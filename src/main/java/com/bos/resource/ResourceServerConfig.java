@@ -30,7 +30,7 @@ public class ResourceServerConfig {
             request.requestMatchers(new AntPathRequestMatcher("/photos")).access(hasAuthority("SCOPE_photo"));
             request.anyRequest().authenticated();
         });
-        http.oauth2ResourceServer((oauth2) -> oauth2.jwt(withDefaults()));
+        http.oauth2ResourceServer((oauth2) -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())));
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();
     }
