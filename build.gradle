@@ -23,6 +23,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    runtimeOnly 'com.nimbusds:oauth2-oidc-sdk:11.7.1'
 }
 
 tasks.named('bootBuildImage') {
