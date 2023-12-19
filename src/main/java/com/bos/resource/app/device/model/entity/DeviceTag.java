@@ -38,22 +38,18 @@ public class DeviceTag extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     UseType useYn;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "deviceTags")
-    List<Device> devices;
-
     @Column(name = "CREATE_ID", length = 50, nullable = false)
     String createId;
 
     @Column(name = "UPDATE_ID", length = 50, nullable = false)
     String updateId;
 
-    public DeviceTag(Long id, String name, String description, Company company, UseType useYn, List<Device> devices, String createId, String updateId) {
+    public DeviceTag(Long id, String name, String description, Company company, UseType useYn, String createId, String updateId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.company = company;
         this.useYn = useYn;
-        this.devices = devices;
         this.createId = createId;
         this.updateId = updateId;
     }

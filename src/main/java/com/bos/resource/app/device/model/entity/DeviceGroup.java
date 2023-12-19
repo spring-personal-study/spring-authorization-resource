@@ -44,7 +44,4 @@ public class DeviceGroup extends BaseEntity {
     @Column(name = "USE_YN")
     @Enumerated(EnumType.STRING)
     UseType useType;
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "deviceGroups")
-    List<Device> devices;
 }
