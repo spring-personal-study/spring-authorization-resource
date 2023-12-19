@@ -2,7 +2,7 @@ package com.bos.resource.app.fota.repository;
 
 
 import com.bos.resource.app.fota.model.entity.Campaign;
-import com.bos.resource.app.fota.model.entity.QFOTACampaign;
+import com.bos.resource.app.fota.model.entity.QCampaign;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -13,10 +13,10 @@ public class QCampaignRepositoryImpl implements QCampaignRepository {
 
     @Override
     public Campaign findFirstByNameStartsWithAndCompanyIdOrderByNameDesc(String newDeploymentPrefix, Long companyId) {
-        QFOTACampaign qfotaCampaign = QFOTACampaign.fOTACampaign;
-        return queryFactory.selectFrom(qfotaCampaign)
-                .where(qfotaCampaign.name.startsWith(newDeploymentPrefix), qfotaCampaign.companyId.eq(companyId))
-                .orderBy(qfotaCampaign.name.desc())
+        QCampaign qCampaign = QCampaign.campaign;
+        return queryFactory.selectFrom(qCampaign)
+                .where(qCampaign.name.startsWith(newDeploymentPrefix), qCampaign.companyId.eq(companyId))
+                .orderBy(qCampaign.name.desc())
                 .fetchFirst();
     }
 }

@@ -1,8 +1,8 @@
 package com.bos.resource.exception.controllerAdvice;
 
-import com.bos.emm.exception.common.BizException;
-import com.bos.emm.exception.common.ErrorResponseDTO;
-import com.bos.emm.exception.common.GeneralErrorMessage;
+import com.bos.resource.exception.common.BizException;
+import com.bos.resource.exception.common.ErrorResponseDTO;
+import com.bos.resource.exception.common.GeneralErrorMessage;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;

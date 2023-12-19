@@ -66,7 +66,7 @@ public class NewDeployment implements Notifier {
         savePackageIfDoesNotExists(requestUser, notification, firmwares, supportModel, 1);
 
         // create new Campaign
-        String newCampaignName = getCampaignSeq(campaign, NEW_DEPLOYMENT_PREFIX);
+        String newCampaignName = getCampaignSeq(campaign);
         Campaign newCampaign = Campaign.createCampaign(newCampaignName, supportModel.getPlatform().getId(), ConvertedDateString.setStartEndDateTime(), requestUser);
         Campaign savedCampaign = campaignRepository.save(newCampaign);
         // save campaign details
@@ -89,12 +89,12 @@ public class NewDeployment implements Notifier {
         }
     }
 
-    private static String getCampaignSeq(Campaign campaign, String NEW_DEPLOYMENT_PREFIX) {
+    private static String getCampaignSeq(Campaign campaign) {
         if (campaign != null) {
-            String lastCampaignNumber = campaign.getName().substring(NEW_DEPLOYMENT_PREFIX.length());
-            return NEW_DEPLOYMENT_PREFIX + Integer.parseInt(lastCampaignNumber) + 1;
+            String lastCampaignNumber = campaign.getName().substring("FOTA-".length());
+            return "FOTA-" + Integer.parseInt(lastCampaignNumber) + 1;
         } else {
-            return NEW_DEPLOYMENT_PREFIX + 1;
+            return "FOTA-" + 1;
         }
     }
 
