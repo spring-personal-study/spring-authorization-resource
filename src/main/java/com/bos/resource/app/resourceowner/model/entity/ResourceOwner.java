@@ -17,4 +17,10 @@ public class ResourceOwner {
 
     @Column(name = "ID", length = 20, nullable = false, unique = true)
     private String resourceOwnerId;
+
+    @Column(name = "EMAIL")
+    private String email;
+
+    @Column(name = "COMPANY_ID")
+    private Long companyId;
 }

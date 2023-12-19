@@ -5,5 +5,5 @@ spring:
         jwt:
           issuer-uri: http://127.0.0.1:9000
           jwk-set-uri: http://127.0.0.1:9000/oauth2/jwks
-          audiences: bluebird-client
-          jws-algorithms: RS256
+#          audiences: bluebird-api
+#          jws-algorithms: RS256
