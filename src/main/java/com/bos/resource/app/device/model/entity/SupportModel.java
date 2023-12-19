@@ -13,7 +13,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @Table(name = "TB_SUPPORT_MODEL")
 @SQLRestriction("USE_YN = 'Y'")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @DynamicUpdate
 public class SupportModel extends BaseEntity {
 

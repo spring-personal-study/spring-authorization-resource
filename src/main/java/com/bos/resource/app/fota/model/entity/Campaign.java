@@ -21,7 +21,7 @@ import static com.bos.resource.app.fota.model.enums.CampaignStatus.ACTIVE;
 @Table(name = "TB_FOTA_CAMPAIGN")
 @DynamicUpdate
 @SQLRestriction("USE_YN = 'Y'")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @ToString
 public class Campaign extends BaseEntity {
 

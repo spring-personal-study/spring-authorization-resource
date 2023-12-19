@@ -5,6 +5,8 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -24,12 +26,12 @@ public class BaseEntity {
     @Column(name = "UPDATE_ID", length = 50, nullable = false)
     protected String updateId;
 
-    @CreatedDate
-    @Column(name = "CREATE_DT", nullable = false)
+    @CreationTimestamp
+    @Column(name = "CREATE_DT", updatable = false)
     protected LocalDateTime createDt;
 
-    @LastModifiedDate
-    @Column(name = "UPDATE_DT", nullable = false)
+    @UpdateTimestamp
+    @Column(name = "UPDATE_DT")
     protected LocalDateTime updateDt;
 
 }

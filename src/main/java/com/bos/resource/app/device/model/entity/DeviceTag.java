@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "TB_DEVICE_TAG")
 @SQLRestriction("USE_YN = 'Y'")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 @DynamicUpdate
 public class DeviceTag extends BaseEntity {

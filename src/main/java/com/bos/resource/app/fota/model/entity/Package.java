@@ -53,7 +53,7 @@ public class Package extends BaseEntity {
     private Long platformId;
 
     @Builder
-    public Package(Long packageId, String packageName, String description, String currentVersion, String targetVersion, UseType useYn, SupportModel model, Firmware firmware, Long companyId, Long platformId) {
+    public Package(Long packageId, String packageName, String description, String currentVersion, String targetVersion, UseType useYn, SupportModel model, Firmware firmware, Long companyId, Long platformId, String email) {
         this.packageId = packageId;
         this.packageName = packageName;
         this.description = description;
@@ -64,6 +64,8 @@ public class Package extends BaseEntity {
         this.firmware = firmware;
         this.companyId = companyId;
         this.platformId = platformId;
+        super.createId = email;
+        super.updateId = email;
     }
 
     public static Package createPackage(String newPackageName, Firmware firmware, SupportModel supportModel, ResourceOwnerDto requestUser) {
@@ -77,6 +79,7 @@ public class Package extends BaseEntity {
                 .companyId(requestUser.getCompanyId())
                 .packageName( newPackageName)
                 .useYn(UseType.Y)
+                .email(requestUser.getEmail())
                 .build();
     }
 }

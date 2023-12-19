@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Table(name = "TB_COMPANY")
 @SQLRestriction("USE_YN = 'Y'")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @DynamicUpdate
 public class Company extends BaseEntity {
 

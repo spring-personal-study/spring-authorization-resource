@@ -59,7 +59,11 @@ public class NewDeployment implements Notifier {
                 .filter(e -> PackageType.INCREMENTAL.equals(e.getPackageType()))
                 .filter(e -> notification.params().targetBuild().equals(e.getVersion()))
                 .findFirst()
-                .orElseGet(() -> firmwares.getContent().get(0));
+                .orElseGet(() -> {
+                    boolean fullPackageExists = firmwares.getContent().get(0).getVersion().equals(notification.params().targetBuild());
+                    if (fullPackageExists) return firmwares.getContent().get(0);
+                    throw new BizException(FOTACrudErrorCode.FIRMWARE_NOT_FOUND);
+                });
         SupportModel supportModel = supportModelRepository.findByName(notification.params().model());
         if (supportModel == null) throw new BizException(FOTACrudErrorCode.SUPPORT_MODEL_NOT_FOUND);
 

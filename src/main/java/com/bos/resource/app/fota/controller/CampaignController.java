@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,7 @@ public class CampaignController {
     private final ResourceOwnerService resourceOwnerService;
 
     @PostMapping("/notification")
-    public CreatedNotification notification(Notification notification, @PageableDefault(page = 0, size = 10) Pageable pageable, Authentication authentication) {
+    public CreatedNotification notification(@RequestBody Notification notification, @PageableDefault(page = 0, size = 10) Pageable pageable, Authentication authentication) {
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
         return fotaService.processNotification(resourceOwner, notification, pageable);
     }

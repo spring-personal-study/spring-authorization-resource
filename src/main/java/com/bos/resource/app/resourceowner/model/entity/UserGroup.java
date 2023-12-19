@@ -14,7 +14,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @SQLRestriction("USE_YN = 'Y'")
 @Table(name = "TB_USER_GROUP")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class UserGroup extends BaseEntity {
 
     @Id
