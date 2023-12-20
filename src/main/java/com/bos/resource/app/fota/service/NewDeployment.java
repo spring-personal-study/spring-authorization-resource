@@ -15,6 +15,8 @@ import com.bos.resource.app.fota.model.dto.CampaignResponseDto;
 import com.bos.resource.app.fota.model.dto.ConvertedDateString;
 import com.bos.resource.app.fota.model.entity.Package;
 import com.bos.resource.app.fota.model.entity.*;
+import com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureType;
+import com.bos.resource.app.fota.model.enums.NotificationType;
 import com.bos.resource.app.fota.model.enums.PackageType;
 import com.bos.resource.app.fota.repository.*;
 import com.bos.resource.app.fota.repository.firmware.FirmwareRepository;
@@ -27,7 +29,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureType.EXPIRED_WARRANTY;
+import static com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureType.NOT_FOUND;
 
 @Service("NEW_DEPLOYMENT")
 @RequiredArgsConstructor
@@ -52,18 +59,8 @@ public class NewDeployment implements Notifier {
 
         // find "FOTA-{LATEST_SEQ}"
         Campaign campaign = campaignRepository.findFirstByNameStartsWithAndCompanyIdOrderByNameDesc(NEW_DEPLOYMENT_PREFIX, requestUser.getCompanyId());
-        Page<Firmware> firmwares = firmwareRepository.findByModelPaging(notification.params().model(), pageable);
+        Page<Firmware> firmwares = firmwareRepository.findByModelPaging(notification.params().model(), notification.params().targetBuild(), pageable);
         if (firmwares.getContent().isEmpty()) throw new BizException(FOTACrudErrorCode.FIRMWARE_NOT_FOUND);
-        // find targetBuild's firmware
-        Firmware firmware = firmwares.getContent().stream()
-                .filter(e -> PackageType.INCREMENTAL.equals(e.getPackageType()))
-                .filter(e -> notification.params().targetBuild().equals(e.getVersion()))
-                .findFirst()
-                .orElseGet(() -> {
-                    boolean fullPackageExists = firmwares.getContent().get(0).getVersion().equals(notification.params().targetBuild());
-                    if (fullPackageExists) return firmwares.getContent().get(0);
-                    throw new BizException(FOTACrudErrorCode.FIRMWARE_NOT_FOUND);
-                });
         SupportModel supportModel = supportModelRepository.findByName(notification.params().model());
         if (supportModel == null) throw new BizException(FOTACrudErrorCode.SUPPORT_MODEL_NOT_FOUND);
 
@@ -73,21 +70,43 @@ public class NewDeployment implements Notifier {
         String newCampaignName = getCampaignSeq(campaign);
         Campaign newCampaign = Campaign.createCampaign(newCampaignName, supportModel.getPlatform().getId(), ConvertedDateString.setStartEndDateTime(), requestUser);
         Campaign savedCampaign = campaignRepository.save(newCampaign);
+
+        // record lists for campaign details result
+        List<String> successToAddDevicesIntoCampaign = new ArrayList<>();
+        List<String> expiredWarranty = new ArrayList<>(), notFound = new ArrayList<>();
+        Map<DeviceWithCampaignFailureType, List<String>> failToAddDeviceIntoCampaign = new HashMap<>();
         // save campaign details
-        Package targetPackage = packageRepository.findByFirmwareAndModelAndTargetVersion(firmware, supportModel, notification.params().targetBuild());
-        CampaignRegistrationResult result = saveDeviceInfos(notification.params().serialNumbers(), savedCampaign, targetPackage);
-        return CampaignResponseDto.CreatedNotification.of(firmwares, result);
+        for (Firmware firmware : firmwares.getContent()) {
+            // TODO: need to consider about the case of "FULL" package type. does it need to receive FULL/INCREMENTAL option as additional parameters from the user?
+            if (PackageType.INCREMENTAL.equals(firmware.getPackageType()) && notification.params().targetBuild().equals(firmware.getVersion())) {
+                Package targetPackage = packageRepository.findByFirmwareAndModelAndTargetVersion(firmware, supportModel, notification.params().targetBuild());
+                CampaignPackageMap fotaCampaignPackageMap = CampaignPackageMap.prepareSave(savedCampaign, targetPackage);
+                campaignPackageMapRepository.save(fotaCampaignPackageMap);
+                for (String sn : notification.params().serialNumbers()) {
+                    Device device = deviceRepository.findBySerialNumber(sn);
+                    if (skipInvalidDevice(sn, device, notFound, expiredWarranty)) continue;
+                    saveDeviceIntoCampaign(savedCampaign, targetPackage, device);
+                    saveDeviceTags(savedCampaign, device);
+                    saveDeviceGroup(savedCampaign, device);
+                    successToAddDevicesIntoCampaign.add(sn);
+                }
+                failToAddDeviceIntoCampaign.put(EXPIRED_WARRANTY, expiredWarranty);
+                failToAddDeviceIntoCampaign.put(NOT_FOUND, notFound);
+            }
+        }
+        CampaignRegistrationResult result = new CampaignRegistrationResult(successToAddDevicesIntoCampaign, failToAddDeviceIntoCampaign);
+        return CampaignResponseDto.CreatedNotification.of(NotificationType.NEW_DEPLOYMENT, firmwares, savedCampaign, result, pageable);
     }
 
     private void savePackageIfDoesNotExists(ResourceOwnerDto requestUser, CampaignRequestDto.Notification notification, Page<Firmware> firmwares, SupportModel supportModel, int seq) {
         for (Firmware firmware : firmwares.getContent()) {
             Package targetPackage = packageRepository.findByFirmwareAndModelAndTargetVersion(firmware, supportModel, notification.params().targetBuild());
-            String packageNamePrefix = firmware.getUploadServerType().getType() + "-PACKAGE-";
+            String packageNamePrefix = firmware.getUploadServerType().getType() + "-" + firmware.getPackageType() + "-PACKAGE-";
             if (targetPackage != null && targetPackage.getPackageName().startsWith(packageNamePrefix)) {
                 seq = Integer.parseInt(targetPackage.getPackageName().substring(packageNamePrefix.length())) + 1;
             }
             if (targetPackage == null) {
-                Package newPackage = Package.createPackage((packageNamePrefix + seq++), firmware, supportModel, requestUser);
+                Package newPackage = Package.createPackage((packageNamePrefix + (seq++)), firmware, supportModel, requestUser);
                 packageRepository.save(newPackage);
             }
         }
@@ -96,34 +115,21 @@ public class NewDeployment implements Notifier {
     private static String getCampaignSeq(Campaign campaign) {
         if (campaign != null) {
             String lastCampaignNumber = campaign.getName().substring("FOTA-".length());
-            return "FOTA-" + Integer.parseInt(lastCampaignNumber) + 1;
+            return "FOTA-" + (Integer.parseInt(lastCampaignNumber) + 1);
         } else {
             return "FOTA-" + 1;
         }
     }
 
-    private CampaignRegistrationResult saveDeviceInfos(List<String> serialNumbers, Campaign savedCampaign, Package fotaPackage) {
-        CampaignPackageMap fotaCampaignPackageMap = CampaignPackageMap.prepareSave(savedCampaign, fotaPackage);
-        campaignPackageMapRepository.save(fotaCampaignPackageMap);
-        List<String> successToAddDevicesIntoCampaign = new ArrayList<>();
-        List<String> expiredWarranty = new ArrayList<>(), notFound = new ArrayList<>();
-        for (String sn : serialNumbers) {
-            Device device = deviceRepository.findBySerialNumber(sn);
-            if (validateDevice(sn, device, notFound, expiredWarranty)) continue;
-            saveDeviceIntoCampaign(savedCampaign, fotaPackage, device);
-            saveDeviceTags(savedCampaign, device);
-            saveDeviceGroup(savedCampaign, device);
-            successToAddDevicesIntoCampaign.add(sn);
-        }
-        return new CampaignRegistrationResult(successToAddDevicesIntoCampaign, expiredWarranty, notFound);
-    }
-
-    private static boolean validateDevice(String sn, Device device, List<String> notFoundDevices, List<String> expiredWarrantyDevices) {
+    private static boolean skipInvalidDevice(String sn, Device device, List<String> notFoundDevices, List<String> expiredWarrantyDevices) {
         if (device == null) {
             notFoundDevices.add(sn);
             return true;
         }
-        if (device.getValidWarranty().equals(UseType.N)) expiredWarrantyDevices.add(sn);
+        if (device.getValidWarranty().equals(UseType.N)) {
+            expiredWarrantyDevices.add(sn);
+            return true;
+        }
         return false;
     }
 

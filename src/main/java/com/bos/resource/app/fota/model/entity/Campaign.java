@@ -6,12 +6,12 @@ import com.bos.resource.app.fota.model.dto.ConvertedDateString;
 import com.bos.resource.app.fota.model.enums.CampaignStatus;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLRestriction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.bos.resource.app.common.domain.enums.UseType.Y;
 import static com.bos.resource.app.fota.model.enums.CampaignStatus.ACTIVE;
@@ -96,7 +96,8 @@ public class Campaign extends BaseEntity {
     }
 
     public static Campaign createCampaign(String newCampaignName, Integer platformId, ConvertedDateString convertedDateString, ResourceOwnerDto requestUser) {
-       return Campaign.newDeployment().name(newCampaignName)
+        return Campaign.newDeployment()
+                .name(newCampaignName)
                 .startDate(convertedDateString.getStartDateString())
                 .endDate(convertedDateString.getEndDateString())
                 .startTime(convertedDateString.getStartTimeString())

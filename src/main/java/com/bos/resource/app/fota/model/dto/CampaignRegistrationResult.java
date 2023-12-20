@@ -1,10 +1,12 @@
 package com.bos.resource.app.fota.model.dto;
 
+import com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureType;
+
 import java.util.List;
+import java.util.Map;
 
 public record CampaignRegistrationResult(
         List<String> successToAddDevicesIntoCampaign,
-        List<String> expiredWarranty,
-        List<String> notFound
+        Map<DeviceWithCampaignFailureType, List<String>> failToAddDevicesIntoCampaign
 ) {
 }

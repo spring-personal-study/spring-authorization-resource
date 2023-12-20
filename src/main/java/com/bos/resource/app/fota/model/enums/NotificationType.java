@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum NotificationType {
     NEW_ARTIFACT_AUTO_UPDATE("NEW_ARTIFACT_AUTO_UPDATE"),
-    NEW_ARTIFACT_MANUAL_UPDATE("NEW_DEPLOYMENT"),
+    NEW_DEPLOYMENT("NEW_DEPLOYMENT"),
 ;
     private final String name;
 

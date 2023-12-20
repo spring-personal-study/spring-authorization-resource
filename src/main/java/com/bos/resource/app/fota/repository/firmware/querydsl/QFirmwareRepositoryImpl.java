@@ -17,16 +17,16 @@ public class QFirmwareRepositoryImpl implements QFirmwareRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Firmware> findByModelPaging(String model, Pageable pageable) {
+    public Page<Firmware> findByModelPaging(String model, String version, Pageable pageable) {
         QFirmware qFirmware = QFirmware.firmware;
 
         List<Firmware> firmwares = queryFactory.selectFrom(qFirmware)
-                .where(qFirmware.model.eq(model))
+                .where(qFirmware.model.eq(model), qFirmware.version.eq(version))
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory.select(qFirmware.count())
                 .from(qFirmware)
-                .where(qFirmware.model.eq(model));
+                .where(qFirmware.model.eq(model), qFirmware.version.eq(version));
 
         return PageableExecutionUtils.getPage(firmwares, pageable, countQuery::fetchOne);
     }
