@@ -51,7 +51,7 @@ public class CampaignResponseDto {
 
             final List<NotificationsError.ErrorDetail> errorDetails = new ArrayList<>();
             final List<NotificationsError> notificationsErrors = new ArrayList<>();
-            addErrors(notificationType, notificationsErrors, errorDetails, notFound, expiredWarranty);
+            addErrors(notificationType, notificationsErrors, errorDetails, expiredWarranty, notFound);
 
             return CreatedNotification.builder()
                     .head(new Paging(
