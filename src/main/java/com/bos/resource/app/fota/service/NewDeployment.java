@@ -1,46 +1,18 @@
 package com.bos.resource.app.fota.service;
 
-import com.bos.resource.app.common.domain.enums.UseType;
-import com.bos.resource.app.device.model.entity.Device;
-import com.bos.resource.app.device.model.entity.DeviceGroupMap;
-import com.bos.resource.app.device.model.entity.DeviceTagMap;
-import com.bos.resource.app.device.model.entity.SupportModel;
-import com.bos.resource.app.device.repository.device.DeviceRepository;
-import com.bos.resource.app.device.repository.devicegroup.DeviceGroupMapRepository;
-import com.bos.resource.app.device.repository.devicetag.DeviceTagMapRepository;
-import com.bos.resource.app.fota.exception.FOTACrudErrorCode;
-import com.bos.resource.app.fota.model.dto.CampaignRegistrationResult;
 import com.bos.resource.app.fota.model.dto.CampaignRequestDto;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto;
-import com.bos.resource.app.fota.model.dto.ConvertedDateString;
-import com.bos.resource.app.fota.model.entity.Package;
-import com.bos.resource.app.fota.model.entity.*;
-import com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureType;
-import com.bos.resource.app.fota.model.enums.NotificationType;
-import com.bos.resource.app.fota.model.enums.PackageType;
-import com.bos.resource.app.fota.repository.*;
-import com.bos.resource.app.fota.repository.firmware.FirmwareRepository;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
-import com.bos.resource.exception.common.BizException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureType.EXPIRED_WARRANTY;
-import static com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureType.NOT_FOUND;
 
 @Service("NEW_DEPLOYMENT")
 @RequiredArgsConstructor
 public class NewDeployment implements Notifier {
 
-    private final CampaignRepository campaignRepository;
+  /*  private final CampaignRepository campaignRepository;
     private final FirmwareRepository firmwareRepository;
     private final PackageRepository packageRepository;
     private final SupportModelRepository supportModelRepository;
@@ -50,12 +22,13 @@ public class NewDeployment implements Notifier {
     private final CampaignDeviceTagMapRepository campaignDeviceTagMapRepository;
     private final CampaignDeviceGroupMapRepository campaignDeviceGroupMapRepository;
     private final DeviceTagMapRepository deviceTagMapRepository;
-    private final DeviceGroupMapRepository deviceGroupMapRepository;
+    private final DeviceGroupMapRepository deviceGroupMapRepository;*/
 
     @Transactional
     @Override
     public CampaignResponseDto.CreatedNotification createCampaign(ResourceOwnerDto requestUser, CampaignRequestDto.Notification notification, Pageable pageable) {
-        final String NEW_DEPLOYMENT_PREFIX = "FOTA-";
+        return null;
+       /* final String NEW_DEPLOYMENT_PREFIX = "FOTA-";
 
         // find "FOTA-{LATEST_SEQ}"
         Campaign campaign = campaignRepository.findFirstByNameStartsWithAndCompanyIdOrderByNameDesc(NEW_DEPLOYMENT_PREFIX, requestUser.getCompanyId());
@@ -95,10 +68,10 @@ public class NewDeployment implements Notifier {
             }
         }
         CampaignRegistrationResult result = new CampaignRegistrationResult(successToAddDevicesIntoCampaign, failToAddDeviceIntoCampaign);
-        return CampaignResponseDto.CreatedNotification.of(NotificationType.NEW_DEPLOYMENT, firmwares, savedCampaign, result, pageable);
+        return CampaignResponseDto.CreatedNotification.of(NotificationType.NEW_DEPLOYMENT, firmwares, savedCampaign, result, pageable);*/
     }
 
-    private void savePackageIfDoesNotExists(ResourceOwnerDto requestUser, CampaignRequestDto.Notification notification, Page<Firmware> firmwares, SupportModel supportModel, int seq) {
+   /* private void savePackageIfDoesNotExists(ResourceOwnerDto requestUser, CampaignRequestDto.Notification notification, Page<Firmware> firmwares, SupportModel supportModel, int seq) {
         for (Firmware firmware : firmwares.getContent()) {
             Package targetPackage = packageRepository.findByFirmwareAndModelAndTargetVersion(firmware, supportModel, notification.params().targetBuild());
             String packageNamePrefix = firmware.getUploadServerType().getType() + "-" + firmware.getPackageType() + "-PACKAGE-";
@@ -155,6 +128,6 @@ public class NewDeployment implements Notifier {
             campaignDeviceTagMapRepository.save(fotaCampaignDeviceTagMap);
         }
     }
-
+*/
 
 }

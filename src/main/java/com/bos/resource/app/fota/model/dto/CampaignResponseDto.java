@@ -1,13 +1,12 @@
 package com.bos.resource.app.fota.model.dto;
 
 import com.bos.resource.app.common.domain.dto.Paging;
+import com.bos.resource.app.common.domain.enums.UseType;
 import com.bos.resource.app.fota.model.dto.Notifications.NotificationDetail;
 import com.bos.resource.app.fota.model.dto.Notifications.NotificationDetail.NotificationDetailMetadata;
 import com.bos.resource.app.fota.model.entity.Campaign;
 import com.bos.resource.app.fota.model.entity.Firmware;
-import com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureType;
-import com.bos.resource.app.fota.model.enums.NotificationType;
-import com.bos.resource.app.fota.model.enums.PackageType;
+import com.bos.resource.app.fota.model.enums.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +24,18 @@ import static com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureTyp
 import static java.util.stream.Collectors.toList;
 
 public class CampaignResponseDto {
+
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class CreatedCampaign {
+        private final String deploymentId;
+        private final String action;
+        private final String message;
+        private final String code;
+        private final LocalDateTime timestamp;
+    }
 
     @Getter
     @Builder
@@ -111,4 +122,82 @@ public class CampaignResponseDto {
             }
         }
     }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class FoundCampaignStatus {
+        private final List<CampaignStatusContent> data;
+        //private final Paging head;
+
+        public static FoundCampaignStatus from(List<CampaignStatusAggregation> campaigns) {
+            return new FoundCampaignStatus(
+                    campaigns.stream()
+                            .map(campaign -> new CampaignStatusContent(
+                                    campaign.getAutoUpdateId(),
+                                    campaign.getDeploymentTag(),
+                                    campaign.getDeploymentId(),
+                                    campaign.getDeploymentStatus(),
+                                    campaign.getTotalDevices(),
+                                    campaign.getCreated(),
+                                    campaign.getScheduled(),
+                                    campaign.getDownloading(),
+                                    campaign.getAwaitingInstall(),
+                                    campaign.getCompleted(),
+                                    campaign.getCancelled(),
+                                    campaign.getUnknown(),
+                                    campaign.getCancelRequested(),
+                                    new CampaignStatusContent.Failed(
+                                            campaign.getFailedDownload(),
+                                            campaign.getFailedInstall()
+                                    ),
+                                    campaign.getCompletedOn(),
+                                    campaign.getCancelledOn()
+                            ))
+                            .collect(toList())
+            );
+        }
+
+        @Getter
+        @RequiredArgsConstructor
+        public static class CampaignStatusContent {
+            private final String autoUpdateId;
+            private final String deploymentTag;
+            private final String deploymentId;
+            private final CampaignStatus deploymentStatus;
+            private final Long totalDevices;
+            private final Integer created;
+            private final Integer scheduled;
+            private final Integer downloading;
+            private final Integer awaitingInstall;
+            private final Integer completed;
+            private final Integer cancelled;
+            private final Integer unknown;
+            private final UseType cancelRequested; // TODO: need to change to Boolean
+            private final Failed failed;
+            private final LocalDateTime completedOn;
+            private final LocalDateTime cancelledOn;
+            //private final List<String> associatedDeployments;
+
+            @Getter
+            @RequiredArgsConstructor
+            public static class Failed {
+                private final Integer download;
+                private final Integer install;
+            }
+        }
+
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class CancelledCampaign {
+        private final Long deploymentId;
+        private final String action;
+        private final String message;
+        private final String status;
+        private final String code;
+        private final LocalDateTime timestamp;
+    }
+
 }

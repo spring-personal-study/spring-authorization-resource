@@ -5,6 +5,7 @@ import com.bos.resource.exception.common.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.Errors;
 
 import java.util.Collections;
 import java.util.Map;
@@ -22,7 +23,7 @@ public enum FOTACrudErrorCode implements ErrorCode {
     FIRMWARE_NOT_FOUND(NOT_FOUND, -1402, ApiErrorMessage.FIRMWARE_NOT_FOUND),
     PACKAGE_NOT_FOUND(NOT_FOUND, -1403, ApiErrorMessage.PACKAGE_NOT_FOUND),
     SUPPORT_MODEL_NOT_FOUND(NOT_FOUND, -1404, ApiErrorMessage.SUPPORT_MODEL_NOT_FOUND),
-    INCRMENTAL_FIRMWARE_NOT_FOUND(NOT_FOUND, -1405, ApiErrorMessage.INCRMENTAL_FIRMWARE_NOT_FOUND),
+    INCREMENTAL_FIRMWARE_NOT_FOUND(NOT_FOUND, -1405, ApiErrorMessage.INCRMENTAL_FIRMWARE_NOT_FOUND),
     ;
 
     private static final Map<String, FOTACrudErrorCode> bizCodes =

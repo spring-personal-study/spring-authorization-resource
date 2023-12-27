@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 public class NewArtifactAutoUpdate implements Notifier {
 
     @Override
-    public CampaignResponseDto.CreatedNotification createCampaign(ResourceOwnerDto requestUser, CampaignRequestDto.Notification notification, Pageable pageable) {
-
+    public CampaignResponseDto.CreatedNotification createCampaign(
+            ResourceOwnerDto requestUser,
+            CampaignRequestDto.Notification notification,
+            Pageable pageable
+    ) {
+        // postpone this method implementation till specification detail is provided.
         return null;
     }
 }
