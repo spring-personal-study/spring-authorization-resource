@@ -11,6 +11,7 @@ import com.bos.resource.app.fota.model.dto.CampaignStatusAggregation;
 import com.bos.resource.app.fota.model.entity.Campaign;
 import com.bos.resource.app.fota.model.entity.CampaignDeviceTagMap;
 import com.bos.resource.app.fota.repository.*;
+import com.bos.resource.app.resourceowner.ResourceOwnerService;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
 import com.bos.resource.exception.common.BizException;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class FOTAService {
     private final CampaignPackageMapRepository campaignPackageMapRepository;
     private final CampaignDeviceGroupMapRepository campaignDeviceGroupMapRepository;
     private final CampaignDeviceTagMapRepository campaignDeviceTagMapRepository;
+    private final ResourceOwnerService resourceOwnerService;
 
     public CreatedNotification processNotification(ResourceOwnerDto requestUser, Notification notification, Pageable pageable) {
         Notifier notifier = notificationProcessors.get(notification.notificationType());
@@ -52,9 +54,11 @@ public class FOTAService {
     }
 
     @Transactional
-    public CancelledCampaign cancelCampaign(ResourceOwnerDto resourceOwner, Long deploymentId) {
+    public CancelledCampaign cancelCampaign(String resourceOwnerName, Long deploymentId) {
         Campaign campaign = campaignRepository.findById(deploymentId)
                 .orElseThrow(() -> new BizException(FOTACrudErrorCode.CAMPAIGN_NOT_FOUND));
+
+        ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(resourceOwnerName);
 
         boolean doesBelongToCompany = resourceOwner.getCompanyId().equals(campaign.getCompanyId());
         if (!doesBelongToCompany) {

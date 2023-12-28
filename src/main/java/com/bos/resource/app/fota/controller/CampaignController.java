@@ -77,8 +77,7 @@ public class CampaignController {
            @RequestBody(required = true) CampaignRequestDto.CancelCampaign cancelCampaign,
            Authentication authentication
     ) {
-        ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
         Long deploymentIdLong = Long.parseLong(cancelCampaign.deploymentId());
-        return fotaService.cancelCampaign(resourceOwner, deploymentIdLong);
+        return fotaService.cancelCampaign(authentication.getName(), deploymentIdLong);
     }
 }
