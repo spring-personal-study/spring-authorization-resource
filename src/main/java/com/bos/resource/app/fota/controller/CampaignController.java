@@ -74,9 +74,11 @@ public class CampaignController {
 
     @PostMapping("/v1/deployments/cancel")
     public CampaignResponseDto.CancelledCampaign cancelCampaign(
-           @RequestBody(required = true) CampaignRequestDto.CancelCampaign cancelCampaign
+           @RequestBody(required = true) CampaignRequestDto.CancelCampaign cancelCampaign,
+           Authentication authentication
     ) {
+        ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
         Long deploymentIdLong = Long.parseLong(cancelCampaign.deploymentId());
-        return fotaService.cancelCampaign(deploymentIdLong);
+        return fotaService.cancelCampaign(resourceOwner, deploymentIdLong);
     }
 }

@@ -1,5 +1,6 @@
 package com.bos.resource.app.fota.service;
 
+import com.bos.resource.app.fota.exception.FOTACrudErrorCode;
 import com.bos.resource.app.fota.model.dto.CampaignRequestDto;
 import com.bos.resource.app.fota.model.dto.CampaignRequestDto.Notification;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto;
@@ -11,6 +12,7 @@ import com.bos.resource.app.fota.model.entity.Campaign;
 import com.bos.resource.app.fota.model.entity.CampaignDeviceTagMap;
 import com.bos.resource.app.fota.repository.*;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
+import com.bos.resource.exception.common.BizException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -50,9 +52,15 @@ public class FOTAService {
     }
 
     @Transactional
-    public CancelledCampaign cancelCampaign(Long deploymentId) {
+    public CancelledCampaign cancelCampaign(ResourceOwnerDto resourceOwner, Long deploymentId) {
         Campaign campaign = campaignRepository.findById(deploymentId)
-                .orElseThrow(() -> new RuntimeException("not found campaign"));
+                .orElseThrow(() -> new BizException(FOTACrudErrorCode.CAMPAIGN_NOT_FOUND));
+
+        boolean doesBelongToCompany = resourceOwner.getCompanyId().equals(campaign.getCompanyId());
+        if (!doesBelongToCompany) {
+            throw new BizException(FOTACrudErrorCode.ATTEMPTED_CANCEL_CAMPAIGN_WITH_NOT_VALID_USER);
+        }
+
         campaignDeviceMapRepository.deleteByCampaign(campaign);
         campaignPackageMapRepository.deleteByCampaign(campaign);
         campaignDeviceGroupMapRepository.deleteByCampaign(campaign);
