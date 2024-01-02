@@ -2,7 +2,6 @@ package com.bos.resource.app.fota.model.entity;
 
 import com.bos.resource.app.device.model.entity.DeviceGroup;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

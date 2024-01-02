@@ -7,15 +7,21 @@ import com.bos.resource.app.fota.model.dto.CampaignResponseDto;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.CancelledCampaign;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.CreatedNotification;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FoundCampaignStatus;
+import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FoundCampaignStatusDetail;
 import com.bos.resource.app.fota.model.dto.CampaignStatusAggregation;
 import com.bos.resource.app.fota.model.entity.Campaign;
-import com.bos.resource.app.fota.model.entity.CampaignDeviceTagMap;
-import com.bos.resource.app.fota.repository.*;
+import com.bos.resource.app.fota.model.entity.CampaignDeviceMap;
+import com.bos.resource.app.fota.repository.CampaignDeviceGroupMapRepository;
+import com.bos.resource.app.fota.repository.CampaignDeviceTagMapRepository;
+import com.bos.resource.app.fota.repository.CampaignPackageMapRepository;
+import com.bos.resource.app.fota.repository.CampaignRepository;
+import com.bos.resource.app.fota.repository.devicemap.CampaignDeviceMapRepository;
 import com.bos.resource.app.resourceowner.ResourceOwnerService;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
 import com.bos.resource.exception.common.BizException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+@Transactional(readOnly = true)
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -42,18 +49,33 @@ public class FOTAService {
         return notifier.createCampaign(requestUser, notification, pageable);
     }
 
+    @Transactional(readOnly = false)
+    public CampaignResponseDto createCampaign(ResourceOwnerDto resourceOwner, CampaignRequestDto.CreateCampaignDto createCampaignDto, Pageable pageable) {
+
+        return null;
+    }
+
     public FoundCampaignStatus getCampaignStatus(ResourceOwnerDto resourceOwner, CampaignRequestDto.CampaignStatus campaignStatus, Pageable pageable) {
         List<CampaignStatusAggregation> campaignStatusByCampaignIdAndBetweenDate = campaignRepository.findCampaignStatusByCampaignIdAndBetweenDate(
-                campaignStatus.deploymentId().get(0), campaignStatus.fromTime(), campaignStatus.toTime()
+                campaignStatus.deploymentId(), campaignStatus.fromTime(), campaignStatus.toTime()
         );
         return FoundCampaignStatus.from(campaignStatusByCampaignIdAndBetweenDate);
     }
 
-    public CampaignResponseDto createCampaign(ResourceOwnerDto resourceOwner, CampaignRequestDto.CreateCampaignDto createCampaignDto, Pageable pageable) {
-        return null;
+    public FoundCampaignStatusDetail getCampaignStatusDetail(ResourceOwnerDto resourceOwner, CampaignRequestDto.CampaignStatusDetail campaignStatus, Pageable pageable) {
+        CampaignStatusAggregation campaignStatusAggregation = null;
+        Campaign targetCampaign = campaignRepository.findByCampaignName(resourceOwner.getCompanyId(), campaignStatus.deploymentId());
+        if (campaignStatus.appendStatus()) {
+            campaignStatusAggregation = campaignRepository.findCampaignStatusByCampaign(targetCampaign);
+        }
+        if (targetCampaign == null) {
+            throw new BizException(FOTACrudErrorCode.CAMPAIGN_NOT_FOUND);
+        }
+        Page<CampaignDeviceMap> campaignDevices = campaignDeviceMapRepository.findByCampaignDevices(targetCampaign, pageable);
+        return FoundCampaignStatusDetail.of(campaignStatus.deploymentId(), campaignStatusAggregation, campaignDevices, pageable);
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public CancelledCampaign cancelCampaign(String resourceOwnerName, Long deploymentId) {
         Campaign campaign = campaignRepository.findById(deploymentId)
                 .orElseThrow(() -> new BizException(FOTACrudErrorCode.CAMPAIGN_NOT_FOUND));

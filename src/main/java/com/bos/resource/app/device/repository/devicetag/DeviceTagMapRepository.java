@@ -1,7 +1,6 @@
 package com.bos.resource.app.device.repository.devicetag;
 
 import com.bos.resource.app.device.model.entity.Device;
-import com.bos.resource.app.device.model.entity.DeviceTag;
 import com.bos.resource.app.device.model.entity.DeviceTagMap;
 import org.springframework.data.jpa.repository.JpaRepository;
 

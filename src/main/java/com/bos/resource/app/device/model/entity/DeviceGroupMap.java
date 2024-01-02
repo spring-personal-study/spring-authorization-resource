@@ -1,7 +1,6 @@
 package com.bos.resource.app.device.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

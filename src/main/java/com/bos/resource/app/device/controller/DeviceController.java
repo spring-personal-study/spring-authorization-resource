@@ -1,8 +1,8 @@
 package com.bos.resource.app.device.controller;
 
+import com.bos.resource.app.common.apiresponse.ResponseDto;
 import com.bos.resource.app.device.model.dto.DeviceResponseDto;
 import com.bos.resource.app.device.service.ApiService;
-import com.bos.resource.app.common.apiresponse.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;

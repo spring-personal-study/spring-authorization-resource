@@ -2,8 +2,8 @@ package com.bos.resource.app.fota.model.entity;
 
 import com.bos.resource.app.common.domain.entity.BaseEntity;
 import com.bos.resource.app.common.domain.enums.UseType;
-import com.bos.resource.app.fota.model.enums.PackageType;
 import com.bos.resource.app.fota.model.enums.FirmwareUploadServerType;
+import com.bos.resource.app.fota.model.enums.PackageType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

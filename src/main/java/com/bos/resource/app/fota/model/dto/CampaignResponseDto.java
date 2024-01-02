@@ -1,12 +1,14 @@
 package com.bos.resource.app.fota.model.dto;
 
 import com.bos.resource.app.common.domain.dto.Paging;
-import com.bos.resource.app.common.domain.enums.UseType;
+import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FoundCampaignStatus.CampaignStatusContent;
 import com.bos.resource.app.fota.model.dto.Notifications.NotificationDetail;
 import com.bos.resource.app.fota.model.dto.Notifications.NotificationDetail.NotificationDetailMetadata;
 import com.bos.resource.app.fota.model.entity.Campaign;
+import com.bos.resource.app.fota.model.entity.CampaignDeviceMap;
 import com.bos.resource.app.fota.model.entity.Firmware;
 import com.bos.resource.app.fota.model.enums.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,6 @@ import static com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureTyp
 import static java.util.stream.Collectors.toList;
 
 public class CampaignResponseDto {
-
 
     @Getter
     @Builder
@@ -133,25 +134,14 @@ public class CampaignResponseDto {
             return new FoundCampaignStatus(
                     campaigns.stream()
                             .map(campaign -> new CampaignStatusContent(
-                                    campaign.getAutoUpdateId(),
-                                    campaign.getDeploymentTag(),
-                                    campaign.getDeploymentId(),
                                     campaign.getDeploymentStatus(),
                                     campaign.getTotalDevices(),
-                                    campaign.getCreated(),
                                     campaign.getScheduled(),
                                     campaign.getDownloading(),
                                     campaign.getAwaitingInstall(),
                                     campaign.getCompleted(),
-                                    campaign.getCancelled(),
-                                    campaign.getUnknown(),
-                                    campaign.getCancelRequested(),
-                                    new CampaignStatusContent.Failed(
-                                            campaign.getFailedDownload(),
-                                            campaign.getFailedInstall()
-                                    ),
-                                    campaign.getCompletedOn(),
-                                    campaign.getCancelledOn()
+                                    campaign.getFailed(),
+                                    campaign.getCompletedOn()
                             ))
                             .collect(toList())
             );
@@ -160,32 +150,138 @@ public class CampaignResponseDto {
         @Getter
         @RequiredArgsConstructor
         public static class CampaignStatusContent {
-            private final String autoUpdateId;
-            private final String deploymentTag;
-            private final String deploymentId;
             private final CampaignStatus deploymentStatus;
             private final Long totalDevices;
-            private final Integer created;
             private final Integer scheduled;
             private final Integer downloading;
             private final Integer awaitingInstall;
             private final Integer completed;
-            private final Integer cancelled;
-            private final Integer unknown;
-            private final UseType cancelRequested; // TODO: need to change to Boolean
-            private final Failed failed;
+            private final Integer failed;
             private final LocalDateTime completedOn;
-            private final LocalDateTime cancelledOn;
-            //private final List<String> associatedDeployments;
+        }
 
-            @Getter
-            @RequiredArgsConstructor
-            public static class Failed {
-                private final Integer download;
-                private final Integer install;
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class FoundCampaignStatusDetail {
+        private final CampaignStatusDetailContent data;
+        private final Paging head;
+
+        public static FoundCampaignStatusDetail of(
+                String deploymentId,
+                CampaignStatusAggregation campaignStatusAggregation,
+                Page<CampaignDeviceMap> campaignDevices,
+                Pageable pageable
+        ) {
+            CampaignStatusContent campaignStatusContent = getCampaignStatusContent(campaignStatusAggregation);
+            CampaignStatusDetailContent campaignStatusDetailContent = getCampaignStatusDetailContent(deploymentId, campaignStatusContent, campaignDevices.getContent());
+            Paging paging = getPaging(campaignDevices, pageable);
+            return new FoundCampaignStatusDetail(campaignStatusDetailContent, paging);
+        }
+
+        private static Paging getPaging(Page<CampaignDeviceMap> page, Pageable pageable) {
+            return new Paging(
+                    page.getNumber(),
+                    pageable.getOffset(),
+                    pageable.getPageSize(),
+                    page.getNumberOfElements()
+            );
+        }
+
+        private static CampaignStatusDetailContent getCampaignStatusDetailContent(
+                String deploymentId,
+                CampaignStatusContent campaignStatusContent,
+                List<CampaignDeviceMap> devices
+        ) {
+            return CampaignStatusDetailContent.of(
+                    deploymentId,
+                    campaignStatusContent,
+                    devices.stream()
+                            .map(device -> new CampaignStatusDetailDevice(
+                                    device.getDevice().getDeviceDetail().getModelName(),
+                                    device.getDevice().getSerialNumber(),
+                                    device.getStatus(),
+                                    device.getResultMessage(),
+                                    device.getUpdateDate()
+                            ))
+                            .collect(toList())
+            );
+        }
+
+        private static CampaignStatusContent getCampaignStatusContent(CampaignStatusAggregation campaign) {
+            CampaignStatusContent foundCampaignStatusDetail = null;
+            if (campaign != null) {
+                foundCampaignStatusDetail = new CampaignStatusContent(
+                        campaign.getDeploymentStatus(),
+                        campaign.getTotalDevices(),
+                        campaign.getScheduled(),
+                        campaign.getDownloading(),
+                        campaign.getAwaitingInstall(),
+                        campaign.getCompleted(),
+                        campaign.getFailed(),
+                        campaign.getCompletedOn()
+                );
+            }
+            return foundCampaignStatusDetail;
+
+
+        }
+
+        @Getter
+        @Builder
+        @RequiredArgsConstructor
+        public static class CampaignStatusDetailContent {
+            private final String deploymentId;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private final CampaignStatus deploymentStatus;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private final Long totalDevices;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private final Integer scheduled;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private final Integer downloading;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private final Integer awaitingInstall;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private final Integer completed;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private final Integer failed;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private final LocalDateTime completedOn;
+            private final List<CampaignStatusDetailDevice> devices;
+
+            public static CampaignStatusDetailContent of(String deploymentId, CampaignStatusContent campaignStatusContent, List<CampaignStatusDetailDevice> detailDevices) {
+                if (campaignStatusContent == null) {
+                    return CampaignStatusDetailContent.builder()
+                            .deploymentId(deploymentId)
+                            .devices(detailDevices)
+                            .build();
+                }
+                return CampaignStatusDetailContent.builder()
+                        .deploymentId(deploymentId)
+                        .deploymentStatus(campaignStatusContent.getDeploymentStatus())
+                        .totalDevices(campaignStatusContent.getTotalDevices())
+                        .scheduled(campaignStatusContent.getScheduled())
+                        .downloading(campaignStatusContent.getDownloading())
+                        .awaitingInstall(campaignStatusContent.getAwaitingInstall())
+                        .completed(campaignStatusContent.getCompleted())
+                        .failed(campaignStatusContent.getFailed())
+                        .completedOn(campaignStatusContent.getCompletedOn())
+                        .devices(detailDevices)
+                        .build();
             }
         }
 
+        @Getter
+        @RequiredArgsConstructor
+        public static class CampaignStatusDetailDevice {
+            private final String model;
+            private final String serialNumber;
+            private final CampaignDeviceStatus status;
+            private final String message;
+            private final LocalDateTime completionTime;
+        }
     }
 
     @Getter

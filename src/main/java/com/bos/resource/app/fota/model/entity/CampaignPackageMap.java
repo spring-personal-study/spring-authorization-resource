@@ -1,7 +1,6 @@
 package com.bos.resource.app.fota.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
