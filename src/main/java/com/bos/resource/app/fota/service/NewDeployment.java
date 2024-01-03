@@ -26,7 +26,7 @@ public class NewDeployment implements Notifier {
 
     @Transactional
     @Override
-    public CampaignResponseDto.CreatedNotification createCampaign(ResourceOwnerDto requestUser, CampaignRequestDto.Notification notification, Pageable pageable) {
+    public CampaignResponseDto.CreatedNotification createCampaign(ResourceOwnerDto requestUser, CampaignRequestDto.Notification notification) {
         return null;
        /* final String NEW_DEPLOYMENT_PREFIX = "FOTA-";
 

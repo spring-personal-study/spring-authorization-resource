@@ -9,8 +9,8 @@ import java.util.List;
 public interface QCampaignRepository {
     Campaign findFirstByNameStartsWithAndCompanyIdOrderByNameDesc(String newDeploymentPrefix, Long companyId);
 
-    List<CampaignStatusAggregation> findCampaignStatusByCampaignIdAndBetweenDate(
-            String campaignId, LocalDateTime startDate, LocalDateTime endDate);
+    List<CampaignStatusAggregation> findCampaignStatusByCompanyIdAndCampaignIdAndBetweenDate(
+            Long companyId, String campaignId, LocalDateTime startDate, LocalDateTime endDate);
 
     CampaignStatusAggregation findCampaignStatusByCampaign( Campaign targetCampaign);
 

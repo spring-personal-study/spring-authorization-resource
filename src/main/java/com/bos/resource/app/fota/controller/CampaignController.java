@@ -35,8 +35,8 @@ public class CampaignController {
     @Deprecated(since = "0.0.1, not supported in our service")
     @PostMapping("/notification")
     public CreatedNotification notification(
-            @RequestBody Notification notification,
-            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @RequestBody
+            Notification notification,
             Authentication authentication,
             BindingResult result
     ) {
@@ -44,13 +44,13 @@ public class CampaignController {
             throw new InvalidFOTAParameterException(result, FOTACrudErrorCode.FOTA_CRUD_FAIL);
         }
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
-        return fotaService.processNotification(resourceOwner, notification, pageable);
+        return fotaService.processNotification(resourceOwner, notification);
     }
 
     @PostMapping("/deployments")
-    public CampaignResponseDto campaigns(
-            @RequestBody CreateCampaignDto createCampaignDto,
-            @PageableDefault(page = 0, size = 10) Pageable pageable,
+    public CampaignResponseDto.CreatedCampaign campaigns(
+            @RequestBody
+            CreateCampaignDto createCampaignDto,
             Authentication authentication,
             BindingResult result
     ) {
@@ -58,13 +58,13 @@ public class CampaignController {
             throw new InvalidFOTAParameterException(result, FOTACrudErrorCode.FOTA_CRUD_FAIL);
         }
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
-        return fotaService.createCampaign(resourceOwner, createCampaignDto, pageable);
+        return fotaService.createCampaign(resourceOwner, createCampaignDto);
     }
 
     @PostMapping("/deployments/status")
     public FoundCampaignStatus campaignsStatus(
-            @RequestBody CampaignStatus campaignStatus,
-            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @RequestBody
+            CampaignStatus campaignStatus,
             Authentication authentication,
             BindingResult result
     ) {
@@ -72,13 +72,13 @@ public class CampaignController {
             throw new InvalidFOTAParameterException(result, FOTACrudErrorCode.FOTA_CRUD_FAIL);
         }
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
-        return fotaService.getCampaignStatus(resourceOwner, campaignStatus, pageable);
+        return fotaService.getCampaignStatus(resourceOwner, campaignStatus);
     }
 
     @PostMapping("/deployments/detail")
     public FoundCampaignStatusDetail campaignsStatusDetail(
-            @RequestBody CampaignStatusDetail campaignStatus,
-            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @RequestBody
+            CampaignStatusDetail campaignStatus,
             Authentication authentication,
             BindingResult result
     ) {
@@ -86,15 +86,26 @@ public class CampaignController {
             throw new InvalidFOTAParameterException(result, FOTACrudErrorCode.FOTA_CRUD_FAIL);
         }
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
-        return fotaService.getCampaignStatusDetail(resourceOwner, campaignStatus, pageable);
+        return fotaService.getCampaignStatusDetail(resourceOwner, campaignStatus);
     }
 
     @PostMapping("/deployments/cancel")
     public CampaignResponseDto.CancelledCampaign cancelCampaign(
-           @RequestBody(required = true) CampaignRequestDto.CancelCampaign cancelCampaign,
-           Authentication authentication
+            @RequestBody(required = true)
+            CampaignRequestDto.CancelCampaign cancelCampaign,
+            Authentication authentication
     ) {
         Long deploymentIdLong = Long.parseLong(cancelCampaign.deploymentId());
         return fotaService.cancelCampaign(authentication.getName(), deploymentIdLong);
+    }
+
+    @PostMapping("/devices")
+    public CampaignResponseDto.FotaReadyDevice campaignDevice(
+            @RequestBody(required = true)
+            CampaignRequestDto.FOTAReadyDevice campaignDevice,
+            Authentication authentication
+    ) {
+        ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
+        return fotaService.getFOTAReadyDevice(resourceOwner.getCompanyId(), campaignDevice);
     }
 }

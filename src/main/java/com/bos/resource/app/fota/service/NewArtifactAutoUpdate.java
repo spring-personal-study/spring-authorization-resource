@@ -12,8 +12,7 @@ public class NewArtifactAutoUpdate implements Notifier {
     @Override
     public CampaignResponseDto.CreatedNotification createCampaign(
             ResourceOwnerDto requestUser,
-            CampaignRequestDto.Notification notification,
-            Pageable pageable
+            CampaignRequestDto.Notification notification
     ) {
         // postpone this method implementation till specification detail is provided.
         return null;

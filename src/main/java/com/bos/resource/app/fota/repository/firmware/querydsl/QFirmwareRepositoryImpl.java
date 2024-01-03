@@ -30,4 +30,12 @@ public class QFirmwareRepositoryImpl implements QFirmwareRepository {
 
         return PageableExecutionUtils.getPage(firmwares, pageable, countQuery::fetchOne);
     }
+
+    @Override
+    public List<Firmware> findByModel(String model, String version) {
+        QFirmware qFirmware = QFirmware.firmware;
+        return queryFactory.selectFrom(qFirmware)
+                .where(qFirmware.model.eq(model), qFirmware.version.eq(version))
+                .fetch();
+    }
 }

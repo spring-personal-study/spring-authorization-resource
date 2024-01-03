@@ -31,8 +31,8 @@ public class QCampaignRepositoryImpl implements QCampaignRepository {
     }
 
     @Override
-    public List<CampaignStatusAggregation> findCampaignStatusByCampaignIdAndBetweenDate(
-            String campaignId, LocalDateTime startDate, LocalDateTime endDate
+    public List<CampaignStatusAggregation> findCampaignStatusByCompanyIdAndCampaignIdAndBetweenDate(
+           Long companyId, String campaignId, LocalDateTime startDate, LocalDateTime endDate
     ) {
         QCampaign qCampaign = QCampaign.campaign;
         QCampaignDeviceMap qCampaignDeviceMap = QCampaignDeviceMap.campaignDeviceMap;
@@ -40,14 +40,8 @@ public class QCampaignRepositoryImpl implements QCampaignRepository {
         return queryFactory.select(
                         Projections.constructor(
                                 CampaignStatusAggregation.class,
-                                //qCampaign.name.as("autoUpdateId"),
-                                //qCampaign.name.as("deploymentId"),
-                                //qCampaign.name.as("deploymentTag"),
                                 qCampaign.status.as("deploymentStatus"),
                                 qCampaignDeviceMap.device.id.count().as("totalDevices"),
-                                /*new CaseBuilder()
-                                        .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.PENDING))
-                                        .then(1).otherwise(0).sum().as("created"),*/
                                 new CaseBuilder()
                                         .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.PENDING))
                                         .then(1).otherwise(0).sum().as("scheduled"),
@@ -60,28 +54,16 @@ public class QCampaignRepositoryImpl implements QCampaignRepository {
                                 new CaseBuilder()
                                         .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.COMPLETED))
                                         .then(1).otherwise(0).sum().as("completed"),
-                               /* new CaseBuilder()
-                                        .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.PENDING))
-                                        .then(1).otherwise(0).sum().as("cancelled"),*/
-                                /*new CaseBuilder()
-                                        .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.PENDING))
-                                        .then(1).otherwise(0).sum().as("unknown"),*/
-                                /*qCampaign.askUserYn.as("cancelRequested"),*/
                                 new CaseBuilder()
                                         .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.FAIL))
                                         .then(1).otherwise(0).sum().as("failed"),
-                                /*
-                                new CaseBuilder()
-                                        .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.FAIL))
-                                        .then(1).otherwise(0).sum().as("install"),*/
                                 qCampaign.updateDt
-                                //qCampaignDeviceMap.updateDate
                         )
                 )
                 .from(qCampaign)
                 .innerJoin(qCampaignDeviceMap).on(qCampaign.id.eq(qCampaignDeviceMap.campaign.id))
                 .fetchJoin()
-                .where(qCampaign.name.eq(campaignId).and(qCampaign.createDt.between(startDate, endDate)))
+                .where(qCampaign.name.eq(campaignId), qCampaign.createDt.between(startDate, endDate), qCampaign.companyId.eq(companyId))
                 .groupBy(qCampaign.status, qCampaign.updateDt)
                 .fetch();
     }
@@ -94,14 +76,8 @@ public class QCampaignRepositoryImpl implements QCampaignRepository {
         return queryFactory.select(
                         Projections.constructor(
                                 CampaignStatusAggregation.class,
-                                //qCampaign.name.as("autoUpdateId"),
-                                //qCampaign.name.as("deploymentId"),
-                                //qCampaign.name.as("deploymentTag"),
                                 qCampaign.status.as("deploymentStatus"),
                                 qCampaignDeviceMap.device.id.count().as("totalDevices"),
-                                /*new CaseBuilder()
-                                        .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.PENDING))
-                                        .then(1).otherwise(0).sum().as("created"),*/
                                 new CaseBuilder()
                                         .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.PENDING))
                                         .then(1).otherwise(0).sum().as("scheduled"),
@@ -114,22 +90,10 @@ public class QCampaignRepositoryImpl implements QCampaignRepository {
                                 new CaseBuilder()
                                         .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.COMPLETED))
                                         .then(1).otherwise(0).sum().as("completed"),
-                               /* new CaseBuilder()
-                                        .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.PENDING))
-                                        .then(1).otherwise(0).sum().as("cancelled"),*/
-                                /*new CaseBuilder()
-                                        .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.PENDING))
-                                        .then(1).otherwise(0).sum().as("unknown"),*/
-                                /*qCampaign.askUserYn.as("cancelRequested"),*/
                                 new CaseBuilder()
                                         .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.FAIL))
                                         .then(1).otherwise(0).sum().as("failed"),
-                                /*
-                                new CaseBuilder()
-                                        .when(qCampaignDeviceMap.status.eq(CampaignDeviceStatus.FAIL))
-                                        .then(1).otherwise(0).sum().as("install"),*/
                                 qCampaign.updateDt
-                                //qCampaignDeviceMap.updateDate
                         )
                 )
                 .from(qCampaign)

@@ -29,7 +29,8 @@ public class CampaignRequestDto {
                         //String bsp,
                         String patch,
                         String OSVersion
-                ) {}
+                ) {
+                }
             }
 
            /* public record CampaignMediaServer(
@@ -63,7 +64,8 @@ public class CampaignRequestDto {
                     //Integer postponeMaxDuration,
                     //String postponeMessage,
                     //String userMessage
-            ) {}
+            ) {
+            }
 
             /*public record BatteryRule(
                     Integer level,
@@ -72,9 +74,10 @@ public class CampaignRequestDto {
         }
 
         public record CampaignDevice(
-            String model,
-            List<String> serial
-        ) {}
+                String model,
+                List<String> serial
+        ) {
+        }
     }
 
     public record CampaignStatus(
@@ -83,8 +86,19 @@ public class CampaignRequestDto {
             String deploymentId,
             String status,
             LocalDateTime fromTime,
-            LocalDateTime toTime
-    ) { }
+            LocalDateTime toTime,
+            Integer offset,
+            Integer size
+    ) {
+        public CampaignStatus(String deploymentId, String status, LocalDateTime fromTime, LocalDateTime toTime, Integer offset, Integer size) {
+            this.deploymentId = deploymentId;
+            this.status = status;
+            this.fromTime = fromTime;
+            this.toTime = toTime;
+            this.offset = offset == null ? 0 : offset;
+            this.size = size == null ? 10 : size;
+        }
+    }
 
     public record Notification(
             String notificationType,
@@ -117,10 +131,35 @@ public class CampaignRequestDto {
 
     public record CampaignStatusDetail(
             String deploymentId,
-            Boolean appendStatus
-    ) {}
+            Boolean appendStatus,
+            Integer offset,
+            Integer size
+    ) {
+        public CampaignStatusDetail(String deploymentId, Boolean appendStatus, Integer offset, Integer size) {
+            this.deploymentId = deploymentId;
+            this.appendStatus = appendStatus;
+            this.offset = offset == null ? 0 : offset;
+            this.size = size == null ? 10 : size;
+        }
+    }
 
     public record CancelCampaign(
             String deploymentId
-    ) { }
+    ) {
+    }
+
+    public record FOTAReadyDevice(
+            String fotaReady,
+            String detailLevel,
+            Integer offset,
+            Integer size
+    ) {
+        public FOTAReadyDevice(String fotaReady, String detailLevel, Integer offset, Integer size) {
+            this.fotaReady = fotaReady;
+            this.detailLevel = detailLevel;
+            this.offset = offset == null ? 0 : offset;
+            this.size = size == null ? 10 : size;
+        }
+    }
+
 }

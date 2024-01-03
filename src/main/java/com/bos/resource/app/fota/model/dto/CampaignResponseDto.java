@@ -9,6 +9,7 @@ import com.bos.resource.app.fota.model.entity.CampaignDeviceMap;
 import com.bos.resource.app.fota.model.entity.Firmware;
 import com.bos.resource.app.fota.model.enums.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -294,6 +295,53 @@ public class CampaignResponseDto {
         private final String status;
         private final String code;
         private final LocalDateTime timestamp;
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class FotaReadyDevice {
+        private final Paging head;
+        private final List<FOTAReadyDeviceContent> data;
+
+        @Getter
+        public static class FOTAReadyDeviceContent {
+            private final String serialNumber;
+            private final String model;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private Long fotaReady;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private LocalDateTime lastStatusReportTime;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private String buildId;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            private String OSVersion;
+
+            public FOTAReadyDeviceContent(String serialNumber, String model) {
+                this.model = model;
+                this.serialNumber = serialNumber;
+            }
+
+            public FOTAReadyDeviceContent(String serialNumber, String model, Long fotaReady, LocalDateTime lastStatusReportTime, String buildId, String OSVersion) {
+                this.model = model;
+                this.serialNumber = serialNumber;
+                this.fotaReady = fotaReady;
+                this.lastStatusReportTime = lastStatusReportTime;
+                this.buildId = buildId;
+                this.OSVersion = OSVersion;
+            }
+        }
+
+        public static FotaReadyDevice of(Page<FOTAReadyDeviceContent> fotaReadyDevice) {
+            return new FotaReadyDevice(
+                    new Paging(
+                            fotaReadyDevice.getNumber(),
+                            fotaReadyDevice.getPageable().getOffset(),
+                            fotaReadyDevice.getPageable().getPageSize(),
+                            fotaReadyDevice.getNumberOfElements()
+                    ),
+                    fotaReadyDevice.getContent()
+            );
+        }
     }
 
 }
