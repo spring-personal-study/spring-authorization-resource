@@ -1,6 +1,5 @@
 package com.bos.resource.app.fota.model.dto;
 
-import com.bos.resource.app.common.domain.enums.UseType;
 import com.bos.resource.app.fota.model.enums.CampaignStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

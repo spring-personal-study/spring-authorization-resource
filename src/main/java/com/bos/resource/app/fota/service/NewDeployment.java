@@ -4,7 +4,6 @@ import com.bos.resource.app.fota.model.dto.CampaignRequestDto;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

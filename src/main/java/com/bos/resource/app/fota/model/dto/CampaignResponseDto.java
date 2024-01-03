@@ -9,7 +9,6 @@ import com.bos.resource.app.fota.model.entity.CampaignDeviceMap;
 import com.bos.resource.app.fota.model.entity.Firmware;
 import com.bos.resource.app.fota.model.enums.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -15,8 +15,6 @@ import com.bos.resource.app.fota.service.FOTAService;
 import com.bos.resource.app.resourceowner.ResourceOwnerService;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;

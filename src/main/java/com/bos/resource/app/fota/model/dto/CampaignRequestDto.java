@@ -16,7 +16,7 @@ public class CampaignRequestDto {
     ) {
         public record CampaignProfile(
                 String updateType,
-                String timeOffset,
+                //String timeOffset,
                 ProfileTarget target
                 //List<CampaignMediaServer> mediaServer
         ) {
@@ -25,10 +25,10 @@ public class CampaignRequestDto {
                     TargetValue value
             ) {
                 public record TargetValue(
-                        String artifactName,
+                        String artifactName
                         //String bsp,
-                        String patch,
-                        String OSVersion
+                        //String patch,
+                        //String OSVersion
                 ) {
                 }
             }

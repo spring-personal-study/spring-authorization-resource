@@ -95,7 +95,7 @@ public class Campaign extends BaseEntity {
         this.useYn = Y;
     }
 
-    public static Campaign createCampaign(String newCampaignName, Integer platformId, ConvertedDateString convertedDateString, ResourceOwnerDto requestUser) {
+    public static Campaign createCampaign(String newCampaignName, ResourceOwnerDto requestUser, Integer platformId, ConvertedDateString convertedDateString, UseType allowUserPostpone) {
         return Campaign.newDeployment()
                 .name(newCampaignName)
                 .startDate(convertedDateString.getStartDateString())
@@ -105,7 +105,7 @@ public class Campaign extends BaseEntity {
                 .companyId(requestUser.getCompanyId())
                 .platformId(platformId)
                 .p2pModeYn(UseType.N)
-                .askUserYn(UseType.Y)
+                .askUserYn(allowUserPostpone)
                 .lteUseYn(UseType.Y)
                 .username(requestUser.getResourceOwnerId())
                 .email(requestUser.getEmail())
