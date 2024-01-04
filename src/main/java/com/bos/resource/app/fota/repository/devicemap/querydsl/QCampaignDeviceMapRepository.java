@@ -5,7 +5,9 @@ import com.bos.resource.app.fota.model.entity.CampaignDeviceMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface QCampaignDeviceMapRepository {
+import java.util.List;
 
+public interface QCampaignDeviceMapRepository {
     Page<CampaignDeviceMap> findByCampaignDevices(Campaign targetCampaign, Pageable pageable);
+    List<CampaignDeviceMap> findByCampaign(Campaign campaign);
 }

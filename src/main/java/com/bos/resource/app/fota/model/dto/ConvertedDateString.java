@@ -4,6 +4,7 @@ import com.bos.resource.app.fota.model.dto.CampaignRequestDto.CreateCampaignDto.
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Getter
@@ -27,8 +28,8 @@ public class ConvertedDateString {
         String formattedStartDateString = startDate.format(dateFormatter);
         String formattedEndDateString = endDate.format(dateFormatter);
 
-        LocalDateTime startTime = LocalDateTime.parse(install.timeWindowStart(), DateTimeFormatter.ISO_TIME);
-        LocalDateTime endTime = LocalDateTime.parse(install.timeWindowEnd(), DateTimeFormatter.ISO_TIME);
+        LocalTime startTime = LocalTime.parse(install.timeWindowStart(), DateTimeFormatter.ISO_TIME);
+        LocalTime endTime = LocalTime.parse(install.timeWindowEnd(), DateTimeFormatter.ISO_TIME);
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         String formattedStartTimeString = startTime.format(timeFormatter);
         String formattedEndTimeString = endTime.format(timeFormatter);

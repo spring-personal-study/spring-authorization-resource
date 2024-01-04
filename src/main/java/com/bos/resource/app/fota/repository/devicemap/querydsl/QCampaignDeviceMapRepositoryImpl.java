@@ -1,7 +1,9 @@
 package com.bos.resource.app.fota.repository.devicemap.querydsl;
 
+import com.bos.resource.app.device.model.entity.QDevice;
 import com.bos.resource.app.fota.model.entity.Campaign;
 import com.bos.resource.app.fota.model.entity.CampaignDeviceMap;
+import com.bos.resource.app.fota.model.entity.QCampaign;
 import com.bos.resource.app.fota.model.entity.QCampaignDeviceMap;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -31,5 +33,20 @@ public class QCampaignDeviceMapRepositoryImpl implements QCampaignDeviceMapRepos
                 .from(qCampaignDeviceMap)
                 .where(qCampaignDeviceMap.campaign.eq(targetCampaign));
         return PageableExecutionUtils.getPage(devices, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public List<CampaignDeviceMap> findByCampaign(Campaign campaign) {
+        QCampaignDeviceMap qCampaignDeviceMap = QCampaignDeviceMap.campaignDeviceMap;
+        QCampaign qCampaign = QCampaign.campaign;
+        QDevice qDevice = QDevice.device;
+
+        return queryFactory.select(qCampaignDeviceMap)
+                .from(qCampaignDeviceMap)
+                .innerJoin(qCampaign).on(qCampaign.id.eq(qCampaignDeviceMap.campaign.id))
+                .innerJoin(qDevice).on(qDevice.id.eq(qCampaignDeviceMap.device.id))
+                .fetchJoin()
+                .where(qCampaignDeviceMap.campaign.id.eq(campaign.getId()))
+                .fetch();
     }
 }

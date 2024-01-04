@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CampaignPackageMapRepository extends JpaRepository<CampaignPackageMap, Long>  {
     void deleteByCampaign(Campaign campaign);
+
+    CampaignPackageMap findByCampaign(Campaign campaign);
 }
