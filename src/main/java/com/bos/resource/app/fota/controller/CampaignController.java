@@ -102,7 +102,7 @@ public class CampaignController {
     public CampaignResponseDto.FotaReadyDevice campaignDevice(
             Authentication authentication,
             @Valid @RequestBody(required = true)
-            CampaignRequestDto.FOTAReadyDevice campaignDevice,
+            CampaignRequestDto.FOTAReadyDevice campaignDevice
     ) {
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
         return fotaService.getFOTAReadyDevice(resourceOwner.getCompanyId(), campaignDevice);
