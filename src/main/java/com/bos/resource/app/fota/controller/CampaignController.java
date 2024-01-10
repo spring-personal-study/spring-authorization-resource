@@ -34,9 +34,9 @@ public class CampaignController {
     @Deprecated(since = "0.0.1, not supported in our service")
     @PostMapping("/notification")
     public CreatedNotification notification(
+            Authentication authentication,
             @Valid @RequestBody
             Notification notification,
-            Authentication authentication,
             BindingResult result
     ) {
         if (result.hasErrors()) {
@@ -48,23 +48,24 @@ public class CampaignController {
 
     @PostMapping("/deployments")
     public CampaignResponseDto.CreatedCampaign campaigns(
+            Authentication authentication,
             @Valid @RequestBody
             CreateCampaignDto createCampaignDto,
-            Authentication authentication,
             BindingResult result
     ) {
         if (result.hasErrors()) {
             throw new InvalidFOTAParameterException(result, FOTACrudErrorCode.FOTA_CRUD_FAIL);
         }
+
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
         return fotaService.createCampaign(resourceOwner, createCampaignDto);
     }
 
     @PostMapping("/deployments/status")
     public FoundCampaignStatus campaignsStatus(
+            Authentication authentication,
             @Valid @RequestBody
             CampaignStatus campaignStatus,
-            Authentication authentication,
             BindingResult result
     ) {
         if (result.hasErrors()) {
@@ -90,18 +91,18 @@ public class CampaignController {
 
     @PostMapping("/deployments/cancel")
     public CampaignResponseDto.CancelledCampaign cancelCampaign(
+            Authentication authentication,
             @Valid @RequestBody(required = true)
-            CampaignRequestDto.CancelCampaign cancelCampaign,
-            Authentication authentication
+            CampaignRequestDto.CancelCampaign cancelCampaign
     ) {
         return fotaService.cancelCampaign(authentication.getName(), cancelCampaign.deploymentId());
     }
 
     @PostMapping("/devices")
     public CampaignResponseDto.FotaReadyDevice campaignDevice(
+            Authentication authentication,
             @Valid @RequestBody(required = true)
             CampaignRequestDto.FOTAReadyDevice campaignDevice,
-            Authentication authentication
     ) {
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
         return fotaService.getFOTAReadyDevice(resourceOwner.getCompanyId(), campaignDevice);
