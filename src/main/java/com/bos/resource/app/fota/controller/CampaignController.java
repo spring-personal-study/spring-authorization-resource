@@ -14,6 +14,7 @@ import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FoundCampaignStat
 import com.bos.resource.app.fota.service.FOTAService;
 import com.bos.resource.app.resourceowner.ResourceOwnerService;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
@@ -33,7 +34,7 @@ public class CampaignController {
     @Deprecated(since = "0.0.1, not supported in our service")
     @PostMapping("/notification")
     public CreatedNotification notification(
-            @RequestBody
+            @Valid @RequestBody
             Notification notification,
             Authentication authentication,
             BindingResult result
@@ -47,7 +48,7 @@ public class CampaignController {
 
     @PostMapping("/deployments")
     public CampaignResponseDto.CreatedCampaign campaigns(
-            @RequestBody
+            @Valid @RequestBody
             CreateCampaignDto createCampaignDto,
             Authentication authentication,
             BindingResult result
@@ -61,7 +62,7 @@ public class CampaignController {
 
     @PostMapping("/deployments/status")
     public FoundCampaignStatus campaignsStatus(
-            @RequestBody
+            @Valid @RequestBody
             CampaignStatus campaignStatus,
             Authentication authentication,
             BindingResult result
@@ -75,7 +76,7 @@ public class CampaignController {
 
     @PostMapping("/deployments/detail")
     public FoundCampaignStatusDetail campaignsStatusDetail(
-            @RequestBody
+            @Valid @RequestBody
             CampaignStatusDetail campaignStatus,
             Authentication authentication,
             BindingResult result
@@ -89,7 +90,8 @@ public class CampaignController {
 
     @PostMapping("/deployments/cancel")
     public CampaignResponseDto.CancelledCampaign cancelCampaign(
-            @RequestBody(required = true) CampaignRequestDto.CancelCampaign cancelCampaign,
+            @Valid @RequestBody(required = true)
+            CampaignRequestDto.CancelCampaign cancelCampaign,
             Authentication authentication
     ) {
         return fotaService.cancelCampaign(authentication.getName(), cancelCampaign.deploymentId());
@@ -97,7 +99,7 @@ public class CampaignController {
 
     @PostMapping("/devices")
     public CampaignResponseDto.FotaReadyDevice campaignDevice(
-            @RequestBody(required = true)
+            @Valid @RequestBody(required = true)
             CampaignRequestDto.FOTAReadyDevice campaignDevice,
             Authentication authentication
     ) {

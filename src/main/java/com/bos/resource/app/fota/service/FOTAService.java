@@ -112,8 +112,6 @@ public class FOTAService {
         return FoundCampaignStatusDetail.of(campaignStatus.deploymentId(), campaignStatusAggregation, campaignDevices, pageRequest);
     }
 
-
-    // TODO: remove json data - tb_operation_queue
     @Transactional(readOnly = false)
     public CancelledCampaign cancelCampaign(String resourceOwnerName, String campaignName) {
         Campaign campaign = campaignRepository.findByName(campaignName)
