@@ -101,11 +101,11 @@ public class FOTAService {
     public FoundCampaignStatusDetail getCampaignStatusDetail(ResourceOwnerDto resourceOwner, CampaignRequestDto.CampaignStatusDetail campaignStatus) {
         CampaignStatusAggregation campaignStatusAggregation = null;
         Campaign targetCampaign = campaignRepository.findByCampaignName(resourceOwner.getCompanyId(), campaignStatus.deploymentId());
-        if (campaignStatus.appendStatus()) {
-            campaignStatusAggregation = campaignRepository.findCampaignStatusByCampaign(targetCampaign);
-        }
         if (targetCampaign == null) {
             throw new BizException(FOTACrudErrorCode.CAMPAIGN_NOT_FOUND);
+        }
+        if (campaignStatus.appendStatus()) {
+            campaignStatusAggregation = campaignRepository.findCampaignStatusByCampaign(targetCampaign);
         }
         PageRequest pageRequest = PageRequest.of(campaignStatus.offset(), campaignStatus.size());
         Page<CampaignDeviceMap> campaignDevices = campaignDeviceMapRepository.findByCampaignDevices(targetCampaign, pageRequest);
