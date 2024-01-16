@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+// default url: http://127.0.0.1:8082/swagger-ui/index.html/
 @Configuration
 public class SwaggerConfig {
 
