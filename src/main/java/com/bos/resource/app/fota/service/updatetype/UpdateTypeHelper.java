@@ -68,7 +68,13 @@ public class UpdateTypeHelper {
         }
     }
 
-    boolean skipInvalidDevice(String sn, Device device, List<String> notFoundDevices, List<String> expiredWarrantyDevices) {
+    boolean skipInvalidDevice(String sn, Device device) {
+        if (device == null) return true;
+        if (device.getValidWarranty().equals(UseType.N)) return true;
+        return false;
+    }
+
+    /*boolean skipInvalidDevice(String sn, Device device, List<String> notFoundDevices, List<String> expiredWarrantyDevices) {
         if (device == null) {
             notFoundDevices.add(sn);
             return true;
@@ -78,7 +84,7 @@ public class UpdateTypeHelper {
             return true;
         }
         return false;
-    }
+    }*/
 
     void saveDeviceIntoCampaign(Campaign savedCampaign, Package fotaPackage, Device device) {
         CampaignDeviceMap campaignDeviceMap = CampaignDeviceMap.prepareSave(savedCampaign, device, fotaPackage.getFirmware().getUploadServerType());
@@ -103,7 +109,19 @@ public class UpdateTypeHelper {
         }
     }
 
-    void saveCampaignDetails(Campaign savedCampaign, Package targetPackage, List<String> serialNumbers, List<String> notFound, List<String> expiredWarranty) {
+    void saveCampaignDetails(Campaign savedCampaign, Package targetPackage, List<String> serialNumbers) {
+        CampaignPackageMap fotaCampaignPackageMap = CampaignPackageMap.prepareSave(savedCampaign, targetPackage);
+        campaignPackageMapRepository.save(fotaCampaignPackageMap);
+        for (String sn : serialNumbers) {
+            Device device = deviceRepository.findBySerialNumber(sn);
+            if (skipInvalidDevice(sn, device)) continue;
+            saveDeviceIntoCampaign(savedCampaign, targetPackage, device);
+            saveDeviceTags(savedCampaign, device);
+            saveDeviceGroup(savedCampaign, device);
+        }
+    }
+
+    /*void saveCampaignDetails(Campaign savedCampaign, Package targetPackage, List<String> serialNumbers, List<String> notFound, List<String> expiredWarranty) {
         CampaignPackageMap fotaCampaignPackageMap = CampaignPackageMap.prepareSave(savedCampaign, targetPackage);
         campaignPackageMapRepository.save(fotaCampaignPackageMap);
         for (String sn : serialNumbers) {
@@ -113,7 +131,7 @@ public class UpdateTypeHelper {
             saveDeviceTags(savedCampaign, device);
             saveDeviceGroup(savedCampaign, device);
         }
-    }
+    }*/
 
     record CreateCampaignIngredients(
         Campaign newCampaign,

@@ -16,10 +16,10 @@ public class DeviceController {
 
     private final ApiService apiService;
 
-    @GetMapping("/authentication/info")
+/*    @GetMapping("/authentication/info")
     public Authentication index(Authentication authentication) {
         return authentication;
-    }
+    }*/
 
     @GetMapping("/asset")
     public ResponseDto<DeviceResponseDto> asset(Authentication authentication) {

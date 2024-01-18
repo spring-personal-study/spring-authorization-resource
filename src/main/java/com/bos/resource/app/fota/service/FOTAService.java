@@ -127,6 +127,7 @@ public class FOTAService {
                 .stream()
                 .map(CampaignDeviceMap::getDevice)
                 .toList();
+
         for (Device campaignDevice : campaignDevices) {
             operationQueueRepository.findByOpCodeAndDevice(OpCode.UPGRADE_FIRMWARE, campaignDevice)
                     .ifPresent(operationQueueRepository::delete);

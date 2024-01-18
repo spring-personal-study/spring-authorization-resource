@@ -44,7 +44,7 @@ public class UpdateTypeCustom implements UpdateTypeSelector {
         Campaign savedCampaign = campaignRepository.save(newCampaign.newCampaign());
 
         // record lists for campaign details result
-        List<String> expiredWarranty = new ArrayList<>(), notFound = new ArrayList<>();
+        //List<String> expiredWarranty = new ArrayList<>(), notFound = new ArrayList<>();
 
         // save campaign details
         for (Firmware firmware : firmwares) {
@@ -53,7 +53,8 @@ public class UpdateTypeCustom implements UpdateTypeSelector {
                 createCampaignDto.profile().target().value().artifactName().equals(firmware.getVersion())
             ) {
                 Package targetPackage = packageRepository.findByFirmwareAndModelAndTargetVersion(firmware, newCampaign.supportModel(), createCampaignDto.profile().target().value().artifactName());
-                createCampaignKit.saveCampaignDetails(savedCampaign, targetPackage, createCampaignDto.devices().serial(), notFound, expiredWarranty);
+                createCampaignKit.saveCampaignDetails(savedCampaign, targetPackage, createCampaignDto.devices().serial());
+                //createCampaignKit.saveCampaignDetails(savedCampaign, targetPackage, createCampaignDto.devices().serial(), notFound, expiredWarranty);
             }
         }
         return CreatedCampaign.builder()

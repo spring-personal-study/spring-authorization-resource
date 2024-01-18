@@ -1,6 +1,7 @@
 package com.bos.resource.app.resourceowner.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,12 @@ public class ResourceOwner {
 
     @Column(name = "COMPANY_ID")
     private Long companyId;
+
+    @Builder
+    public ResourceOwner(Long id, String resourceOwnerId, String email, Long companyId) {
+        this.id = id;
+        this.resourceOwnerId = resourceOwnerId;
+        this.email = email;
+        this.companyId = companyId;
+    }
 }

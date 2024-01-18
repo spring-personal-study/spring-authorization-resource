@@ -16,8 +16,8 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
         Info info = new Info()
                 .version("v1.0.0")
-                .title("BosEMM")
-                .description("BosEMM Backend RestApi Docs");
+                .title("Bluebird FOTA API")
+                .description("Bluebird FOTA API Documentation");
 
         String jwt = "JWT TOKEN";
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwt);

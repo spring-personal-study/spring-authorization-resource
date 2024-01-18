@@ -4,9 +4,7 @@ import com.bos.resource.app.common.domain.enums.UseType;
 import com.bos.resource.app.device.model.enums.DeviceStatus;
 import com.bos.resource.app.resourceowner.model.entity.ResourceOwner;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.SQLRestriction;
@@ -19,6 +17,7 @@ import java.time.LocalDateTime;
 @SQLRestriction("USE_YN = 'Y'")
 @Table(name = "TB_DEVICE")
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Device {
 
     @Id
@@ -62,4 +61,18 @@ public class Device {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private ResourceOwner resourceOwner;
+
+    @Builder
+    public Device(Long id, String serialNumber, String deviceCode, String deviceName, String deviceDescription, DeviceStatus status, LocalDateTime enrolmentDate, UseType validWarranty, DeviceDetail deviceDetail, ResourceOwner resourceOwner) {
+        this.id = id;
+        this.serialNumber = serialNumber;
+        this.deviceCode = deviceCode;
+        this.deviceName = deviceName;
+        this.deviceDescription = deviceDescription;
+        this.status = status;
+        this.enrolmentDate = enrolmentDate;
+        this.validWarranty = validWarranty;
+        this.deviceDetail = deviceDetail;
+        this.resourceOwner = resourceOwner;
+    }
 }

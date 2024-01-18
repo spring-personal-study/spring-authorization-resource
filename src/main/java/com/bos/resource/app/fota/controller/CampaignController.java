@@ -17,6 +17,7 @@ import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +35,7 @@ public class CampaignController {
     @Deprecated(since = "0.0.1, not supported in our service")
     @PostMapping("/notification")
     public CreatedNotification notification(
-            Authentication authentication,
+            JwtAuthenticationToken authentication,
             @Valid @RequestBody
             Notification notification,
             BindingResult result
@@ -48,7 +49,7 @@ public class CampaignController {
 
     @PostMapping("/deployments")
     public CampaignResponseDto.CreatedCampaign campaigns(
-            Authentication authentication,
+            JwtAuthenticationToken authentication,
             @Valid @RequestBody
             CreateCampaignDto createCampaignDto,
             BindingResult result
@@ -56,14 +57,13 @@ public class CampaignController {
         if (result.hasErrors()) {
             throw new InvalidFOTAParameterException(result, FOTACrudErrorCode.FOTA_CRUD_FAIL);
         }
-
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
         return fotaService.createCampaign(resourceOwner, createCampaignDto);
     }
 
     @PostMapping("/deployments/status")
     public FoundCampaignStatus campaignsStatus(
-            Authentication authentication,
+            JwtAuthenticationToken authentication,
             @Valid @RequestBody
             CampaignStatus campaignStatus,
             BindingResult result
@@ -77,9 +77,9 @@ public class CampaignController {
 
     @PostMapping("/deployments/detail")
     public FoundCampaignStatusDetail campaignsStatusDetail(
+            JwtAuthenticationToken authentication,
             @Valid @RequestBody
             CampaignStatusDetail campaignStatus,
-            Authentication authentication,
             BindingResult result
     ) {
         if (result.hasErrors()) {
@@ -91,19 +91,27 @@ public class CampaignController {
 
     @PostMapping("/deployments/cancel")
     public CampaignResponseDto.CancelledCampaign cancelCampaign(
-            Authentication authentication,
+            JwtAuthenticationToken authentication,
             @Valid @RequestBody(required = true)
-            CampaignRequestDto.CancelCampaign cancelCampaign
+            CampaignRequestDto.CancelCampaign cancelCampaign,
+            BindingResult result
     ) {
+        if (result.hasErrors()) {
+            throw new InvalidFOTAParameterException(result, FOTACrudErrorCode.FOTA_CRUD_FAIL);
+        }
         return fotaService.cancelCampaign(authentication.getName(), cancelCampaign.deploymentId());
     }
 
     @PostMapping("/devices")
     public CampaignResponseDto.FotaReadyDevice campaignDevice(
-            Authentication authentication,
-            @Valid @RequestBody(required = true)
-            CampaignRequestDto.FOTAReadyDevice campaignDevice
+            JwtAuthenticationToken authentication,
+            @Valid @RequestBody
+            CampaignRequestDto.FOTAReadyDevice campaignDevice,
+            BindingResult result
     ) {
+        if (result.hasErrors()) {
+            throw new InvalidFOTAParameterException(result, FOTACrudErrorCode.FOTA_CRUD_FAIL);
+        }
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
         return fotaService.getFOTAReadyDevice(resourceOwner.getCompanyId(), campaignDevice);
     }

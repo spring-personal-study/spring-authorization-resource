@@ -181,6 +181,10 @@ public class CampaignRequestDto {
             @NotNull(message = ApiErrorMessage.DEPLOYMENT_ID_IS_NULL)
             String deploymentId
     ) {
+
+        public CancelCampaign(String deploymentId) {
+            this.deploymentId = deploymentId;
+        }
     }
 
     public record FOTAReadyDevice(

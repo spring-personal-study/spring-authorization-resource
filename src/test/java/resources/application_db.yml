@@ -1,9 +1,17 @@
+## DB setting
+## GET {uri}/h2-console
+## create database at firsttime
+## jdbc:h2:~/test_fota
+## access into h2
+## jdbc:h2:tcp://localhost/~/test
+
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://211.238.149.26:3306/emm?characterEncoding=UTF-8
-    username: root
-    password: wso2carbon
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem://localhost/~/testdb;MODE=MYSQL
+    username: sa
+    password:
+    initialization-mode: always
 
   h2:
     console:
@@ -13,19 +21,22 @@ spring:
         trace: false
         web-allow-others: false
 
+  sql:
+    init:
+      platform: h2
+      mode: always
 
   jpa:
     show-sql: false
+    defer-datasource-initialization: true
     properties:
       hibernate:
         format_sql: true
         show_sql: false
         dialect: org.hibernate.dialect.MySQLDialect
-        # default_batch_fetch_size: 1000
     hibernate:
-      ddl-auto: none
-    database: mysql
-    open-in-view: false
+       ddl-auto: none
+
 
 decorator:
   datasource:

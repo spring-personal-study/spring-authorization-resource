@@ -2,6 +2,7 @@ package com.bos.resource.app.device.model.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -12,8 +13,8 @@ public class DeviceResponseDto {
     private final Integer code;
     private final List<DeviceDto> assets;
 
-    public static DeviceResponseDto wrapper(List<DeviceDto> deviceDto) {
-        return new DeviceResponseDto("success", 200, deviceDto);
+    public static DeviceResponseDto wrapper(List<DeviceDto> deviceDtos) {
+        return new DeviceResponseDto("success", 200, deviceDtos);
     }
 
     @Getter
