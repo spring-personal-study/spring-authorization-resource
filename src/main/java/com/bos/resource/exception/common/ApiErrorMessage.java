@@ -24,8 +24,6 @@ public class ApiErrorMessage {
     public static final String DEPLOYMENT_ID_IS_NULL = "deploymentId is null.";
     public static final String DEPLOYMENT_ID_IS_EMPTY = "deploymentId has empty value.";
     public static final String APPEND_STATUS_IS_NULL = "appendStatus is null.";
-    public static final String STATUS_IS_NULL = "status is null.";
-    public static final String STATUS_IS_EMPTY = "status has empty value.";
     public static final String UPDATE_TYPE_IS_NULL = "updateType is null.";
     public static final String UPDATE_TYPE_IS_EMPTY = "updateType has empty value.";
     public static final String ARTIFACT_NAME_IS_NULL = "artifactName is null.";

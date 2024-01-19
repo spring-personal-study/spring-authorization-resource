@@ -6,3 +6,7 @@ spring:
     import:
       - application_oauth2_resource.yml
       - application_db.yml
+
+logging:
+  level:
+    org.springframework.security: trace

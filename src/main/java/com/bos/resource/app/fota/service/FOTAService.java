@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+
+import static com.bos.resource.app.common.apiresponse.ApiSuccessMessage.CANCEL_DEPLOYMENT_SUCCESS;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -144,11 +147,11 @@ public class FOTAService {
         campaignRepository.deleteById(campaign.getId());
 
         return CancelledCampaign.builder()
-                .deploymentId(campaign.getId())
+                .deploymentId(campaignName)
                 .action("canceled")
-                .message("cancel deployment success")
-                .status("success")
-                .code("200")
+                .message(CANCEL_DEPLOYMENT_SUCCESS)
+                .status(HttpStatus.OK.name())
+                .code("success")
                 .timestamp(LocalDateTime.now())
                 .build();
     }

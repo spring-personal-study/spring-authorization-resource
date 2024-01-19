@@ -2,6 +2,7 @@ package com.bos.resource.app.fota.model.dto;
 
 import com.bos.resource.app.fota.model.enums.NotificationType;
 import com.bos.resource.exception.common.ApiErrorMessage;
+import com.querydsl.core.util.StringUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -14,11 +15,14 @@ public class CampaignRequestDto {
     public record CreateCampaignDto(
             //Boolean simulate,
             @Valid
+            @NotNull
             CampaignProfile profile,
             //CampaignSchedule schedule,
             @Valid
+            @NotNull
             CampaignRule rules,
             @Valid
+            @NotNull
             CampaignDevice devices
     ) {
         public record CampaignProfile(
@@ -27,6 +31,7 @@ public class CampaignRequestDto {
                 String updateType,
                 //String timeOffset,
                 @Valid
+                @NotNull
                 ProfileTarget target
                 //List<CampaignMediaServer> mediaServer
         ) {
@@ -110,8 +115,6 @@ public class CampaignRequestDto {
             @NotNull(message = ApiErrorMessage.DEPLOYMENT_ID_IS_NULL)
             @NotEmpty(message = ApiErrorMessage.DEPLOYMENT_ID_IS_EMPTY)
             String deploymentId,
-            @NotNull(message = ApiErrorMessage.STATUS_IS_NULL)
-            @NotEmpty(message = ApiErrorMessage.STATUS_IS_EMPTY)
             String status,
             LocalDateTime fromTime,
             LocalDateTime toTime,
@@ -120,7 +123,7 @@ public class CampaignRequestDto {
     ) {
         public CampaignStatus(String deploymentId, String status, LocalDateTime fromTime, LocalDateTime toTime, Integer offset, Integer size) {
             this.deploymentId = deploymentId;
-            this.status = status;
+            this.status = status == null ? "ALL" : StringUtils.capitalize(status);
             this.fromTime = fromTime == null ? LocalDateTime.now().minusDays(1) : fromTime;
             this.toTime = toTime == null ? LocalDateTime.now().minusDays(90) : toTime;
             this.offset = offset == null ? 0 : offset;

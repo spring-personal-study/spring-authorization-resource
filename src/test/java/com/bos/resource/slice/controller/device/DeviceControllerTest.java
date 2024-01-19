@@ -81,7 +81,6 @@ public class DeviceControllerTest {
         @DisplayName("Request from an unauthorized user - 401")
         void givenRequestIsAnonymous_whenGetAsset_thenUnauthorized() throws Exception {
             mockMvc.perform(get("/v1/asset").with(anonymous()))
-                    .andDo(print())
                     .andExpect(status().isUnauthorized());
         }
 

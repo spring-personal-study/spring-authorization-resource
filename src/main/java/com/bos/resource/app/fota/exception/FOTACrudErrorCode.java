@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,22 +37,20 @@ public enum FOTACrudErrorCode implements ErrorCode {
     DEPLOYMENT_ID_IS_NULL(BAD_REQUEST, -1415, ApiErrorMessage.DEPLOYMENT_ID_IS_NULL),
     DEPLOYMENT_ID_IS_EMPTY(BAD_REQUEST, -1416, ApiErrorMessage.DEPLOYMENT_ID_IS_EMPTY),
     APPEND_STATUS_IS_NULL(BAD_REQUEST, -1417, ApiErrorMessage.APPEND_STATUS_IS_NULL),
-    STATUS_IS_NULL(BAD_REQUEST, -1418, ApiErrorMessage.STATUS_IS_NULL),
-    STATUS_IS_EMPTY(BAD_REQUEST, -1419, ApiErrorMessage.STATUS_IS_EMPTY),
-    UPDATE_TYPE_IS_NULL(BAD_REQUEST, -1420, ApiErrorMessage.UPDATE_TYPE_IS_NULL),
-    UPDATE_TYPE_IS_EMPTY(BAD_REQUEST, -1421, ApiErrorMessage.UPDATE_TYPE_IS_EMPTY),
-    ARTIFACT_NAME_IS_NULL(BAD_REQUEST, -1422, ApiErrorMessage.ARTIFACT_NAME_IS_NULL),
-    ARTIFACT_NAME_IS_EMPTY(BAD_REQUEST, -1423, ApiErrorMessage.ARTIFACT_NAME_IS_EMPTY),
-    START_DATE_IS_NULL(BAD_REQUEST, -1424, ApiErrorMessage.START_DATE_IS_NULL),
-    START_DATE_IS_EMPTY(BAD_REQUEST, -1425, ApiErrorMessage.START_DATE_IS_EMPTY),
-    TIME_WINDOW_START_IS_NULL(BAD_REQUEST, -1426, ApiErrorMessage.TIME_WINDOW_START_IS_NULL),
-    TIME_WINDOW_START_IS_EMPTY(BAD_REQUEST, -1427, ApiErrorMessage.TIME_WINDOW_START_IS_EMPTY),
-    TIME_WINDOW_END_IS_NULL(BAD_REQUEST, -1428, ApiErrorMessage.TIME_WINDOW_END_IS_NULL),
-    TIME_WINDOW_END_IS_EMPTY(BAD_REQUEST, -1429, ApiErrorMessage.TIME_WINDOW_END_IS_EMPTY),
-    ALLOW_USER_POSTPONE_IS_NULL(BAD_REQUEST, -1430, ApiErrorMessage.ALLOW_USER_POSTPONE_IS_NULL),
-    MODEL_IS_NULL(BAD_REQUEST, -1431, ApiErrorMessage.MODEL_IS_NULL),
-    SERIAL_IS_NULL(BAD_REQUEST, -1432, ApiErrorMessage.SERIAL_IS_NULL),
-    SERIAL_IS_EMPTY(BAD_REQUEST, -1433, ApiErrorMessage.SERIAL_IS_EMPTY)
+    UPDATE_TYPE_IS_NULL(BAD_REQUEST, -1418, ApiErrorMessage.UPDATE_TYPE_IS_NULL),
+    UPDATE_TYPE_IS_EMPTY(BAD_REQUEST, -1419, ApiErrorMessage.UPDATE_TYPE_IS_EMPTY),
+    ARTIFACT_NAME_IS_NULL(BAD_REQUEST, -1420, ApiErrorMessage.ARTIFACT_NAME_IS_NULL),
+    ARTIFACT_NAME_IS_EMPTY(BAD_REQUEST, -1421, ApiErrorMessage.ARTIFACT_NAME_IS_EMPTY),
+    START_DATE_IS_NULL(BAD_REQUEST, -1422, ApiErrorMessage.START_DATE_IS_NULL),
+    START_DATE_IS_EMPTY(BAD_REQUEST, -1423, ApiErrorMessage.START_DATE_IS_EMPTY),
+    TIME_WINDOW_START_IS_NULL(BAD_REQUEST, -1424, ApiErrorMessage.TIME_WINDOW_START_IS_NULL),
+    TIME_WINDOW_START_IS_EMPTY(BAD_REQUEST, -1425, ApiErrorMessage.TIME_WINDOW_START_IS_EMPTY),
+    TIME_WINDOW_END_IS_NULL(BAD_REQUEST, -1426, ApiErrorMessage.TIME_WINDOW_END_IS_NULL),
+    TIME_WINDOW_END_IS_EMPTY(BAD_REQUEST, -1427, ApiErrorMessage.TIME_WINDOW_END_IS_EMPTY),
+    ALLOW_USER_POSTPONE_IS_NULL(BAD_REQUEST, -1428, ApiErrorMessage.ALLOW_USER_POSTPONE_IS_NULL),
+    MODEL_IS_NULL(BAD_REQUEST, -1429, ApiErrorMessage.MODEL_IS_NULL),
+    SERIAL_IS_NULL(BAD_REQUEST, -1430, ApiErrorMessage.SERIAL_IS_NULL),
+    SERIAL_IS_EMPTY(BAD_REQUEST, -1431, ApiErrorMessage.SERIAL_IS_EMPTY)
     ;
 
     private static final Map<String, FOTACrudErrorCode> bizCodes =
@@ -62,7 +61,7 @@ public enum FOTACrudErrorCode implements ErrorCode {
     private final String msg;
 
     public Integer findMatchBizCode(final String failMessage) {
-        return bizCodes.get(failMessage).getBizCode();
+        return Optional.ofNullable(bizCodes.get(failMessage)).orElse(FOTA_CRUD_FAIL).getBizCode();
     }
 
 }

@@ -249,6 +249,7 @@ public class CampaignResponseDto {
             private final Integer failed;
             @JsonInclude(JsonInclude.Include.NON_NULL)
             private final LocalDateTime completedOn;
+            @JsonInclude(JsonInclude.Include.NON_NULL)
             private final List<CampaignStatusDetailDevice> devices;
 
             public static CampaignStatusDetailContent of(String deploymentId, CampaignStatusContent campaignStatusContent, List<CampaignStatusDetailDevice> detailDevices) {
@@ -288,7 +289,7 @@ public class CampaignResponseDto {
     @Builder
     @RequiredArgsConstructor
     public static class CancelledCampaign {
-        private final Long deploymentId;
+        private final String deploymentId;
         private final String action;
         private final String message;
         private final String status;

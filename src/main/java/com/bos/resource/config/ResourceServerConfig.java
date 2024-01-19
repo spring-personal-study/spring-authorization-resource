@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
@@ -41,6 +44,15 @@ public class ResourceServerConfig {
         });
         http.oauth2ResourceServer((oauth2) -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())));
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+        http.csrf(Customizer.withDefaults());
+        http.exceptionHandling((exception) -> {
+            exception.accessDeniedHandler((request, response, accessDeniedException) -> {
+                response.sendError(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase());
+            });
+            exception.authenticationEntryPoint((request, response, authException) -> {
+                response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            });
+        });
         return http.build();
     }
 
