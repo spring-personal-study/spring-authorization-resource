@@ -1,6 +1,5 @@
 package com.bos.resource.app.resourceowner.exception;
 
-import com.bos.resource.app.fota.exception.FOTACrudErrorCode;
 import com.bos.resource.exception.common.ApiErrorMessage;
 import com.bos.resource.exception.common.ErrorCode;
 import lombok.Getter;

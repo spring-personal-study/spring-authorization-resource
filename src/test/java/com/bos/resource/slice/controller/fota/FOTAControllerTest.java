@@ -319,7 +319,11 @@ public class FOTAControllerTest {
                     .andExpect(jsonPath("$.msg").value(GeneralParameterErrorCode.INVALID_PARAMETER.getMsg()))
                     .andExpect(jsonPath("$.httpCode").value(FOTACrudErrorCode.FOTA_CRUD_FAIL.getHttpStatus().value()))
                     .andExpect(jsonPath("$.internalCode").value(FOTACrudErrorCode.FOTA_CRUD_FAIL.getBizCode()))
-                    .andExpect(jsonPath("$.detailErrors[0].reason").value(FOTACrudErrorCode.DETAIL_LEVEL_IS_EMPTY.getMsg()))
+                    .andExpect(jsonPath("$.detailErrors[*].reason", containsInAnyOrder(
+                            FOTACrudErrorCode.FOTA_READY_IS_NULL.getMsg(),
+                            FOTACrudErrorCode.FOTA_READY_IS_EMPTY.getMsg(),
+                            FOTACrudErrorCode.DETAIL_LEVEL_IS_EMPTY.getMsg()
+                    )))
                     .andExpect(jsonPath("$.timestamp").isNotEmpty());
 
             verify(resourceOwnerService, atMostOnce()).findByResourceOwnerId(resourceOwnerId);

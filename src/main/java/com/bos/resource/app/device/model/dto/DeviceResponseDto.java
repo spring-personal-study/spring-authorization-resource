@@ -2,7 +2,6 @@ package com.bos.resource.app.device.model.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 import java.util.List;
 
