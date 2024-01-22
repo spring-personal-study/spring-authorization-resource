@@ -4,6 +4,7 @@ import com.bos.resource.app.common.domain.entity.BaseEntity;
 import com.bos.resource.app.common.domain.enums.UseType;
 import com.bos.resource.app.resourceowner.model.entity.Company;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -43,4 +44,15 @@ public class DeviceGroup extends BaseEntity {
     @Column(name = "USE_YN")
     @Enumerated(EnumType.STRING)
     UseType useType;
+
+    @Builder
+    public DeviceGroup(Long id, String groupCode, String groupName, String groupDescription, Company company, List<DeviceGroupMap> deviceGroups, UseType useType) {
+        this.id = id;
+        this.groupCode = groupCode;
+        this.groupName = groupName;
+        this.groupDescription = groupDescription;
+        this.company = company;
+        this.deviceGroups = deviceGroups;
+        this.useType = useType;
+    }
 }

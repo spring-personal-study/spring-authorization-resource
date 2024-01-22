@@ -4,6 +4,7 @@ import com.bos.resource.app.common.domain.entity.BaseEntity;
 import com.bos.resource.app.common.domain.enums.UseType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
@@ -38,4 +39,13 @@ public class DevicePlatform extends BaseEntity {
     @Setter
     @Column(name = "UPDATE_ID", nullable = false)
     String updateId;
+
+    @Builder
+    public DevicePlatform(Integer id, String platformName, UseType useYn, String createId, String updateId) {
+        this.id = id;
+        this.platformName = platformName;
+        this.useYn = useYn;
+        this.createId = createId;
+        this.updateId = updateId;
+    }
 }

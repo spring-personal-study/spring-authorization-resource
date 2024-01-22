@@ -1,6 +1,7 @@
 package com.bos.resource.app.device.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,11 @@ public class DeviceTagMap {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DEVICE_TAG_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private DeviceTag deviceTag;
+
+    @Builder
+    public DeviceTagMap(Long id, Device device, DeviceTag deviceTag) {
+        this.id = id;
+        this.device = device;
+        this.deviceTag = deviceTag;
+    }
 }

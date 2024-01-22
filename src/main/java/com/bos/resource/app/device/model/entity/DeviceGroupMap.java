@@ -1,6 +1,7 @@
 package com.bos.resource.app.device.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,11 @@ public class DeviceGroupMap {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DEVICE_GRP_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private DeviceGroup deviceGroup;
+
+    @Builder
+    public DeviceGroupMap(Long id, Device device, DeviceGroup deviceGroup) {
+        this.id = id;
+        this.device = device;
+        this.deviceGroup = deviceGroup;
+    }
 }

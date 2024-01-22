@@ -4,6 +4,7 @@ import com.bos.resource.app.common.domain.entity.BaseEntity;
 import com.bos.resource.app.common.domain.enums.UseType;
 import com.bos.resource.app.resourceowner.model.entity.Company;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -41,6 +42,7 @@ public class DeviceTag extends BaseEntity {
     @Column(name = "UPDATE_ID", length = 50, nullable = false)
     String updateId;
 
+    @Builder
     public DeviceTag(Long id, String name, String description, Company company, UseType useYn, String createId, String updateId) {
         this.id = id;
         this.name = name;

@@ -3,6 +3,7 @@ package com.bos.resource.app.device.model.entity;
 import com.bos.resource.app.common.domain.entity.BaseEntity;
 import com.bos.resource.app.common.domain.enums.UseType;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -31,4 +32,12 @@ public class SupportModel extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "USE_YN")
     private UseType useType;
+
+    @Builder
+    public SupportModel(Long id, DevicePlatform platform, String name, UseType useType) {
+        this.id = id;
+        this.platform = platform;
+        this.name = name;
+        this.useType = useType;
+    }
 }
