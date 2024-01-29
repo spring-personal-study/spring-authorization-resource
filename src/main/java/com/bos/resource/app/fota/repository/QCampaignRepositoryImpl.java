@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static com.bos.resource.app.fota.model.enums.CampaignStatus.ACTIVE;
+import static com.querydsl.core.types.Projections.constructor;
 import static java.util.Objects.requireNonNullElseGet;
 import static org.springframework.util.StringUtils.capitalize;
 
@@ -44,7 +45,7 @@ public class QCampaignRepositoryImpl implements QCampaignRepository {
         QCampaignDeviceMap qCampaignDeviceMap = QCampaignDeviceMap.campaignDeviceMap;
 
         return queryFactory.select(
-                        Projections.constructor(
+                        constructor(
                                 CampaignStatusAggregation.class,
                                 qCampaign.status.as("deploymentStatus"),
                                 qCampaignDeviceMap.device.id.count().as("totalDevices"),
@@ -80,7 +81,7 @@ public class QCampaignRepositoryImpl implements QCampaignRepository {
         QCampaignDeviceMap qCampaignDeviceMap = QCampaignDeviceMap.campaignDeviceMap;
 
         return queryFactory.select(
-                        Projections.constructor(
+                        constructor(
                                 CampaignStatusAggregation.class,
                                 qCampaign.status.as("deploymentStatus"),
                                 qCampaignDeviceMap.device.id.count().as("totalDevices"),

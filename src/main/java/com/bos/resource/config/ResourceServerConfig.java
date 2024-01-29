@@ -36,11 +36,16 @@ public class ResourceServerConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((request) -> {
-            //request.requestMatchers(new AntPathRequestMatcher("/photos")).access(hasAuthority("SCOPE_photo"));
             request.requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll();
             request.anyRequest().authenticated();
         });
-        http.oauth2ResourceServer((oauth2) -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())));
+        http.oauth2ResourceServer((oauth2) -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder()))
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+                })
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.sendError(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase());
+                }));
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.csrf(Customizer.withDefaults());
         http.exceptionHandling((exception) -> {
@@ -48,6 +53,7 @@ public class ResourceServerConfig {
                 response.sendError(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase());
             });
             exception.authenticationEntryPoint((request, response, authException) -> {
+
                 response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
             });
         });

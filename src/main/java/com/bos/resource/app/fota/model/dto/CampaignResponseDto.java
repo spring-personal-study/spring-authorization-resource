@@ -9,6 +9,7 @@ import com.bos.resource.app.fota.model.entity.CampaignDeviceMap;
 import com.bos.resource.app.fota.model.entity.Firmware;
 import com.bos.resource.app.fota.model.enums.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -301,33 +302,40 @@ public class CampaignResponseDto {
     @RequiredArgsConstructor
     public static class FotaReadyDevice {
         private final Paging head;
-        private final List<FOTAReadyDeviceContent> data;
+        private final FOTAReadyDeviceWrapper data;
+
+        @Getter
+        @RequiredArgsConstructor
+        public static class FOTAReadyDeviceWrapper {
+            private final List<FOTAReadyDeviceContent> devices;
+        }
 
         @Getter
         public static class FOTAReadyDeviceContent {
             private final String serialNumber;
             private final String model;
             @JsonInclude(JsonInclude.Include.NON_NULL)
-            private Long fotaReady;
+            private Integer fotaReady;
             @JsonInclude(JsonInclude.Include.NON_NULL)
             private LocalDateTime lastStatusReportTime;
             @JsonInclude(JsonInclude.Include.NON_NULL)
             private String buildId;
             @JsonInclude(JsonInclude.Include.NON_NULL)
-            private String OSVersion;
+            @JsonProperty("OSVersion")
+            private String osVersion;
 
             public FOTAReadyDeviceContent(String serialNumber, String model) {
                 this.model = model;
                 this.serialNumber = serialNumber;
             }
 
-            public FOTAReadyDeviceContent(String serialNumber, String model, Long fotaReady, LocalDateTime lastStatusReportTime, String buildId, String OSVersion) {
+            public FOTAReadyDeviceContent(String serialNumber, String model, Integer fotaReady, LocalDateTime lastStatusReportTime, String buildId, String osVersion) {
                 this.model = model;
                 this.serialNumber = serialNumber;
                 this.fotaReady = fotaReady;
                 this.lastStatusReportTime = lastStatusReportTime;
                 this.buildId = buildId;
-                this.OSVersion = OSVersion;
+                this.osVersion = osVersion;
             }
         }
 
@@ -339,7 +347,7 @@ public class CampaignResponseDto {
                             fotaReadyDevice.getPageable().getPageSize(),
                             fotaReadyDevice.getNumberOfElements()
                     ),
-                    fotaReadyDevice.getContent()
+                    new FOTAReadyDeviceWrapper(fotaReadyDevice.getContent())
             );
         }
     }

@@ -13,6 +13,7 @@ import com.bos.resource.app.fota.model.dto.CampaignRequestDto.CreateCampaignDto.
 import com.bos.resource.app.fota.model.dto.CampaignRequestDto.CreateCampaignDto.CampaignRule.InstallRule;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FotaReadyDevice.FOTAReadyDeviceContent;
+import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FotaReadyDevice.FOTAReadyDeviceWrapper;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FoundCampaignStatus.CampaignStatusContent;
 import com.bos.resource.app.fota.model.enums.CampaignStatus;
 import com.bos.resource.app.fota.service.FOTAService;
@@ -80,9 +81,10 @@ public class FOTAControllerTest {
 
         CampaignResponseDto.FotaReadyDevice responseBody = new CampaignResponseDto.FotaReadyDevice(
                 new Paging(0, 10, 10, 100),
-                List.of(
-                        new FOTAReadyDeviceContent("EF501_SN1", "EF501", 1L, now(), "20991231", "10")
-                )
+                new FOTAReadyDeviceWrapper(
+                        List.of(
+                        new FOTAReadyDeviceContent("EF501_SN1", "EF501", 1, now(), "20991231", "10")
+                ))
         );
 
         private final ResourceOwnerDto resourceOwnerDto = new ResourceOwnerDto(

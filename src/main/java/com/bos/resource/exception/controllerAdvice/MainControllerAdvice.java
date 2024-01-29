@@ -10,6 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +20,10 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.net.MalformedURLException;
+
+import static com.bos.resource.exception.controllerAdvice.GeneralControllerAdvice.handleGeneralException;
+import static com.bos.resource.exception.controllerAdvice.GeneralControllerAdvice.handleUnknownInternalException;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 2)
@@ -34,12 +39,12 @@ public class MainControllerAdvice {
      */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponseDTO> handleException(Exception e) {
-        return GeneralControllerAdvice.handleGeneralException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        return handleUnknownInternalException(e);
     }
 
     @ExceptionHandler(MismatchedInputException.class)
     protected ResponseEntity<ErrorResponseDTO> handleMismatchedInputException(MethodArgumentNotValidException e) {
-        return GeneralControllerAdvice.handleGeneralException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        return handleGeneralException(INTERNAL_SERVER_ERROR, e);
     }
 
     /**
@@ -49,7 +54,7 @@ public class MainControllerAdvice {
      */
     @ExceptionHandler(NullPointerException.class)
     protected ResponseEntity<ErrorResponseDTO> handleNPE(NullPointerException e) {
-        return GeneralControllerAdvice.handleGeneralException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        return handleGeneralException(INTERNAL_SERVER_ERROR, e);
     }
 
     /**
@@ -80,12 +85,12 @@ public class MainControllerAdvice {
      */
     @ExceptionHandler(IllegalArgumentException.class)
     protected ResponseEntity<ErrorResponseDTO> handleIllgegalURLException(IllegalArgumentException iae) {
-        return GeneralControllerAdvice.handleGeneralException(HttpStatus.BAD_REQUEST, iae);
+        return handleGeneralException(HttpStatus.BAD_REQUEST, iae);
     }
 
     @ExceptionHandler(MalformedURLException.class)
     protected ResponseEntity<ErrorResponseDTO> handleMalformedURLException(MalformedURLException mue) {
-        return GeneralControllerAdvice.handleGeneralException(HttpStatus.BAD_REQUEST, mue);
+        return handleGeneralException(HttpStatus.BAD_REQUEST, mue);
     }
 
     /**
@@ -96,7 +101,7 @@ public class MainControllerAdvice {
     @ExceptionHandler(NoHandlerFoundException.class)
     protected ResponseEntity<ErrorResponseDTO> handle404(NoHandlerFoundException nhfe) {
         log.error("A user requested a resource with a non-existent url path.");
-        return GeneralControllerAdvice.handleGeneralException(HttpStatus.NOT_FOUND, nhfe);
+        return handleGeneralException(HttpStatus.NOT_FOUND, nhfe);
     }
 
     /**
@@ -110,7 +115,7 @@ public class MainControllerAdvice {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ResponseEntity<ErrorResponseDTO> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        return GeneralControllerAdvice.handleGeneralException(HttpStatus.METHOD_NOT_ALLOWED, e);
+        return handleGeneralException(HttpStatus.METHOD_NOT_ALLOWED, e);
     }
 
     /**
@@ -122,7 +127,7 @@ public class MainControllerAdvice {
      */
     @ExceptionHandler(HttpServerErrorException.BadGateway.class)
     protected ResponseEntity<ErrorResponseDTO> handleBadGateway(HttpServerErrorException.BadGateway e) {
-        return GeneralControllerAdvice.handleGeneralException(HttpStatus.BAD_GATEWAY, e);
+        return handleGeneralException(HttpStatus.BAD_GATEWAY, e);
     }
 
     /**
@@ -135,7 +140,7 @@ public class MainControllerAdvice {
      */
     @ExceptionHandler(HttpServerErrorException.ServiceUnavailable.class)
     protected ResponseEntity<ErrorResponseDTO> handleServiceUnavailable(HttpServerErrorException.ServiceUnavailable e) {
-        return GeneralControllerAdvice.handleGeneralException(HttpStatus.SERVICE_UNAVAILABLE, e);
+        return handleGeneralException(HttpStatus.SERVICE_UNAVAILABLE, e);
     }
 
     /**
@@ -146,7 +151,7 @@ public class MainControllerAdvice {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponseDTO> handleMethodArgNotValidException(MethodArgumentNotValidException e) {
-        return GeneralControllerAdvice.handleGeneralException(HttpStatus.BAD_REQUEST, e);
+        return handleGeneralException(HttpStatus.BAD_REQUEST, e);
     }
 
     /**
@@ -163,15 +168,13 @@ public class MainControllerAdvice {
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<ErrorResponseDTO> catchFileSizeException(MaxUploadSizeExceededException e){
+    public ResponseEntity<ErrorResponseDTO> catchFileSizeException(MaxUploadSizeExceededException e) {
         ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
-            .message(GeneralErrorMessage.MAXIMUM_FILE_SIZE)
-            .internalCode(-8001)
-            .errorCode(HttpStatus.BAD_REQUEST.value())
-            .build();
+                .message(GeneralErrorMessage.MAXIMUM_FILE_SIZE)
+                .internalCode(-8001)
+                .errorCode(HttpStatus.BAD_REQUEST.value())
+                .build();
         log.error(e.getMessage());
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
     }
-
-
 }

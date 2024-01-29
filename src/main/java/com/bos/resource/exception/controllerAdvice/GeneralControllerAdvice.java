@@ -11,9 +11,33 @@ import org.springframework.http.ResponseEntity;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 public class GeneralControllerAdvice {
 
     private static final Logger log = LoggerFactory.getLogger(GeneralControllerAdvice.class);
+
+    /**
+     * for Global exception handling only.
+     *
+     * @return ResponseEntity<ErrorResponseDTO>
+     */
+    public static ResponseEntity<ErrorResponseDTO> handleUnknownInternalException(Exception... e) {
+        HttpStatus httpStatus = INTERNAL_SERVER_ERROR;
+        ErrorResponseDTO response = ErrorResponseDTO.builder()
+                .errorCode(httpStatus.value())
+                .message("Internal Server Error")
+                .build();
+
+        log.error("handleUnknownInternalException()");
+        log.error(Arrays.stream(e)
+                .filter(Objects::nonNull).findFirst()
+                .map(Exception::getMessage)
+                .orElseGet(httpStatus::getReasonPhrase));
+
+        return new ResponseEntity<>(response, getHttpHeader(), httpStatus);
+    }
+
 
     /**
      * Creates a standardized error response message format.

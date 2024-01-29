@@ -55,10 +55,10 @@ public class QDeviceRepositoryImpl implements QDeviceRepository {
         if (fotaReady.equals("1") && detailLevel.equals("1")) {
             return getAllDevicesDetailRegardlessFOTAReadyOrNot(companyId, pageable);
         }
-        if (fotaReady.equals("1") && detailLevel.equals("0")) {
+        if (fotaReady.equals("1") && detailLevel.equals("0")) { // TODO: fix
             return getAllDevicesRegardlessFOTAReadyOrNot(companyId, pageable);
         }
-        if (fotaReady.equals("0") && detailLevel.equals("0")) {
+        if (fotaReady.equals("0") && detailLevel.equals("0")) { // TODO: fix
             return getDevicesFOTAReadyOnly(companyId, pageable);
         }
         // fotaReady.equals("0") && detailLevel.equals("1")
@@ -120,7 +120,10 @@ public class QDeviceRepositoryImpl implements QDeviceRepository {
                         FOTAReadyDeviceContent.class,
                         qDevice.serialNumber,
                         qDeviceDetail.modelName,
-                        asNumber(qCampaignDeviceMap.campaign.id).as("fotaReady"),
+                        new CaseBuilder()
+                                .when(qCampaignDeviceMap.campaign.id.isNull())
+                                .then(0)
+                                .otherwise(1).as("fotaReady"),
                         qDeviceDetail.updatedDate,
                         qDeviceDetail.osBuildNumber,
                         qDeviceDetail.osVersion)).distinct()
@@ -167,7 +170,6 @@ public class QDeviceRepositoryImpl implements QDeviceRepository {
                 .join(qCompany).on(qCompany.id.eq(qResourceOwner.companyId))
                 .fetchJoin()
                 .where(qCompany.id.eq(companyId))
-                .orderBy(qDeviceDetail.updatedDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -204,7 +206,6 @@ public class QDeviceRepositoryImpl implements QDeviceRepository {
                 .innerJoin(qCampaign).on(qCampaign.eq(qCampaignDeviceMap.campaign))
                 .fetchJoin()
                 .where(qCampaign.companyId.eq(companyId))
-                .orderBy(qDeviceDetail.updatedDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
