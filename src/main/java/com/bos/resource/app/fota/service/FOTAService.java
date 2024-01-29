@@ -102,13 +102,16 @@ public class FOTAService {
         List<CampaignStatusAggregation> list = new ArrayList<>();
 
         for (String deploymentId : campaignStatus.deploymentId()) {
-            list.add(campaignRepository.findCampaignStatusByCompanyIdAndCampaignIdAndBetweenDateAndStatus(
+            CampaignStatusAggregation aggregation = campaignRepository.findCampaignStatusByCompanyIdAndCampaignIdAndBetweenDateAndStatus(
                     resourceOwner.getCompanyId(),
                     deploymentId,
                     campaignStatus.fromTime(),
                     campaignStatus.toTime(),
                     campaignStatus.status()
-            ));
+            );
+            if (aggregation != null) {
+                list.add(aggregation);
+            }
         }
 
         return FoundCampaignStatus.from(list);
