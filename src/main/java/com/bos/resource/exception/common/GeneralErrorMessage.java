@@ -11,4 +11,5 @@ public class GeneralErrorMessage {
     public static final String MAXIMUM_FILE_SIZE = "Maximum upload size exceeded";
 
     public static final String UPLOAD_FAIL = "File Upload Fail.";
+    public static final String DATE_TIME_PARSE_ERROR = "Invalid Date Time Format Detected.";
 }

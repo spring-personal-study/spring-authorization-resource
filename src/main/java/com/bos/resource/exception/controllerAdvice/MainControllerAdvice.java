@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.net.MalformedURLException;
+import java.time.format.DateTimeParseException;
 
 import static com.bos.resource.exception.controllerAdvice.GeneralControllerAdvice.handleGeneralException;
 import static com.bos.resource.exception.controllerAdvice.GeneralControllerAdvice.handleUnknownInternalException;
@@ -172,6 +173,17 @@ public class MainControllerAdvice {
         ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
                 .message(GeneralErrorMessage.MAXIMUM_FILE_SIZE)
                 .internalCode(-8001)
+                .errorCode(HttpStatus.BAD_REQUEST.value())
+                .build();
+        log.error(e.getMessage());
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<ErrorResponseDTO> catchDateTimeParseException(DateTimeParseException e) {
+        ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
+                .message(GeneralErrorMessage.DATE_TIME_PARSE_ERROR + " " + e.getParsedString())
+                .internalCode(-8002)
                 .errorCode(HttpStatus.BAD_REQUEST.value())
                 .build();
         log.error(e.getMessage());
