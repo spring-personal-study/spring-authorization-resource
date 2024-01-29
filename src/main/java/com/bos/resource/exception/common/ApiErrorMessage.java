@@ -38,6 +38,8 @@ public class ApiErrorMessage {
     public static final String MODEL_IS_NULL = "model is null.";
     public static final String SERIAL_IS_NULL = "serial is null.";
     public static final String SERIAL_IS_EMPTY = "serial has empty value.";
+    public static final String SERIAL_SIZE_EXCEEDED = "serial size exceeded. (maximum: 1000) please check the serial size again.";
+    public static final String DATE_RANGE_EXCEEDED = "date range exceeded. please check the date range again. (maximum: within 90 days)";
 
     public static final String RESOURCE_OWNER_CRUD_FAIL = "Request relates with User has failed.";
     public static final String RESOURCE_OWNER_NOT_FOUND = "the user cannot found.";

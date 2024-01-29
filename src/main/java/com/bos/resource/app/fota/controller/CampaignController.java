@@ -14,6 +14,7 @@ import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FoundCampaignStat
 import com.bos.resource.app.fota.service.FOTAService;
 import com.bos.resource.app.resourceowner.ResourceOwnerService;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
+import com.bos.resource.exception.common.BizException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -22,6 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @RestController
@@ -70,8 +74,17 @@ public class CampaignController {
         if (result.hasErrors()) {
             throw new InvalidFOTAParameterException(result, FOTACrudErrorCode.FOTA_CRUD_FAIL);
         }
+        if (checkDurationExceeded(campaignStatus.fromTime(), campaignStatus.toTime())) {
+            throw new BizException(FOTACrudErrorCode.DATE_RANGE_EXCEEDED);
+        }
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(authentication.getName());
         return fotaService.getCampaignStatus(resourceOwner, campaignStatus);
+    }
+
+    private boolean checkDurationExceeded(LocalDateTime fromTime, LocalDateTime toTime) {
+        Duration duration = Duration.between(fromTime, toTime);
+        long daysDifference = duration.toDays();
+        return daysDifference > 90;
     }
 
     @PostMapping("/deployments/detail")

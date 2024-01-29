@@ -105,6 +105,7 @@ public class CampaignRequestDto {
                 String model,
                 @NotNull(message = ApiErrorMessage.SERIAL_IS_NULL)
                 @NotEmpty(message = ApiErrorMessage.SERIAL_IS_EMPTY)
+                @Size(max = 1000, message = ApiErrorMessage.SERIAL_SIZE_EXCEEDED)
                 List<String> serial
         ) {
         }
@@ -127,7 +128,7 @@ public class CampaignRequestDto {
         ) {
             this.deploymentId = deploymentId;
             this.status = status == null ? "ALL" : StringUtils.capitalize(status);
-            this.fromTime = fromTime == null ? LocalDateTime.now().minusDays(1) : fromTime;
+            this.fromTime = fromTime == null ? LocalDateTime.now() : fromTime;
             this.toTime = toTime == null ? LocalDateTime.now().minusDays(90) : toTime;
         }
     }
