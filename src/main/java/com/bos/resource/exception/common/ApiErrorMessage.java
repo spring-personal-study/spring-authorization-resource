@@ -41,4 +41,11 @@ public class ApiErrorMessage {
 
     public static final String RESOURCE_OWNER_CRUD_FAIL = "Request relates with User has failed.";
     public static final String RESOURCE_OWNER_NOT_FOUND = "the user cannot found.";
+
+    public static final String CAMPAIGN_PROFILE_IS_NULL = "profile is null.";
+    public static final String CAMPAIGN_PROFILE_IS_EMPTY = "profile has empty value.";
+    public static final String CAMPAIGN_RULES_IS_NULL = "rules is null.";
+    public static final String CAMPAIGN_RULES_IS_EMPTY = "rules has empty value.";
+    public static final String CAMPAIGN_DEVICES_IS_NULL = "devices is null.";
+    public static final String CAMPAIGN_DEVICES_IS_EMPTY = "devices has empty value.";
 }

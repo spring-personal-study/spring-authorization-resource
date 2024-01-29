@@ -100,7 +100,6 @@ public class FOTAService {
             CampaignRequestDto.CampaignStatus campaignStatus
     ) {
         List<CampaignStatusAggregation> list = new ArrayList<>();
-
         for (String deploymentId : campaignStatus.deploymentId()) {
             CampaignStatusAggregation aggregation = campaignRepository.findCampaignStatusByCompanyIdAndCampaignIdAndBetweenDateAndStatus(
                     resourceOwner.getCompanyId(),

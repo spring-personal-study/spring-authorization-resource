@@ -14,8 +14,12 @@ import org.springframework.validation.FieldError;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 @Getter
 public class ErrorResponseDTO {
@@ -97,8 +101,9 @@ public class ErrorResponseDTO {
             customFieldErrors = new ArrayList<>();
 
             for (FieldError fieldError : fieldErrors) {
+                System.out.println(Arrays.toString(fieldError.getCodes()));
                 customFieldErrors.add(new CustomFieldError(
-                        Objects.requireNonNull(fieldError.getCodes())[0].split("\\.")[2],
+                        Arrays.stream(requireNonNull(fieldError.getCodes())[1].split("\\.")).skip(1).collect(joining(".")),
                         fieldError.getRejectedValue(),
                         fieldError.getDefaultMessage(),
                         errorCode.findMatchBizCode(fieldError.getDefaultMessage()))
@@ -121,8 +126,10 @@ public class ErrorResponseDTO {
         }
     }
 
-         /**
-         * A class containing fields that did not pass parameter validation by @Valid or @Validated
-         */
-        public record CustomFieldError(String rejectedParameter, Object rejectedValue, String reason, Integer internalErrorCode) { }
+    /**
+     * A class containing fields that did not pass parameter validation by @Valid or @Validated
+     */
+    public record CustomFieldError(String rejectedParameter, Object rejectedValue, String reason,
+                                   Integer internalErrorCode) {
+    }
 }

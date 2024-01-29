@@ -6,6 +6,7 @@ import com.querydsl.core.util.StringUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,14 +16,14 @@ public class CampaignRequestDto {
     public record CreateCampaignDto(
             //Boolean simulate,
             @Valid
-            @NotNull
+            @NotNull(message = ApiErrorMessage.CAMPAIGN_PROFILE_IS_NULL)
             CampaignProfile profile,
             //CampaignSchedule schedule,
             @Valid
-            @NotNull
+            @NotNull(message = ApiErrorMessage.CAMPAIGN_RULES_IS_NULL)
             CampaignRule rules,
             @Valid
-            @NotNull
+            @NotNull(message = ApiErrorMessage.CAMPAIGN_DEVICES_IS_NULL)
             CampaignDevice devices
     ) {
         public record CampaignProfile(
@@ -111,6 +112,8 @@ public class CampaignRequestDto {
 
     public record CampaignStatus(
             //String deploymentTag,
+            @NotEmpty(message = ApiErrorMessage.DEPLOYMENT_ID_IS_EMPTY)
+            @NotNull(message = ApiErrorMessage.DEPLOYMENT_ID_IS_NULL)
             List<String> deploymentId,
             String status,
             LocalDateTime fromTime,
