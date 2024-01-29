@@ -3,16 +3,14 @@ package com.bos.resource.app.device.model.entity;
 import com.bos.resource.app.common.domain.entity.BaseEntity;
 import com.bos.resource.app.common.domain.enums.UseType;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @SQLRestriction("USE_YN = 'Y'")
 @Table(name = "TB_PLATFORM")
 @FieldDefaults(level = AccessLevel.PRIVATE)

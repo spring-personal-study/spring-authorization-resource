@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -94,11 +95,23 @@ public class FOTAService {
         }
     }
 
-    public FoundCampaignStatus getCampaignStatus(ResourceOwnerDto resourceOwner, CampaignRequestDto.CampaignStatus campaignStatus) {
-        List<CampaignStatusAggregation> campaignStatusByCampaignIdAndBetweenDate = campaignRepository.findCampaignStatusByCompanyIdAndCampaignIdAndBetweenDate(
-                resourceOwner.getCompanyId(), campaignStatus.deploymentId(), campaignStatus.fromTime(), campaignStatus.toTime()
-        );
-        return FoundCampaignStatus.from(campaignStatusByCampaignIdAndBetweenDate);
+    public FoundCampaignStatus getCampaignStatus(
+            ResourceOwnerDto resourceOwner,
+            CampaignRequestDto.CampaignStatus campaignStatus
+    ) {
+        List<CampaignStatusAggregation> list = new ArrayList<>();
+
+        for (String deploymentId : campaignStatus.deploymentId()) {
+            list.add(campaignRepository.findCampaignStatusByCompanyIdAndCampaignIdAndBetweenDateAndStatus(
+                    resourceOwner.getCompanyId(),
+                    deploymentId,
+                    campaignStatus.fromTime(),
+                    campaignStatus.toTime(),
+                    campaignStatus.status()
+            ));
+        }
+
+        return FoundCampaignStatus.from(list);
     }
 
     public FoundCampaignStatusDetail getCampaignStatusDetail(ResourceOwnerDto resourceOwner, CampaignRequestDto.CampaignStatusDetail campaignStatus) {

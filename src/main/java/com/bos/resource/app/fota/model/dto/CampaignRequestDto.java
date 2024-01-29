@@ -30,19 +30,19 @@ public class CampaignRequestDto {
                 @NotEmpty(message = ApiErrorMessage.UPDATE_TYPE_IS_EMPTY)
                 String updateType,
                 //String timeOffset,
-                @Valid
-                @NotNull
+                //@Valid
+                //@NotNull
                 ProfileTarget target
                 //List<CampaignMediaServer> mediaServer
         ) {
             public record ProfileTarget(
                     //String type,
-                    @Valid
+                    //@Valid
                     TargetValue value
             ) {
                 public record TargetValue(
-                        @NotNull(message = ApiErrorMessage.ARTIFACT_NAME_IS_NULL)
-                        @NotEmpty(message = ApiErrorMessage.ARTIFACT_NAME_IS_EMPTY)
+                        //@NotNull(message = ApiErrorMessage.ARTIFACT_NAME_IS_NULL)
+                        //@NotEmpty(message = ApiErrorMessage.ARTIFACT_NAME_IS_EMPTY)
                         String artifactName
                         //String bsp,
                         //String patch,
@@ -111,37 +111,39 @@ public class CampaignRequestDto {
 
     public record CampaignStatus(
             //String deploymentTag,
-            //List<String> deploymentId,
-            @NotNull(message = ApiErrorMessage.DEPLOYMENT_ID_IS_NULL)
-            @NotEmpty(message = ApiErrorMessage.DEPLOYMENT_ID_IS_EMPTY)
-            String deploymentId,
+            List<String> deploymentId,
             String status,
             LocalDateTime fromTime,
-            LocalDateTime toTime,
-            Integer offset,
-            Integer size
+            LocalDateTime toTime
     ) {
-        public CampaignStatus(String deploymentId, String status, LocalDateTime fromTime, LocalDateTime toTime, Integer offset, Integer size) {
+        public CampaignStatus(
+                List<String> deploymentId,
+                String status,
+                LocalDateTime fromTime,
+                LocalDateTime toTime
+        ) {
             this.deploymentId = deploymentId;
             this.status = status == null ? "ALL" : StringUtils.capitalize(status);
             this.fromTime = fromTime == null ? LocalDateTime.now().minusDays(1) : fromTime;
             this.toTime = toTime == null ? LocalDateTime.now().minusDays(90) : toTime;
-            this.offset = offset == null ? 0 : offset;
-            this.size = size == null ? 10 : size;
         }
     }
 
     public record Notification(
-            @NotNull(message = ApiErrorMessage.NOTIFICATION_TYPE_IS_NULL)
-            @NotEmpty(message = ApiErrorMessage.NOTIFICATION_TYPE_IS_EMPTY)
             String notificationType,
             NotificationParams params,
             Integer offset,
             Integer limit
     ) {
 
-        public Notification(@NotNull(message = ApiErrorMessage.NOTIFICATION_TYPE_IS_NULL)
-                            String notificationType, NotificationParams params, Integer offset, Integer limit) {
+        public Notification(
+                @NotNull(message = ApiErrorMessage.NOTIFICATION_TYPE_IS_NULL)
+                @NotEmpty(message = ApiErrorMessage.NOTIFICATION_TYPE_IS_EMPTY)
+                String notificationType,
+                NotificationParams params,
+                Integer offset,
+                Integer limit
+        ) {
             this.notificationType = NotificationType.findType(notificationType);
             this.params = params;
             this.offset = offset;

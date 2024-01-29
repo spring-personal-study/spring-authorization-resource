@@ -509,7 +509,7 @@ public class FOTAControllerTest {
         @Test
         @DisplayName("/deployments/status 200 OK")
         void givenUserIsAuthorized_whenGetCampaignStatus_thenOk() throws Exception {
-            CampaignRequestDto.CampaignStatus requestBody = new CampaignRequestDto.CampaignStatus("FOTA-1", null, null, null, null, null);
+            CampaignRequestDto.CampaignStatus requestBody = new CampaignRequestDto.CampaignStatus(List.of("FOTA-1"), null, null, null);
             CampaignStatusContent content1 = new CampaignStatusContent(CampaignStatus.ACTIVE, 23L, 5, 3, 4, 5, 6, now());
             CampaignStatusContent content2 = new CampaignStatusContent(CampaignStatus.ACTIVE, 10L, 1, 2, 3, 4, 5, now());
 
@@ -548,7 +548,7 @@ public class FOTAControllerTest {
         @Test
         @DisplayName("/deployments/status 400 Bad Request - Missed deploymentId")
         void givenInsufficientRequestBodyDeploymentId_whenGetCampaignStatus_thenBadRequest() throws Exception {
-            CampaignRequestDto.CampaignStatus requestBody = new CampaignRequestDto.CampaignStatus(null, null, null, null, null, null);
+            CampaignRequestDto.CampaignStatus requestBody = new CampaignRequestDto.CampaignStatus(null, null, null, null);
             CampaignStatusContent content1 = new CampaignStatusContent(CampaignStatus.ACTIVE, 23L, 5, 3, 4, 5, 6, now());
             CampaignStatusContent content2 = new CampaignStatusContent(CampaignStatus.ACTIVE, 10L, 1, 2, 3, 4, 5, now());
 
