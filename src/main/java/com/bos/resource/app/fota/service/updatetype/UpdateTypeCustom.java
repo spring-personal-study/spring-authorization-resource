@@ -37,6 +37,13 @@ public class UpdateTypeCustom implements UpdateTypeSelector {
     @Override
     public CreatedCampaign createCampaign(ResourceOwnerDto requestUser, CampaignRequestDto.CreateCampaignDto createCampaignDto) {
         CreateCampaignIngredients newCampaign = createCampaignKit.prepareToSave(requestUser, createCampaignDto);
+        if (createCampaignDto.profile() == null ||
+                createCampaignDto.profile().target() == null ||
+                createCampaignDto.profile().target().value() == null ||
+                createCampaignDto.profile().target().value().artifactName() == null
+        ) {
+            throw new BizException(FOTACrudErrorCode.ARTIFACT_NAME_IS_NULL);
+        }
         List<Firmware> firmwares = firmwareRepository.findByModelAndVersion(createCampaignDto.devices().model(), createCampaignDto.profile().target().value().artifactName());
         if (firmwares.isEmpty()) throw new BizException(FOTACrudErrorCode.FIRMWARE_NOT_FOUND);
         savePackageIfDoesNotExists(requestUser, createCampaignDto, firmwares, newCampaign.supportModel(), 1);
@@ -49,7 +56,7 @@ public class UpdateTypeCustom implements UpdateTypeSelector {
         for (Firmware firmware : firmwares) {
             // TODO: need to consider about the package types. does it need to receive FULL/INCREMENTAL option as additional parameters from the user?
             if ( //PackageType.INCREMENTAL.equals(firmware.getPackageType()) &&
-                createCampaignDto.profile().target().value().artifactName().equals(firmware.getVersion())
+                    createCampaignDto.profile().target().value().artifactName().equals(firmware.getVersion())
             ) {
                 Package targetPackage = packageRepository.findByFirmwareAndModelAndTargetVersion(firmware, newCampaign.supportModel(), createCampaignDto.profile().target().value().artifactName());
                 createCampaignKit.saveCampaignDetails(savedCampaign, targetPackage, createCampaignDto.devices().serial());
