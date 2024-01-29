@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class CampaignStatusAggregation {
     //private final String autoUpdateId;
-    //private final String deploymentId;
+    private final String deploymentId;
     //private final String deploymentTag;
     private final CampaignStatus deploymentStatus;
     private final Long totalDevices;

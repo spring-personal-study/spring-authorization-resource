@@ -135,6 +135,7 @@ public class CampaignResponseDto {
             return new FoundCampaignStatus(
                     campaigns.stream()
                             .map(campaign -> new CampaignStatusContent(
+                                    campaign.getDeploymentId(),
                                     campaign.getDeploymentStatus(),
                                     campaign.getTotalDevices(),
                                     campaign.getScheduled(),
@@ -151,6 +152,7 @@ public class CampaignResponseDto {
         @Getter
         @RequiredArgsConstructor
         public static class CampaignStatusContent {
+            private final String deploymentId;
             private final CampaignStatus deploymentStatus;
             private final Long totalDevices;
             private final Integer scheduled;
@@ -214,6 +216,7 @@ public class CampaignResponseDto {
             CampaignStatusContent foundCampaignStatusDetail = null;
             if (campaign != null) {
                 foundCampaignStatusDetail = new CampaignStatusContent(
+                        campaign.getDeploymentId(),
                         campaign.getDeploymentStatus(),
                         campaign.getTotalDevices(),
                         campaign.getScheduled(),

@@ -47,6 +47,7 @@ public class QCampaignRepositoryImpl implements QCampaignRepository {
         return queryFactory.select(
                         constructor(
                                 CampaignStatusAggregation.class,
+                                qCampaign.name,
                                 qCampaign.status.as("deploymentStatus"),
                                 qCampaignDeviceMap.device.id.count().as("totalDevices"),
                                 new CaseBuilder()
@@ -83,6 +84,7 @@ public class QCampaignRepositoryImpl implements QCampaignRepository {
         return queryFactory.select(
                         constructor(
                                 CampaignStatusAggregation.class,
+                                qCampaign.name,
                                 qCampaign.status.as("deploymentStatus"),
                                 qCampaignDeviceMap.device.id.count().as("totalDevices"),
                                 new CaseBuilder()
