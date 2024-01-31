@@ -8,6 +8,8 @@ import com.bos.resource.exception.common.BizException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ResourceOwnerService {
@@ -18,5 +20,10 @@ public class ResourceOwnerService {
         ResourceOwner resourceOwner = resourceOwnerRepository.findByResourceOwnerId(resourceOwnerId)
                 .orElseThrow(() -> new BizException(ResourceOwnerErrorCode.RESOURCE_OWNER_NOT_FOUND));
         return new ResourceOwnerDto(resourceOwner);
+    }
+
+
+    public List<ResourceOwner> findByCompanyId(Long companyId) {
+        return resourceOwnerRepository.findByCompanyId(companyId);
     }
 }

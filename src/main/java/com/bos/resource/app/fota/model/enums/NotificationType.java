@@ -3,11 +3,14 @@ package com.bos.resource.app.fota.model.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import static com.bos.resource.app.fota.model.dto.NotificationTypeConstants.NEW_ARTIFACT_AUTO_UPDATE_VALUE;
+import static com.bos.resource.app.fota.model.dto.NotificationTypeConstants.NEW_DEPLOYMENT_VALUE;
+
 @Getter
 @RequiredArgsConstructor
 public enum NotificationType {
-    NEW_ARTIFACT_AUTO_UPDATE("NEW_ARTIFACT_AUTO_UPDATE"),
-    NEW_DEPLOYMENT("NEW_DEPLOYMENT"),
+    NEW_ARTIFACT_AUTO_UPDATE(NEW_ARTIFACT_AUTO_UPDATE_VALUE),
+    NEW_DEPLOYMENT(NEW_DEPLOYMENT_VALUE),
 ;
     private final String name;
 
@@ -28,4 +31,6 @@ public enum NotificationType {
         }
         throw new IllegalArgumentException("No NotificationType with name: {} " + notificationType);
     }
+
+
 }

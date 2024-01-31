@@ -65,6 +65,21 @@ public class QDeviceRepositoryImpl implements QDeviceRepository {
         return getFOTAReadyOnlyWithDetail(companyId, pageable);
     }
 
+    @Override
+    public List<String> findModelNameAndFirmwareVersionByUser(String resourceOwnerId) {
+        QDevice qDevice = QDevice.device;
+        QDeviceDetail qDeviceDetail = QDeviceDetail.deviceDetail;
+        QResourceOwner qResourceOwner = QResourceOwner.resourceOwner;
+
+        return queryFactory
+                .select(qDeviceDetail.modelName).distinct()
+                .from(qDevice)
+                .innerJoin(qDeviceDetail).on(qDeviceDetail.eq(qDevice.deviceDetail))
+                .innerJoin(qResourceOwner).on(qResourceOwner.eq(qDevice.resourceOwner))
+                .where(qResourceOwner.resourceOwnerId.eq(resourceOwnerId))
+                .fetch();
+    }
+
     private Page<FOTAReadyDeviceContent> getAllDevicesDetailRegardlessFOTAReadyOrNot(Long companyId, PageRequest pageable) {
         QDevice qDevice = QDevice.device;
         QDeviceDetail qDeviceDetail = QDeviceDetail.deviceDetail;

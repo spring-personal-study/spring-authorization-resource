@@ -41,7 +41,7 @@ import static com.bos.resource.app.common.apiresponse.ApiSuccessMessage.CANCEL_D
 @RequiredArgsConstructor
 public class FOTAService {
 
-    private final Map<String, Notifier> notificationProcessors;
+    private final Map<String, UpdateNotifier> notificationProcessors;
     private final CampaignRepository campaignRepository;
     private final DeviceRepository deviceRepository;
     private final CampaignDeviceMapRepository campaignDeviceMapRepository;
@@ -53,8 +53,8 @@ public class FOTAService {
     private final Map<String, UpdateTypeSelector> updateTypeSelector;
 
     public CreatedNotification processNotification(ResourceOwnerDto requestUser, Notification notification) {
-        Notifier notifier = notificationProcessors.get(notification.notificationType());
-        return notifier.createCampaign(requestUser, notification);
+        UpdateNotifier updateNotifier = notificationProcessors.get(notification.notificationType());
+        return updateNotifier.notify(requestUser, notification);
     }
 
     @Transactional(readOnly = false)

@@ -21,10 +21,6 @@ public class Notifications {
     public static class NotificationDetail {
         private final String model;
         private final String artifactName;
-        @JsonProperty("artifact_url")
-        private final String artifactUrl;
-        @JsonProperty("artifact_timestamp")
-        private final LocalDateTime notificationTimestamp;
         @JsonProperty("isOptional")
         private final boolean optional;
         @JsonInclude(JsonInclude.Include.NON_NULL)

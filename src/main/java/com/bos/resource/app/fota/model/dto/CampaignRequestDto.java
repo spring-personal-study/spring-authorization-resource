@@ -135,7 +135,7 @@ public class CampaignRequestDto {
 
     public record Notification(
             String notificationType,
-            NotificationParams params,
+            PeriodParams params,
             Integer offset,
             Integer limit
     ) {
@@ -144,29 +144,20 @@ public class CampaignRequestDto {
                 @NotNull(message = ApiErrorMessage.NOTIFICATION_TYPE_IS_NULL)
                 @NotEmpty(message = ApiErrorMessage.NOTIFICATION_TYPE_IS_EMPTY)
                 String notificationType,
-                NotificationParams params,
+                PeriodParams params,
                 Integer offset,
                 Integer limit
         ) {
             this.notificationType = NotificationType.findType(notificationType);
             this.params = params;
-            this.offset = offset;
-            this.limit = limit;
+            this.offset = offset == null ? 0 : offset;
+            this.limit = limit == null ? 10 : limit;
         }
 
-        public record NotificationParams(
-                String model,
-                List<String> serialNumbers,
-                String targetBuild,
-                String subType
-        ) {
-            public NotificationParams(String model, List<String> serialNumbers, String targetBuild, String subType) {
-                this.model = model;
-                this.serialNumbers = serialNumbers;
-                this.targetBuild = targetBuild;
-                this.subType = subType == null ? "GMS" : subType;
-            }
-        }
+        public record PeriodParams(
+                LocalDateTime fromTime,
+                LocalDateTime toTime
+        ) { }
     }
 
     public record CampaignStatusDetail(

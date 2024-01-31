@@ -50,21 +50,17 @@ public class CampaignResponseDto {
 
         public static CreatedNotification of(
                 NotificationType notificationType,
-                Page<Firmware> firmwares,
-                Campaign savedCampaign,
-                CampaignRegistrationResult result,
+                Page<NotificationFirmwareInfoDto> firmwares,
+                //CampaignRegistrationResult result,
                 Pageable pageable
         ) {
 
-            Map<DeviceWithCampaignFailureType, List<String>> failToAddDevicesIntoCampaign = result.failToAddDevicesIntoCampaign();
-            List<String> expiredWarranty = failToAddDevicesIntoCampaign.get(EXPIRED_WARRANTY);
-            List<String> notFound = failToAddDevicesIntoCampaign.get(NOT_FOUND);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHH:mm");
-            LocalDateTime notificationTimestamp = LocalDateTime.parse(savedCampaign.getStartDate() + savedCampaign.getStartTime(), formatter);
-
-            final List<NotificationsError.ErrorDetail> errorDetails = new ArrayList<>();
-            final List<NotificationsError> notificationsErrors = new ArrayList<>();
-            addErrors(notificationType, notificationsErrors, errorDetails, expiredWarranty, notFound);
+            //Map<DeviceWithCampaignFailureType, List<String>> failToAddDevicesIntoCampaign = result.failToAddDevicesIntoCampaign();
+            //List<String> expiredWarranty = failToAddDevicesIntoCampaign.get(EXPIRED_WARRANTY);
+            //List<String> notFound = failToAddDevicesIntoCampaign.get(NOT_FOUND);
+            //final List<NotificationsError.ErrorDetail> errorDetails = new ArrayList<>();
+            //final List<NotificationsError> notificationsErrors = new ArrayList<>();
+            //addErrors(notificationType, notificationsErrors, errorDetails, expiredWarranty, notFound);
 
             return CreatedNotification.builder()
                     .head(new Paging(
@@ -77,20 +73,18 @@ public class CampaignResponseDto {
                                     .map(firmware -> Notifications.builder()
                                             .type(notificationType.name())
                                             .value(NotificationDetail.builder()
-                                                    .model(firmware.getModel())
-                                                    .artifactName(firmware.getVersion())
-                                                    .artifactUrl(firmware.getUrl() + "/update.zip")
-                                                    .notificationTimestamp(notificationTimestamp)
-                                                    .optional(PackageType.FULL.equals(firmware.getPackageType()))
+                                                    .model(firmware.modelName())
+                                                    .artifactName(firmware.firmwareVersion())
+                                                    .optional(PackageType.FULL.equals(firmware.packageType()))
                                                     .metadata(NotificationDetailMetadata.builder()
-                                                            .availableFrom(firmware.getCreateDt())
-                                                            .type(firmware.getPackageType().name())
+                                                            .availableFrom(firmware.createDt())
+                                                            .type(firmware.packageType().name())
                                                             .build())
                                                     .build())
                                             .build())
                                     .collect(toList())
                     )
-                    .notificationsErrors(notificationsErrors)
+                    //.notificationsErrors(notificationsErrors)
                     .build();
         }
 

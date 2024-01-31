@@ -35,7 +35,6 @@ public class CampaignController {
     private final FOTAService fotaService;
     private final ResourceOwnerService resourceOwnerService;
 
-    @Deprecated(since = "0.0.1, not supported in our service")
     @PostMapping("/notification")
     public CreatedNotification notification(
             JwtAuthenticationToken authentication,
