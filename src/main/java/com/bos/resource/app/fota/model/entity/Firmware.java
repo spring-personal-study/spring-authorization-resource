@@ -5,6 +5,7 @@ import com.bos.resource.app.common.domain.enums.UseType;
 import com.bos.resource.app.fota.model.enums.FirmwareUploadServerType;
 import com.bos.resource.app.fota.model.enums.PackageType;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -60,4 +61,22 @@ public class Firmware extends BaseEntity {
 
     @Column(name = "COMPANY_ID")
     private Long companyId;
+
+    @Builder
+    public Firmware(Long id, String name, String version, String model, Long osVersion, String uuid, String originFileName, String url, String description, FirmwareUploadServerType uploadServerType, PackageType packageType, UseType useYn, Long platformId, Long companyId) {
+        this.id = id;
+        this.name = name;
+        this.version = version;
+        this.model = model;
+        this.osVersion = osVersion;
+        this.uuid = uuid;
+        this.originFileName = originFileName;
+        this.url = url;
+        this.description = description;
+        this.uploadServerType = uploadServerType;
+        this.packageType = packageType;
+        this.useYn = useYn;
+        this.platformId = platformId;
+        this.companyId = companyId;
+    }
 }

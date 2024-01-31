@@ -41,9 +41,6 @@ public class DeviceControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper jsonConverter;
-
     @Nested
     @DisplayName("/v1/asset")
     public class AssetTest {

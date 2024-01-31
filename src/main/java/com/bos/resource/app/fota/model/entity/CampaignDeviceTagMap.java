@@ -26,7 +26,8 @@ public class CampaignDeviceTagMap {
 
 
     @Builder
-    public CampaignDeviceTagMap(Campaign campaign, DeviceTag deviceTag) {
+    public CampaignDeviceTagMap(Long id, Campaign campaign, DeviceTag deviceTag) {
+        this.id = id;
         this.campaign = campaign;
         this.deviceTag = deviceTag;
     }

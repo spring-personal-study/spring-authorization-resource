@@ -1,4 +1,4 @@
-package com.bos.resource.unit.entity;
+package com.bos.resource.unit.entity.device;
 
 import com.bos.resource.app.common.domain.enums.UseType;
 import com.bos.resource.app.device.model.entity.*;
@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Entity Test")
-public class EntityTest {
+public class DeviceEntityTest {
 
     @Nested
     @DisplayName("Device Entity")
-    class DeviceEntityTest {
+    class Device_EntityTest {
 
         @Test
         @DisplayName("Create Device Entity - OK")
@@ -50,7 +50,7 @@ public class EntityTest {
     }
 
     @Nested
-    @DisplayName("Device Detail Entity")
+    @DisplayName("DeviceDetail Entity")
     class DeviceDetailEntityTest {
 
         @Test
@@ -85,11 +85,11 @@ public class EntityTest {
     }
 
     @Nested
-    @DisplayName("Device Group Entity")
+    @DisplayName("DeviceGroup Entity")
     class DeviceGroupEntityTest {
 
         @Test
-        @DisplayName("Create Device Group Entity - OK")
+        @DisplayName("Create DeviceGroup Entity - OK")
         void createDeviceGroupEntity_Ok() {
 
             DeviceGroup deviceGroup = DeviceGroup.builder()
@@ -110,11 +110,11 @@ public class EntityTest {
     }
 
     @Nested
-    @DisplayName("Device GroupMap Entity")
+    @DisplayName("DeviceGroupMap Entity")
     class DeviceGroupMapEntityTest {
 
         @Test
-        @DisplayName("Create Device Group Map Entity - OK")
+        @DisplayName("Create DeviceGroupMap Entity - OK")
         void createDeviceGroupMapEntity_Ok() {
 
             Device device = Device.builder()
@@ -152,7 +152,7 @@ public class EntityTest {
     }
 
     @Nested
-    @DisplayName("Device Platform Entity")
+    @DisplayName("DevicePlatform Entity")
     class DevicePlatformEntityTest {
 
         @Test
@@ -178,7 +178,7 @@ public class EntityTest {
     }
 
     @Nested
-    @DisplayName("Device Tag Entity")
+    @DisplayName("DeviceTag Entity")
     class DeviceTagEntityTest {
 
         @Test
@@ -209,11 +209,11 @@ public class EntityTest {
     }
 
     @Nested
-    @DisplayName("Device TagMap Entity")
+    @DisplayName("DeviceTagMap Entity")
     class DeviceTagMapEntityTest {
 
         @Test
-        @DisplayName("Create Device TagMap Entity - OK")
+        @DisplayName("Create DeviceTagMap Entity - OK")
         void createDeviceTagMapEntity_Ok() {
 
             Device device = Device.builder()
@@ -255,7 +255,7 @@ public class EntityTest {
     }
 
     @Nested
-    @DisplayName("Device Support Model Entity")
+    @DisplayName("DeviceSupportModel Entity")
     class DeviceSupportModelEntityTest {
 
         @Test

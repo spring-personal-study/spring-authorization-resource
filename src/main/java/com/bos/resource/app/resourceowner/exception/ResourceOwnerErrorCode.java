@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 public enum ResourceOwnerErrorCode implements ErrorCode {
     RESOURCE_OWNER_CRUD_FAIL(HttpStatus.BAD_REQUEST, -1000, ApiErrorMessage.RESOURCE_OWNER_CRUD_FAIL),
     RESOURCE_OWNER_NOT_FOUND(HttpStatus.NOT_FOUND, -1001, ApiErrorMessage.RESOURCE_OWNER_NOT_FOUND),
+    COMPANY_NOT_FOUND(HttpStatus.NOT_FOUND, -1002, ApiErrorMessage.COMPANY_NOT_FOUND),
     ;
 
     private static final Map<String, ResourceOwnerErrorCode> bizCodes =

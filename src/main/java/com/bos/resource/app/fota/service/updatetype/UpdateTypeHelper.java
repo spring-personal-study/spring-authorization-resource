@@ -16,12 +16,17 @@ import com.bos.resource.app.fota.model.entity.*;
 import com.bos.resource.app.fota.repository.*;
 import com.bos.resource.app.fota.repository.devicemap.CampaignDeviceMapRepository;
 import com.bos.resource.app.fota.repository.firmware.FirmwareRepository;
+import com.bos.resource.app.resourceowner.exception.ResourceOwnerErrorCode;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
+import com.bos.resource.app.resourceowner.model.entity.Company;
+import com.bos.resource.app.resourceowner.repository.CompanyRepository;
 import com.bos.resource.exception.common.BizException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.bos.resource.app.resourceowner.exception.ResourceOwnerErrorCode.COMPANY_NOT_FOUND;
 
 @Component
 @RequiredArgsConstructor
@@ -38,6 +43,7 @@ public class UpdateTypeHelper {
     private final CampaignDeviceMapRepository campaignDeviceMapRepository;
     private final DeviceTagMapRepository deviceTagMapRepository;
     private final DeviceGroupMapRepository deviceGroupMapRepository;
+    private final CompanyRepository companyRepository;
     final String DEPLOYMENT_PREFIX = "FOTA-";
 
     CreateCampaignIngredients prepareToSave(ResourceOwnerDto requestUser, CampaignRequestDto.CreateCampaignDto createCampaignDto) {
@@ -45,10 +51,13 @@ public class UpdateTypeHelper {
         Campaign campaign = campaignRepository.findFirstByNameStartsWithAndCompanyIdOrderByNameDesc(DEPLOYMENT_PREFIX, requestUser.getCompanyId());
         SupportModel supportModel = supportModelRepository.findByName(createCampaignDto.devices().model());
         if (supportModel == null) throw new BizException(FOTACrudErrorCode.SUPPORT_MODEL_NOT_FOUND);
+        Company company = companyRepository.findById(requestUser.getCompanyId())
+                .orElseThrow(() -> new BizException(COMPANY_NOT_FOUND));
 
         Campaign newCampaign = Campaign.createCampaign(
                 getNewCampaignName(campaign),
                 requestUser,
+                company.getName(),
                 supportModel.getPlatform().getId(),
                 ConvertedDateString.setStartEndDateTime(createCampaignDto.rules().install()),
                 createCampaignDto.rules().install().allowUserPostpone() ? UseType.Y : UseType.N
@@ -56,8 +65,6 @@ public class UpdateTypeHelper {
 
         return new CreateCampaignIngredients(newCampaign, supportModel);
     }
-
-
 
     String getNewCampaignName(Campaign campaign) {
         if (campaign != null) {

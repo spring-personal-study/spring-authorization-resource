@@ -53,7 +53,8 @@ public class CampaignDeviceMap {
     private LocalDateTime updateDate;
 
     @Builder
-    public CampaignDeviceMap(Campaign campaign, Device device, FirmwareUploadServerType firmwareUploadServerType) {
+    public CampaignDeviceMap(Long id, Campaign campaign, Device device, FirmwareUploadServerType firmwareUploadServerType) {
+        this.id = id;
         this.campaign = campaign;
         this.device = device;
         this.status = CampaignDeviceStatus.PENDING;
@@ -71,11 +72,5 @@ public class CampaignDeviceMap {
 
     public void increaseSequence() {
         this.sequence += 1;
-    }
-
-    public void resetStatus() {
-        this.status = CampaignDeviceStatus.PENDING;
-        this.result = null;
-        this.resultMessage = null;
     }
 }

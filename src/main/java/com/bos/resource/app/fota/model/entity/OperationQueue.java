@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -29,24 +30,19 @@ public class OperationQueue {
     private String payLoad;
 
     @Column(name = "UPDATE_DT")
+    @CreationTimestamp
     private LocalDateTime updateDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DEVICE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Device device;
 
-    public OperationQueue(Device device, OpCode opCode, String payLoad, LocalDateTime updateDateTime) {
+    @Builder
+    public OperationQueue(Long id, Device device, OpCode opCode, String payLoad, LocalDateTime updateDateTime) {
+        this.id = id;
         this.device = device;
         this.opCode = opCode;
         this.payLoad = payLoad;
         this.updateDateTime = updateDateTime;
-    }
-
-    @Builder(builderMethodName = "create")
-    public OperationQueue(Device device, OpCode opCode, String payload) {
-        this.device = device;
-        this.opCode = opCode;
-        this.payLoad = payload;
-        this.updateDateTime = LocalDateTime.now();
     }
 }

@@ -74,12 +74,13 @@ public class Campaign extends BaseEntity {
     @Column(name = "COMPANY_ID")
     private Long companyId;
 
-    @Builder(builderMethodName = "newDeployment")
-    public Campaign(String name, Integer platformId, UseType p2pModeYn,
+    @Builder
+    public Campaign(Long id, String name, Integer platformId, UseType p2pModeYn,
                     String startDate, String startTime, String endDate, String endTime,
-                    UseType askUserYn, UseType lteUseYn, Long companyId, String username, String email) {
+                    UseType askUserYn, UseType lteUseYn, Long companyId, String username, String email, String companyName) {
+        this.id = id;
         this.name = name;
-        this.description = name + " campaign created by " + username + " for new deployment.";
+        this.description = name + " campaign created by " + companyName + " company's " + username + " for new deployment.";
         this.platformId = platformId;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -95,8 +96,8 @@ public class Campaign extends BaseEntity {
         this.useYn = Y;
     }
 
-    public static Campaign createCampaign(String newCampaignName, ResourceOwnerDto requestUser, Integer platformId, ConvertedDateString convertedDateString, UseType allowUserPostpone) {
-        return Campaign.newDeployment()
+    public static Campaign createCampaign(String newCampaignName, ResourceOwnerDto requestUser, String companyName, Integer platformId, ConvertedDateString convertedDateString, UseType allowUserPostpone) {
+        return Campaign.builder()
                 .name(newCampaignName)
                 .startDate(convertedDateString.getStartDateString())
                 .endDate(convertedDateString.getEndDateString())
@@ -109,19 +110,8 @@ public class Campaign extends BaseEntity {
                 .lteUseYn(UseType.Y)
                 .username(requestUser.getResourceOwnerId())
                 .email(requestUser.getEmail())
+                .companyName(companyName)
                 .build();
 
     }
-
-
-    public CampaignStatus updateStatus() {
-        if (this.status.equals(ACTIVE)) {
-            this.status = CampaignStatus.INACTIVE;
-            return this.status;
-        }
-        this.status = ACTIVE;
-        return this.status;
-    }
-
-
 }

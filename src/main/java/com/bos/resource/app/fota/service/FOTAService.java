@@ -84,10 +84,11 @@ public class FOTAService {
             );
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
-                OperationQueue operationQueue = new OperationQueue(campaignDeviceMap.getDevice(),
-                        OpCode.UPGRADE_FIRMWARE,
-                        objectMapper.writeValueAsString(operationJson).replace(" ", ""),
-                        LocalDateTime.now());
+                OperationQueue operationQueue = OperationQueue.builder()
+                        .device(campaignDeviceMap.getDevice())
+                        .opCode(OpCode.UPGRADE_FIRMWARE)
+                        .payLoad(objectMapper.writeValueAsString(operationJson).replace(" ", ""))
+                        .build();
                 operationQueueRepository.save(operationQueue);
             } catch (JsonProcessingException e) {
                 throw new BizException(FOTACrudErrorCode.FOTA_CRUD_FAIL);

@@ -26,7 +26,8 @@ public class CampaignDeviceGroupMap {
     private DeviceGroup deviceGroup;
 
     @Builder
-    public CampaignDeviceGroupMap(Campaign campaign, DeviceGroup deviceGroup) {
+    public CampaignDeviceGroupMap(Long id, Campaign campaign, DeviceGroup deviceGroup) {
+        this.id = id;
         this.campaign = campaign;
         this.deviceGroup = deviceGroup;
     }
