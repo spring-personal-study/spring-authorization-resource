@@ -1,14 +1,13 @@
 package com.bos.resource.app.fota.service.updatetype;
 
 import com.bos.resource.app.device.model.entity.SupportModel;
-import com.bos.resource.app.device.repository.device.DeviceRepository;
 import com.bos.resource.app.fota.exception.FOTACrudErrorCode;
 import com.bos.resource.app.fota.model.dto.CampaignRequestDto;
+import com.bos.resource.app.fota.model.dto.CampaignRequestDto.CreateCampaignDto.CampaignProfile;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.CreatedCampaign;
 import com.bos.resource.app.fota.model.entity.Campaign;
 import com.bos.resource.app.fota.model.entity.Firmware;
 import com.bos.resource.app.fota.model.entity.Package;
-import com.bos.resource.app.fota.repository.CampaignPackageMapRepository;
 import com.bos.resource.app.fota.repository.CampaignRepository;
 import com.bos.resource.app.fota.repository.PackageRepository;
 import com.bos.resource.app.fota.repository.firmware.FirmwareRepository;
@@ -22,26 +21,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Service("CUSTOM")
+import static com.bos.resource.app.fota.model.constants.strings.FirmwareUpdateTypeConstants.CUSTOM_VALUE;
+
+@Service(CUSTOM_VALUE)
 @RequiredArgsConstructor
 public class UpdateTypeCustom implements UpdateTypeSelector {
 
     private final CampaignRepository campaignRepository;
     private final PackageRepository packageRepository;
-    private final DeviceRepository deviceRepository;
     private final FirmwareRepository firmwareRepository;
-    private final CampaignPackageMapRepository campaignPackageMapRepository;
     private final UpdateTypeHelper createCampaignKit;
 
     @Transactional
     @Override
     public CreatedCampaign createCampaign(ResourceOwnerDto requestUser, CampaignRequestDto.CreateCampaignDto createCampaignDto) {
         CreateCampaignIngredients newCampaign = createCampaignKit.prepareToSave(requestUser, createCampaignDto);
-        if (createCampaignDto.profile() == null ||
-                createCampaignDto.profile().target() == null ||
-                createCampaignDto.profile().target().value() == null ||
-                createCampaignDto.profile().target().value().artifactName() == null
-        ) {
+        if (doesNotReceivedFirmwareVersionForCustom(createCampaignDto)) {
             throw new BizException(FOTACrudErrorCode.ARTIFACT_NAME_IS_NULL);
         }
         List<Firmware> firmwares = firmwareRepository.findByModelAndVersion(createCampaignDto.devices().model(), createCampaignDto.profile().target().value().artifactName());
@@ -70,6 +65,13 @@ public class UpdateTypeCustom implements UpdateTypeSelector {
                 .code("200")
                 .timestamp(LocalDateTime.now())
                 .build();
+    }
+
+    private boolean doesNotReceivedFirmwareVersionForCustom(CampaignRequestDto.CreateCampaignDto createCampaignDto) {
+        CampaignProfile profile = createCampaignDto.profile();
+        return profile.target() == null ||
+                profile.target().value() == null ||
+                profile.target().value().artifactName() == null;
     }
 
     private void savePackageIfDoesNotExists(ResourceOwnerDto requestUser, CampaignRequestDto.CreateCampaignDto createCampaignDto, List<Firmware> firmwares, SupportModel supportModel, int seq) {

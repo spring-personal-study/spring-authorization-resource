@@ -1,7 +1,7 @@
 package com.bos.resource.app.fota.model.entity;
 
 import com.bos.resource.app.device.model.entity.Device;
-import com.bos.resource.app.fota.model.enums.OpCode;
+import com.bos.resource.app.fota.model.constants.enums.OpCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

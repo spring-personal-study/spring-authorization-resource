@@ -1,4 +1,4 @@
-package com.bos.resource.app.fota.model.enums;
+package com.bos.resource.app.fota.model.constants.enums;
 
 import lombok.RequiredArgsConstructor;
 

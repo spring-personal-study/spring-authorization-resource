@@ -1,4 +1,4 @@
-package com.bos.resource.app.fota.model.enums.message;
+package com.bos.resource.app.fota.model.constants.enums.message;
 
 import com.bos.resource.app.common.apiresponse.ApiSuccessMessage;
 import com.bos.resource.app.common.apiresponse.SuccessMessage;

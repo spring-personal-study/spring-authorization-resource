@@ -22,7 +22,10 @@ public enum ResourceOwnerErrorCode implements ErrorCode {
 
     private static final Map<String, ResourceOwnerErrorCode> bizCodes =
             Collections.unmodifiableMap(Stream.of(values())
-                    .collect(Collectors.toMap(ResourceOwnerErrorCode::getMsg, Function.identity())));
+                    .collect(Collectors.toMap(
+                            ResourceOwnerErrorCode::getMsg,
+                            Function.identity(),
+                            (existing, replacement) -> existing)));
 
     private final HttpStatus httpStatus;
     private final Integer bizCode;

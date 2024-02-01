@@ -1,6 +1,6 @@
 package com.bos.resource.app.fota.model.dto;
 
-import com.bos.resource.app.fota.model.enums.PackageType;
+import com.bos.resource.app.fota.model.constants.enums.PackageType;
 
 import java.time.LocalDateTime;
 

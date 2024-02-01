@@ -9,10 +9,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder
 @Table(name = "TB_DEVICE_DETAIL")
 @NoArgsConstructor
-@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DeviceDetail {
 
@@ -73,4 +71,21 @@ public class DeviceDetail {
     @Column(name = "UPDATE_DT", nullable = false)
     LocalDateTime updatedDate;
 
+    @Builder
+    public DeviceDetail(Long id, Device device, String serialNumber, String imei, String imsi, String macAddress, String modelName, String vendor, String osVersion, String osBuildDate, String osBuildNumber, String osBuildDateString, String fcmToken, LocalDateTime updatedDate) {
+        this.id = id;
+        this.device = device;
+        this.serialNumber = serialNumber;
+        this.imei = imei;
+        this.imsi = imsi;
+        this.macAddress = macAddress;
+        this.modelName = modelName;
+        this.vendor = vendor;
+        this.osVersion = osVersion;
+        this.osBuildDate = osBuildDate;
+        this.osBuildNumber = osBuildNumber;
+        this.osBuildDateString = osBuildDateString;
+        this.fcmToken = fcmToken;
+        this.updatedDate = updatedDate;
+    }
 }

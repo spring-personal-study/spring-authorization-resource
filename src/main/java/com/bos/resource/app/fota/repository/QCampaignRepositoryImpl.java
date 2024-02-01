@@ -5,18 +5,15 @@ import com.bos.resource.app.fota.model.dto.CampaignStatusAggregation;
 import com.bos.resource.app.fota.model.entity.Campaign;
 import com.bos.resource.app.fota.model.entity.QCampaign;
 import com.bos.resource.app.fota.model.entity.QCampaignDeviceMap;
-import com.bos.resource.app.fota.model.enums.CampaignDeviceStatus;
-import com.querydsl.core.types.Projections;
+import com.bos.resource.app.fota.model.constants.enums.CampaignDeviceStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
-import static com.bos.resource.app.fota.model.enums.CampaignStatus.ACTIVE;
+import static com.bos.resource.app.fota.model.constants.enums.CampaignStatus.ACTIVE;
 import static com.querydsl.core.types.Projections.constructor;
 import static java.util.Objects.requireNonNullElseGet;
 import static org.springframework.util.StringUtils.capitalize;

@@ -8,14 +8,14 @@ import com.bos.resource.app.device.model.entity.SupportModel;
 import com.bos.resource.app.device.model.enums.DeviceStatus;
 import com.bos.resource.app.fota.model.entity.Package;
 import com.bos.resource.app.fota.model.entity.*;
-import com.bos.resource.app.fota.model.enums.OpCode;
+import com.bos.resource.app.fota.model.constants.enums.OpCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static com.bos.resource.app.fota.model.enums.CampaignStatus.ACTIVE;
+import static com.bos.resource.app.fota.model.constants.enums.CampaignStatus.ACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FOTAEntityTest {

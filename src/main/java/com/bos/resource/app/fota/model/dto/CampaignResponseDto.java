@@ -1,13 +1,14 @@
 package com.bos.resource.app.fota.model.dto;
 
 import com.bos.resource.app.common.domain.dto.Paging;
+import com.bos.resource.app.fota.model.constants.enums.CampaignDeviceStatus;
+import com.bos.resource.app.fota.model.constants.enums.CampaignStatus;
+import com.bos.resource.app.fota.model.constants.enums.NotificationType;
+import com.bos.resource.app.fota.model.constants.enums.PackageType;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FoundCampaignStatus.CampaignStatusContent;
 import com.bos.resource.app.fota.model.dto.Notifications.NotificationDetail;
 import com.bos.resource.app.fota.model.dto.Notifications.NotificationDetail.NotificationDetailMetadata;
-import com.bos.resource.app.fota.model.entity.Campaign;
 import com.bos.resource.app.fota.model.entity.CampaignDeviceMap;
-import com.bos.resource.app.fota.model.entity.Firmware;
-import com.bos.resource.app.fota.model.enums.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -17,13 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import static com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureType.EXPIRED_WARRANTY;
-import static com.bos.resource.app.fota.model.enums.DeviceWithCampaignFailureType.NOT_FOUND;
+import static com.bos.resource.app.fota.model.constants.enums.DeviceWithCampaignFailureType.EXPIRED_WARRANTY;
+import static com.bos.resource.app.fota.model.constants.enums.DeviceWithCampaignFailureType.NOT_FOUND;
 import static java.util.stream.Collectors.toList;
 
 public class CampaignResponseDto {
@@ -78,7 +76,7 @@ public class CampaignResponseDto {
                                                     .optional(PackageType.FULL.equals(firmware.packageType()))
                                                     .metadata(NotificationDetailMetadata.builder()
                                                             .availableFrom(firmware.createDt())
-                                                            .type(firmware.packageType().name())
+                                                            .type(firmware.packageType())
                                                             .build())
                                                     .build())
                                             .build())
@@ -163,6 +161,7 @@ public class CampaignResponseDto {
     @RequiredArgsConstructor
     public static class FoundCampaignStatusDetail {
         private final CampaignStatusDetailContent data;
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         private final Paging head;
 
         public static FoundCampaignStatusDetail of(
@@ -172,9 +171,15 @@ public class CampaignResponseDto {
                 Pageable pageable
         ) {
             CampaignStatusContent campaignStatusContent = getCampaignStatusContent(campaignStatusAggregation);
-            CampaignStatusDetailContent campaignStatusDetailContent = getCampaignStatusDetailContent(deploymentId, campaignStatusContent, campaignDevices.getContent());
-            Paging paging = getPaging(campaignDevices, pageable);
-            return new FoundCampaignStatusDetail(campaignStatusDetailContent, paging);
+            if (campaignDevices != null) {
+                CampaignStatusDetailContent campaignStatusDetailContent = getCampaignStatusDetailContent(deploymentId, campaignStatusContent, campaignDevices.getContent());
+                Paging paging = getPaging(campaignDevices, pageable);
+                return new FoundCampaignStatusDetail(campaignStatusDetailContent, paging);
+            } else {
+                CampaignStatusDetailContent campaignStatusDetailContent = getCampaignStatusDetailContent(deploymentId, campaignStatusContent);
+                return new FoundCampaignStatusDetail(campaignStatusDetailContent, null);
+            }
+
         }
 
         private static Paging getPaging(Page<CampaignDeviceMap> page, Pageable pageable) {
@@ -184,6 +189,13 @@ public class CampaignResponseDto {
                     pageable.getPageSize(),
                     page.getNumberOfElements()
             );
+        }
+
+        private static CampaignStatusDetailContent getCampaignStatusDetailContent(
+                String deploymentId,
+                CampaignStatusContent campaignStatusContent
+        ) {
+            return CampaignStatusDetailContent.of(deploymentId, campaignStatusContent);
         }
 
         private static CampaignStatusDetailContent getCampaignStatusDetailContent(
@@ -249,6 +261,25 @@ public class CampaignResponseDto {
             private final LocalDateTime completedOn;
             @JsonInclude(JsonInclude.Include.NON_NULL)
             private final List<CampaignStatusDetailDevice> devices;
+
+            public static CampaignStatusDetailContent of(String deploymentId, CampaignStatusContent campaignStatusContent) {
+                if (campaignStatusContent == null) {
+                    return CampaignStatusDetailContent.builder()
+                            .deploymentId(deploymentId)
+                            .build();
+                }
+                return CampaignStatusDetailContent.builder()
+                        .deploymentId(deploymentId)
+                        .deploymentStatus(campaignStatusContent.getDeploymentStatus())
+                        .totalDevices(campaignStatusContent.getTotalDevices())
+                        .scheduled(campaignStatusContent.getScheduled())
+                        .downloading(campaignStatusContent.getDownloading())
+                        .awaitingInstall(campaignStatusContent.getAwaitingInstall())
+                        .completed(campaignStatusContent.getCompleted())
+                        .failed(campaignStatusContent.getFailed())
+                        .completedOn(campaignStatusContent.getCompletedOn())
+                        .build();
+            }
 
             public static CampaignStatusDetailContent of(String deploymentId, CampaignStatusContent campaignStatusContent, List<CampaignStatusDetailDevice> detailDevices) {
                 if (campaignStatusContent == null) {

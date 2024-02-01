@@ -15,7 +15,7 @@ import com.bos.resource.app.fota.model.dto.CampaignResponseDto;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FotaReadyDevice.FOTAReadyDeviceContent;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FotaReadyDevice.FOTAReadyDeviceWrapper;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FoundCampaignStatus.CampaignStatusContent;
-import com.bos.resource.app.fota.model.enums.CampaignStatus;
+import com.bos.resource.app.fota.model.constants.enums.CampaignStatus;
 import com.bos.resource.app.fota.service.FOTAService;
 import com.bos.resource.app.resourceowner.ResourceOwnerService;
 import com.bos.resource.app.resourceowner.exception.ResourceOwnerErrorCode;

@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DeviceRepositoryTest {
 
     @Autowired
-    DeviceRepository deviceRepository;
+    private DeviceRepository deviceRepository;
 
     @Test
     @DisplayName("Create Device Entity - OK")

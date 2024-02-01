@@ -3,7 +3,7 @@ package com.bos.resource.app.fota.model.entity;
 import com.bos.resource.app.common.domain.entity.BaseEntity;
 import com.bos.resource.app.common.domain.enums.UseType;
 import com.bos.resource.app.fota.model.dto.ConvertedDateString;
-import com.bos.resource.app.fota.model.enums.CampaignStatus;
+import com.bos.resource.app.fota.model.constants.enums.CampaignStatus;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLRestriction;
 
 import static com.bos.resource.app.common.domain.enums.UseType.Y;
-import static com.bos.resource.app.fota.model.enums.CampaignStatus.ACTIVE;
+import static com.bos.resource.app.fota.model.constants.enums.CampaignStatus.ACTIVE;
 
 @Getter
 @Entity

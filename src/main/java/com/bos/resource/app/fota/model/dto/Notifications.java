@@ -1,5 +1,6 @@
 package com.bos.resource.app.fota.model.dto;
 
+import com.bos.resource.app.fota.model.constants.enums.PackageType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -31,7 +32,7 @@ public class Notifications {
         @RequiredArgsConstructor
         public static class NotificationDetailMetadata {
             private final LocalDateTime availableFrom;
-            private final String type;
+            private final PackageType type;
         }
     }
 }

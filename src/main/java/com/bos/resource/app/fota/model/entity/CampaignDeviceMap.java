@@ -1,8 +1,8 @@
 package com.bos.resource.app.fota.model.entity;
 
 import com.bos.resource.app.device.model.entity.Device;
-import com.bos.resource.app.fota.model.enums.CampaignDeviceStatus;
-import com.bos.resource.app.fota.model.enums.FirmwareUploadServerType;
+import com.bos.resource.app.fota.model.constants.enums.CampaignDeviceStatus;
+import com.bos.resource.app.fota.model.constants.enums.FirmwareUploadServerType;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

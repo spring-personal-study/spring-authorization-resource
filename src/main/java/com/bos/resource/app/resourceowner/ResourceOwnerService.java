@@ -22,7 +22,6 @@ public class ResourceOwnerService {
         return new ResourceOwnerDto(resourceOwner);
     }
 
-
     public List<ResourceOwner> findByCompanyId(Long companyId) {
         return resourceOwnerRepository.findByCompanyId(companyId);
     }

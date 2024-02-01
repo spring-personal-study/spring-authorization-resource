@@ -3,9 +3,9 @@ package com.bos.resource.app.fota.model.dto;
 import com.bos.resource.app.fota.model.entity.Campaign;
 import com.bos.resource.app.fota.model.entity.CampaignDeviceMap;
 import com.bos.resource.app.fota.model.entity.Firmware;
-import com.bos.resource.app.fota.model.enums.CampaignDeviceStatus;
-import com.bos.resource.app.fota.model.enums.OpCode;
-import com.bos.resource.app.fota.model.enums.OperationType;
+import com.bos.resource.app.fota.model.constants.enums.CampaignDeviceStatus;
+import com.bos.resource.app.fota.model.constants.enums.OpCode;
+import com.bos.resource.app.fota.model.constants.enums.OperationType;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -39,7 +39,7 @@ public record OperationJson(Long id, OpCode code, OperationType type,
                 .status(fotaCampaignDeviceMap.getStatus())
                 .payLoad(payLoad.toJsonFormat())
                 .isEnabled(true)
-                .createdTimeStamp(LocalDateTime.now().format(dateTimeFormatter).toString())
+                .createdTimeStamp(LocalDateTime.now().format(dateTimeFormatter))
                 .build();
     }
 

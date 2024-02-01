@@ -2,14 +2,12 @@ package com.bos.resource.app.fota.service.updatetype;
 
 import com.bos.resource.app.common.apiresponse.ApiSuccessMessage;
 import com.bos.resource.app.device.model.entity.SupportModel;
-import com.bos.resource.app.device.repository.device.DeviceRepository;
 import com.bos.resource.app.fota.exception.FOTACrudErrorCode;
 import com.bos.resource.app.fota.model.dto.CampaignRequestDto;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.CreatedCampaign;
 import com.bos.resource.app.fota.model.entity.Campaign;
 import com.bos.resource.app.fota.model.entity.Firmware;
 import com.bos.resource.app.fota.model.entity.Package;
-import com.bos.resource.app.fota.repository.CampaignPackageMapRepository;
 import com.bos.resource.app.fota.repository.CampaignRepository;
 import com.bos.resource.app.fota.repository.PackageRepository;
 import com.bos.resource.app.fota.repository.firmware.FirmwareRepository;
@@ -24,16 +22,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.bos.resource.app.fota.model.constants.strings.FirmwareUpdateTypeConstants.LATEST_VALUE;
 import static java.util.Collections.singletonList;
 
-@Service("LATEST")
+@Service(LATEST_VALUE)
 @RequiredArgsConstructor
 public class UpdateTypeLatest implements UpdateTypeSelector {
 
     private final CampaignRepository campaignRepository;
     private final PackageRepository packageRepository;
-    private final DeviceRepository deviceRepository;
-    private final CampaignPackageMapRepository campaignPackageMapRepository;
     private final FirmwareRepository firmwareRepository;
     private final UpdateTypeHelper createCampaignKit;
 
@@ -52,7 +49,6 @@ public class UpdateTypeLatest implements UpdateTypeSelector {
         Package targetPackage = packageRepository.findByFirmwareAndModel(firmware, newCampaign.supportModel());
         //createCampaignKit.saveCampaignDetails(savedCampaign, targetPackage, createCampaignDto.devices().serial(), notFound, expiredWarranty);
         createCampaignKit.saveCampaignDetails(savedCampaign, targetPackage, createCampaignDto.devices().serial());
-
 
         return CreatedCampaign.builder()
                 .deploymentId(savedCampaign.getName())

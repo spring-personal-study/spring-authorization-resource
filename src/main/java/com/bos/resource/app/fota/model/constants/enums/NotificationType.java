@@ -1,10 +1,10 @@
-package com.bos.resource.app.fota.model.enums;
+package com.bos.resource.app.fota.model.constants.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import static com.bos.resource.app.fota.model.dto.NotificationTypeConstants.NEW_ARTIFACT_AUTO_UPDATE_VALUE;
-import static com.bos.resource.app.fota.model.dto.NotificationTypeConstants.NEW_DEPLOYMENT_VALUE;
+import static com.bos.resource.app.fota.model.constants.strings.NotificationTypeConstants.NEW_ARTIFACT_AUTO_UPDATE_VALUE;
+import static com.bos.resource.app.fota.model.constants.strings.NotificationTypeConstants.NEW_DEPLOYMENT_VALUE;
 
 @Getter
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ public enum NotificationType {
                 return notificationType;
             }
         }
-        throw new IllegalArgumentException("No NotificationType with name " + name);
+        throw new IllegalArgumentException("No NotificationType with name: {} " + name);
     }
 
     public static String findType(String notificationType) {

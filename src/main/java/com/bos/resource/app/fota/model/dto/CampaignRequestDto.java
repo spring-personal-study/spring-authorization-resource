@@ -1,6 +1,6 @@
 package com.bos.resource.app.fota.model.dto;
 
-import com.bos.resource.app.fota.model.enums.NotificationType;
+import com.bos.resource.app.fota.model.constants.enums.NotificationType;
 import com.bos.resource.exception.common.ApiErrorMessage;
 import com.querydsl.core.util.StringUtils;
 import jakarta.validation.Valid;
@@ -142,7 +142,6 @@ public class CampaignRequestDto {
 
         public Notification(
                 @NotNull(message = ApiErrorMessage.NOTIFICATION_TYPE_IS_NULL)
-                @NotEmpty(message = ApiErrorMessage.NOTIFICATION_TYPE_IS_EMPTY)
                 String notificationType,
                 PeriodParams params,
                 Integer offset,

@@ -1,6 +1,6 @@
 package com.bos.resource.app.fota.model.dto;
 
-import com.bos.resource.app.fota.model.enums.CampaignStatus;
+import com.bos.resource.app.fota.model.constants.enums.CampaignStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -21,8 +21,8 @@ public class CampaignStatusAggregation {
     private final Integer completed;
     //private final Integer cancelled;
     //private final Integer unknown;
-    //private final UseType cancelRequested; // TODO: need to change to Boolean*/
-    private final Integer failed;
+    //private final UseType cancelRequested;
+    private final Integer failed; // TODO: dose it need to change to object ? */
     //private final Integer failedDownload;
     //private final Integer failedInstall;
     private final LocalDateTime completedOn;

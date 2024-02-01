@@ -10,7 +10,7 @@ import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FotaReadyDevice.F
 import com.bos.resource.app.fota.model.dto.CampaignStatusAggregation;
 import com.bos.resource.app.fota.model.dto.OperationJson;
 import com.bos.resource.app.fota.model.entity.*;
-import com.bos.resource.app.fota.model.enums.OpCode;
+import com.bos.resource.app.fota.model.constants.enums.OpCode;
 import com.bos.resource.app.fota.repository.*;
 import com.bos.resource.app.fota.repository.devicemap.CampaignDeviceMapRepository;
 import com.bos.resource.app.fota.service.updatetype.UpdateTypeSelector;
@@ -41,7 +41,9 @@ import static com.bos.resource.app.common.apiresponse.ApiSuccessMessage.CANCEL_D
 @RequiredArgsConstructor
 public class FOTAService {
 
+    private final ResourceOwnerService resourceOwnerService;
     private final Map<String, UpdateNotifier> notificationProcessors;
+    private final Map<String, UpdateTypeSelector> updateTypeSelector;
     private final CampaignRepository campaignRepository;
     private final DeviceRepository deviceRepository;
     private final CampaignDeviceMapRepository campaignDeviceMapRepository;
@@ -49,8 +51,6 @@ public class FOTAService {
     private final CampaignDeviceGroupMapRepository campaignDeviceGroupMapRepository;
     private final CampaignDeviceTagMapRepository campaignDeviceTagMapRepository;
     private final OperationQueueRepository operationQueueRepository;
-    private final ResourceOwnerService resourceOwnerService;
-    private final Map<String, UpdateTypeSelector> updateTypeSelector;
 
     public CreatedNotification processNotification(ResourceOwnerDto requestUser, Notification notification) {
         UpdateNotifier updateNotifier = notificationProcessors.get(notification.notificationType());
@@ -59,11 +59,8 @@ public class FOTAService {
 
     @Transactional(readOnly = false)
     public CreatedCampaign createCampaign(ResourceOwnerDto requestUser, CampaignRequestDto.CreateCampaignDto createCampaignDto) {
-        CreatedCampaign campaign = updateTypeSelector.get(
-                createCampaignDto.profile()
-                        .updateType()
-                        .toUpperCase()
-        ).createCampaign(requestUser, createCampaignDto);
+        UpdateTypeSelector updateTypeSelected = updateTypeSelector.get(createCampaignDto.profile().updateType().toUpperCase());
+        CreatedCampaign campaign = updateTypeSelected.createCampaign(requestUser, createCampaignDto);
         Campaign savedCampaign = campaignRepository.findByName(campaign.getDeploymentId())
                 .orElseThrow(() -> new BizException(FOTACrudErrorCode.CAMPAIGN_NOT_FOUND));
         insertCampaignJsonData(savedCampaign);
@@ -75,6 +72,7 @@ public class FOTAService {
         Firmware firmware = fotaCampaignPackageMap.getFotaPackage().getFirmware();
         List<CampaignDeviceMap> campaignDeviceMaps = campaignDeviceMapRepository.findByCampaign(campaign);
         OperationJson.PayLoad payLoad = OperationJson.PayLoad.getPayLoad(campaign, firmware);
+        ObjectMapper objectMapper = new ObjectMapper();
         for (CampaignDeviceMap campaignDeviceMap : campaignDeviceMaps) {
             campaignDeviceMap.increaseSequence();
             OperationJson operationJson = OperationJson.getOperationJson(
@@ -83,7 +81,6 @@ public class FOTAService {
                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
             );
             try {
-                ObjectMapper objectMapper = new ObjectMapper();
                 OperationQueue operationQueue = OperationQueue.builder()
                         .device(campaignDeviceMap.getDevice())
                         .opCode(OpCode.UPGRADE_FIRMWARE)
@@ -91,7 +88,7 @@ public class FOTAService {
                         .build();
                 operationQueueRepository.save(operationQueue);
             } catch (JsonProcessingException e) {
-                throw new BizException(FOTACrudErrorCode.FOTA_CRUD_FAIL);
+                throw new BizException(FOTACrudErrorCode.INSERT_JSON_DATA_FAIL);
             }
         }
     }
@@ -118,16 +115,17 @@ public class FOTAService {
     }
 
     public FoundCampaignStatusDetail getCampaignStatusDetail(ResourceOwnerDto resourceOwner, CampaignRequestDto.CampaignStatusDetail campaignStatus) {
-        CampaignStatusAggregation campaignStatusAggregation = null;
+        PageRequest pageRequest = null;
+        Page<CampaignDeviceMap> campaignDevices = null;
         Campaign targetCampaign = campaignRepository.findByCampaignName(resourceOwner.getCompanyId(), campaignStatus.deploymentId());
         if (targetCampaign == null) {
             throw new BizException(FOTACrudErrorCode.CAMPAIGN_NOT_FOUND);
         }
         if (campaignStatus.appendStatus()) {
-            campaignStatusAggregation = campaignRepository.findCampaignStatusByCampaign(targetCampaign);
+            pageRequest = PageRequest.of(campaignStatus.offset(), campaignStatus.size());
+            campaignDevices = campaignDeviceMapRepository.findByCampaignDevices(targetCampaign, pageRequest);
         }
-        PageRequest pageRequest = PageRequest.of(campaignStatus.offset(), campaignStatus.size());
-        Page<CampaignDeviceMap> campaignDevices = campaignDeviceMapRepository.findByCampaignDevices(targetCampaign, pageRequest);
+        CampaignStatusAggregation campaignStatusAggregation = campaignRepository.findCampaignStatusByCampaign(targetCampaign);
         return FoundCampaignStatusDetail.of(campaignStatus.deploymentId(), campaignStatusAggregation, campaignDevices, pageRequest);
     }
 
@@ -138,8 +136,8 @@ public class FOTAService {
 
         ResourceOwnerDto resourceOwner = resourceOwnerService.findByResourceOwnerId(resourceOwnerName);
 
-        boolean doesBelongToCompany = resourceOwner.getCompanyId().equals(campaign.getCompanyId());
-        if (!doesBelongToCompany) {
+        boolean isResourceOwnerBelongToCompany = resourceOwner.getCompanyId().equals(campaign.getCompanyId());
+        if (!isResourceOwnerBelongToCompany) {
             throw new BizException(FOTACrudErrorCode.ATTEMPTED_CANCEL_CAMPAIGN_WITH_NOT_VALID_USER);
         }
         List<Device> campaignDevices = campaignDeviceMapRepository.findByCampaign(campaign)
