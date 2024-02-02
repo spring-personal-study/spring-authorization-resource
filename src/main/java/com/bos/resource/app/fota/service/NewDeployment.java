@@ -7,21 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service("NEW_DEPLOYMENT")
+import static com.bos.resource.app.fota.model.constants.strings.NotificationTypeConstants.NEW_DEPLOYMENT_VALUE;
+
+@Service(NEW_DEPLOYMENT_VALUE)
 @RequiredArgsConstructor
 public class NewDeployment implements UpdateNotifier {
-
-  /*  private final CampaignRepository campaignRepository;
-    private final FirmwareRepository firmwareRepository;
-    private final PackageRepository packageRepository;
-    private final SupportModelRepository supportModelRepository;
-    private final CampaignPackageMapRepository campaignPackageMapRepository;
-    private final DeviceRepository deviceRepository;
-    private final CampaignDeviceMapRepository campaignDeviceMapRepository;
-    private final CampaignDeviceTagMapRepository campaignDeviceTagMapRepository;
-    private final CampaignDeviceGroupMapRepository campaignDeviceGroupMapRepository;
-    private final DeviceTagMapRepository deviceTagMapRepository;
-    private final DeviceGroupMapRepository deviceGroupMapRepository;*/
 
     @Override
     public CampaignResponseDto.CreatedNotification notify(ResourceOwnerDto requestUser, CampaignRequestDto.Notification notification) {

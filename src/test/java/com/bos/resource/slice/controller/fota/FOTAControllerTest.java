@@ -455,7 +455,6 @@ public class FOTAControllerTest {
         }
 
         @Test
-        @Disabled("till the api reference has decided")
         @DisplayName("/deployments 400 Bad Request - missed campaign profile")
         void givenInsufficientRequestBodyProfile_whenRegisterNewCampaign_thenBadRequest() throws Exception {
             CampaignRequestDto.CreateCampaignDto requestBody = new CampaignRequestDto.CreateCampaignDto(null, null, null);
@@ -473,7 +472,7 @@ public class FOTAControllerTest {
                     //.andDo(print())
                     .andExpect(status().isBadRequest())
                     .andExpect(content().contentType("application/json"))
-                    .andExpect(jsonPath("$.msg").value(GeneralErrorMessage.ALL_PARAMETER_IS_NULL))
+                    .andExpect(jsonPath("$.msg").value(GeneralErrorMessage.INVALID_PARAMETER))
                     .andExpect(jsonPath("$.httpCode").value(FOTACrudErrorCode.FOTA_CRUD_FAIL.getHttpStatus().value()))
                     .andExpect(jsonPath("$.timestamp").isNotEmpty());
 

@@ -24,8 +24,8 @@ import static com.bos.resource.app.fota.model.constants.strings.NotificationType
 @RequiredArgsConstructor
 public class NewArtifactAutoUpdate implements UpdateNotifier {
 
-    private final FirmwareRepository firmwareRepository;
     private final ResourceOwnerService resourceOwnerService;
+    private final FirmwareRepository firmwareRepository;
     private final DeviceRepository deviceRepository;
 
     @Override
