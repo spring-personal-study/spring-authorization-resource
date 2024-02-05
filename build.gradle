@@ -48,7 +48,7 @@ dependencies {
 
     // h2
     // https://mvnrepository.com/artifact/com.h2database/h2
-    testImplementation 'com.h2database:h2:2.2.224'
+    implementation 'com.h2database:h2:2.2.224'
     //testImplementation 'com.h2database:h2:1.4.193'
 }
 

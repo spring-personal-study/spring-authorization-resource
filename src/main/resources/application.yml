@@ -1,12 +1,25 @@
+logging:
+  level:
+    org.springframework.security: trace
+
 server:
   port: 8082
 
 spring:
+  profiles:
+    active: default
   config:
     import:
-      - application_oauth2_resource.yml
-      - application_db.yml
+        - classpath:/application_oauth2_resource.yml
+        - classpath:/db/mysql_db.yml
 
-logging:
-  level:
-    org.springframework.security: trace
+---
+
+spring:
+  profiles:
+    active: test
+  config:
+    import:
+      - classpath:/application_oauth2_resource.yml
+      - classpath:/db/h2_db.yml
+

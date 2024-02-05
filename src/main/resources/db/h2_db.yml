@@ -1,17 +1,11 @@
-## DB setting
-## GET {uri}/h2-console
-## create database at firsttime
-## jdbc:h2:~/test_fota
-## access into h2
-## jdbc:h2:tcp://localhost/~/test
-
 spring:
+  profiles:
+    active: test
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem://localhost/~/testdb;MODE=MYSQL
+    url: jdbc:h2:mem:testdb;MODE=MySQL
     username: sa
     password:
-    initialization-mode: always
 
   h2:
     console:
@@ -32,15 +26,12 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        show_sql: false
-        dialect: org.hibernate.dialect.MySQLDialect
+        show_sql: true
     hibernate:
        ddl-auto: none
-
 
 decorator:
   datasource:
     p6spy:
       enable-logging: true
       multiline: true
-      log-file: p6spy.log

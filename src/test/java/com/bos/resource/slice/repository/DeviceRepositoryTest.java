@@ -15,7 +15,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@TestPropertySource(locations = "classpath:application_db.yml")
+@TestPropertySource(locations = "classpath:db/mysql_db.yml")
 @Import({DatabaseConfig.class})
 public class DeviceRepositoryTest {
 

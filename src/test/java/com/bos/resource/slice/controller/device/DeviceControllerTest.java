@@ -48,7 +48,7 @@ public class DeviceControllerTest {
         @Test
         @DisplayName("Request from an authorized user - 200")
         void givenRequestIsAuthorized_whenGetAsset_thenOk() throws Exception {
-            final String username = "resource_owner_id";
+            final String username = "fake_user1";
             final String message = "success";
             final String model = "EF501";
             final String serialNumber = "EF501XXXXXXXX1";
