@@ -72,9 +72,6 @@ public class DeviceControllerTest {
         @DisplayName("Test asset API - 200 OK")
         public void testAsset_fail_notExistsUser() throws Exception {
             final String username = "not_exists_user1";
-            final String message = "success";
-            final String model = "HF550";
-            final String serialNumber = "HF550XANLCBA001";
 
             mockMvc.perform(get("/v1/asset")
                             .with(jwt()
