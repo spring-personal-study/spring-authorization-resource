@@ -15,7 +15,7 @@ VALUES (1, 'fake_user1', '$2a$12$JTX1hGYLGuhX3rOiHL5Gne0iOwh0AfA3PAmUmZuEtZk8arb
        (2, 'fake_user2', '$2a$12$JTX1hGYLGuhX3rOiHL5Gne0iOwh0AfA3PAmUmZuEtZk8arbB5BrGa', 'admin@bluebirdcorp.com', 1, 1,
         'admin', 'Y', '2023-05-02 03:50:14', 'admin@bluebirdcorp.com', '2023-05-02 03:50:14', 'admin@bluebirdcorp.com'),
        (3, 'fake_user3', '$2a$12$hA3miYIH5EgzpXV0JT7wmOpFlJu1APeMIfYPNywNfKt2pXcgkYWx6', 'EmmAgent@bluebirdcorp.com', 1,
-        1, 'Agent', 'Y', '2023-05-04 01:40:29', 'admin@bluebirdcorp.com', '2023-05-04 01:40:29',
+        1, 'EmmAgent', 'Y', '2023-05-04 01:40:29', 'admin@bluebirdcorp.com', '2023-05-04 01:40:29',
         'admin@bluebirdcorp.com');
 
 INSERT INTO `TB_PLATFORM` (`PLATFORM_ID`, `PLATFORM_NM`, `USE_YN`, `CREATE_DT`, `CREATE_ID`, `UPDATE_DT`, `UPDATE_ID`)
@@ -38,11 +38,11 @@ VALUES (1, '54f6bb1eae4c811', 'HF550XANLCBA001', 'android_EF500_HF550XANLCBA001'
 INSERT INTO `TB_DEVICE_DETAIL` (`ID`, `DEVICE_ID`, `SN`, `IMEI`, `IMSI`, `MAC_ADDRESS`, `MODEL_NM`, `VENDOR`, `OS_VER`,
                                 `OS_BUILD_DATE`, `OS_BUILD_NUMBER`, `OS_BUILD_DATE_STR`, `FCM_TOKEN`, `UPDATE_DT`)
 VALUES (1, 1, 'HF550XANLCBA001', NULL, NULL, NULL, 'HF550', NULL, NULL, '1659665129', '20230706_R1.00',
-        'Fri Aug  5 11:05:29 KST 2022', NULL, '2023-05-16 17:25:06.142078'),
+        'Fri Aug 5 11:05:29 KST 2022', NULL, '2023-05-16 17:25:06.142078'),
        (2, 2, 'HF550XANLCBA002', NULL, NULL, NULL, 'HF550', NULL, NULL, '1659665129', '20230706_R1.00',
-        'Fri Aug  5 11:05:29 KST 2022', NULL, '2023-05-16 17:25:06.142078'),
-       (3, 3, 'HF551XANLCBA003', NULL, NULL, NULL, 'AG50', NULL, NULL, '1659665129', '20230706_AG1.00',
-        'Fri Aug  5 11:05:29 KST 2022', NULL, '2023-05-16 17:25:06.142078');
+        'Fri Aug 5 11:05:29 KST 2022', NULL, '2023-05-16 17:25:06.142078'),
+       (3, 3, 'AG50XXANLCBA003', NULL, NULL, NULL, 'AG50', NULL, NULL, '1659665129', '20230706_AG1.00',
+        'Fri Aug 5 11:05:29 KST 2022', NULL, '2023-05-16 17:25:06.142078');
 
 INSERT INTO `TB_FOTA_CAMPAIGN` (`CAMPAIGN_ID`, `CAMPAIGN_NM`, `CAMPAIGN_DESC`, `PLATFORM_ID`, `START_DT`, `START_TM`,
                                 `END_DT`, `END_TM`, `P2P_MODE_YN`, `ASK_USER_YN`, `LTE_USE_YN`, `STATUS`, `COMPANY_ID`,
@@ -106,15 +106,18 @@ INSERT INTO `TB_PV_FIRMWARE_MAIN` (`FIRMWARE_MAIN_ID`, `PLATFORM_ID`, `FIRMWARE_
                                    `FIRMWARE_URL`, `FIRMWARE_DESC`, `COMPANY_ID`, `FIRMWARE_UUID_NM`,
                                    `FIRMWARE_ORIGIN_NM`, `UPLOAD_SERVER_TYPE`, `USE_YN`, `CREATE_DT`, `CREATE_ID`,
                                    `UPDATE_DT`, `UPDATE_ID`, `PACKAGE_TYPE`, `ANDROID_VERSION_ID`, `TYPE`)
-VALUES (1, 1, 'HF550_OTA_6', '1', 'HF550', 'https://new-emm.s3.ap-northeast-2.amazonaws.com/image/HF550/20230727_R1.00',
-        'HF550 Firmware6', 2, NULL, NULL, 'CLOUD', 'Y', '2023-07-11 03:28:10', 'admin@bluebirdcorp.com',
+VALUES (1, 1, 'FOTA-23', '1', 'HF550', 'https://new-emm.s3.ap-northeast-2.amazonaws.com/image/HF550/20230727_R1.00',
+        'HF550 Firmware6', 1, NULL, NULL, 'CLOUD', 'Y', '2023-07-11 03:28:10', 'admin@bluebirdcorp.com',
         '2023-07-11 03:28:10', 'admin@bluebirdcorp.com', 'INCREMENTAL', 19, NULL),
-       (2, 1, 'HF550_OTA_7', '1', 'HF550', 'https://new-emm.s3.ap-northeast-2.amazonaws.com/image/HF550/20230727_R1.00',
-        'HF550 Firmware7', 2, NULL, NULL, 'CLOUD', 'Y', '2023-07-11 03:28:10', 'admin@bluebirdcorp.com',
-        '2023-07-11 03:28:10', 'admin@bluebirdcorp.com', 'INCREMENTAL', 19, NULL),
-       (3, 1, 'HF550_OTA_8', '1', 'HF550', 'https://new-emm.s3.ap-northeast-2.amazonaws.com/image/HF550/20230727_R1.00',
-        'HF550 Firmware8', 2, NULL, NULL, 'CLOUD', 'Y', '2023-07-11 03:28:10', 'admin@bluebirdcorp.com',
-        '2023-07-11 03:28:10', 'admin@bluebirdcorp.com', 'INCREMENTAL', 19, NULL);
+       (2, 1, 'FOTA-24', '1', 'HF550', 'https://new-emm.s3.ap-northeast-2.amazonaws.com/image/HF550/20230728_R1.00',
+        'HF550 Firmware7', 1, NULL, NULL, 'CLOUD', 'Y', '2023-07-11 03:28:11', 'admin@bluebirdcorp.com',
+        '2023-07-11 03:28:11', 'admin@bluebirdcorp.com', 'INCREMENTAL', 19, NULL),
+       (3, 1, 'FOTA-25', '1', 'AG50', 'https://new-emm.s3.ap-northeast-2.amazonaws.com/image/AG50/20230729_R1.00',
+        'HF550 Firmware7', 1, NULL, NULL, 'CLOUD', 'Y', '2023-07-11 03:28:12', 'admin@bluebirdcorp.com',
+        '2023-07-11 03:28:12', 'admin@bluebirdcorp.com', 'FULL', 19, NULL),
+       (4, 1, 'FOTA-26', '1', 'HF550', 'https://new-emm.s3.ap-northeast-2.amazonaws.com/image/HF550/20230730_R1.00',
+        'HF550 Firmware8', 2, NULL, NULL, 'CLOUD', 'Y', '2023-07-11 03:28:13', 'admin@bluebirdcorp.com',
+        '2023-07-11 03:28:13', 'admin@bluebirdcorp.com', 'INCREMENTAL', 19, NULL);
 
 INSERT INTO `TB_FOTA_PACKAGE` (`PACKAGE_ID`, `PACKAGE_NM`, `PACKAGE_DESC`, `PLATFORM_ID`, `MODEL_CD`, `CURRENT_VER`,
                                `TARGET_VER`, `FIRMWARE_MAIN_ID`, `COMPANY_ID`, `USE_YN`, `CREATE_DT`, `CREATE_ID`,

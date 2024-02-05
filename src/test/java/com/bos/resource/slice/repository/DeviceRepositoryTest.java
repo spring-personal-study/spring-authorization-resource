@@ -3,20 +3,26 @@ package com.bos.resource.slice.repository;
 import com.bos.resource.app.device.model.entity.Device;
 import com.bos.resource.app.device.repository.device.DeviceRepository;
 import com.bos.resource.config.DatabaseConfig;
+import com.bos.resource.config.P6SpyFormatter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test")
 @DataJpaTest
-@TestPropertySource(locations = "classpath:db/mysql_db.yml")
-@Import({DatabaseConfig.class})
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import({DatabaseConfig.class, P6SpyFormatter.class})
 public class DeviceRepositoryTest {
 
     @Autowired

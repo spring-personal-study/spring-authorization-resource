@@ -185,7 +185,7 @@ public class FOTAServiceTest {
         CampaignProfile.ProfileTarget profileTarget = new CampaignProfile.ProfileTarget(targetValue);
         CampaignProfile profile = new CampaignProfile(CUSTOM_VALUE, profileTarget);
 
-        InstallRule install = new InstallRule("20230131", "19:25", "21:25", false);
+        InstallRule install = new InstallRule("2023-01-31T00:00:00", "19:25", "21:25", false);
         CampaignRule rule = new CampaignRule(install);
 
         CampaignDevice devices = new CampaignDevice(

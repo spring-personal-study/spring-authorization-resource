@@ -40,6 +40,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static com.bos.resource.app.common.apiresponse.ApiSuccessMessage.CANCEL_DEPLOYMENT_SUCCESS;
+import static com.bos.resource.app.fota.model.constants.enums.message.FirmwareUpdateType.LATEST;
 import static java.time.LocalDateTime.now;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.*;
@@ -379,8 +380,8 @@ public class FOTAControllerTest {
                 now()
         );
 
-        private final CampaignProfile profile = new CampaignProfile("LATEST", new ProfileTarget(new TargetValue("20991231")));
-        private final CampaignRule rule = new CampaignRule(new InstallRule("19700101", "00:00", "23:59", false));
+        private final CampaignProfile profile = new CampaignProfile(LATEST.getName(), new ProfileTarget(new TargetValue("20991231")));
+        private final CampaignRule rule = new CampaignRule(new InstallRule("20240630", "09:15", "11:35", false));
         private final CampaignDevice device = new CampaignDevice("EF501", List.of("EF501_SN1", "EF501_SN2"));
 
         @Test

@@ -44,6 +44,7 @@ public class CampaignResponseDto {
 
         private final Paging head;
         private final List<Notifications> notifications;
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         private final List<NotificationsError> notificationsErrors;
 
         public static CreatedNotification of(
