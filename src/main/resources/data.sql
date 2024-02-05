@@ -68,22 +68,13 @@ VALUES (1, 1, 'EF501', 'Y', '2023-07-11 03:34:27', 'admin@bluebirdcorp.com', '20
        (4, 1, 'AG50', 'Y', '2023-07-31 08:20:13', 'admin@bluebirdcorp.com', '2023-07-31 08:20:13',
         'admin@bluebirdcorp.com');
 
-INSERT INTO `TB_DEVICE_DETAIL` (`ID`, `DEVICE_ID`, `SN`, `IMEI`, `IMSI`, `MAC_ADDRESS`, `MODEL_NM`, `VENDOR`, `OS_VER`,
-                                `OS_BUILD_DATE`, `OS_BUILD_NUMBER`, `OS_BUILD_DATE_STR`, `FCM_TOKEN`, `UPDATE_DT`)
-VALUES (1, 1, 'HF550XANLCBA001', NULL, NULL, NULL, 'HF550', NULL, NULL, '1659665129', '20230706_R1.00',
-        'Fri Aug  5 11:05:29 KST 2022', NULL, '2023-05-16 17:25:06.142078'),
-       (2, 2, 'EF501XANLCBA002', NULL, NULL, NULL, 'EF501', NULL, NULL, '1659665129', '20230706_R1.00',
-        'Fri Aug  5 11:05:29 KST 2022', NULL, '2023-05-16 17:25:06.142078'),
-       (3, 3, 'HF550XANLCBA003', NULL, NULL, NULL, 'HF550', NULL, NULL, '1659665129', '20230706_AG1.00',
-        'Fri Aug  5 11:05:29 KST 2022', NULL, '2023-05-16 17:25:06.142078');
-
 INSERT INTO `TB_DEVICE_GROUP` (`DEVICE_GRP_ID`, `DEVICE_GRP_CD`, `DEVICE_GRP_NM`, `DEVICE_GRP_DESC`, `COMPANY_ID`,
                                `USE_YN`, `CREATE_DT`, `CREATE_ID`, `UPDATE_DT`, `UPDATE_ID`)
-VALUES (1, '0', 'default', 'default device group', 1, 'Y', '2023-05-12 07:07:18', 'admin@bluebirdcorp.com',
+VALUES (1, '1', 'default', 'default device group', 1, 'Y', '2023-05-12 07:07:18', 'admin@bluebirdcorp.com',
         '2023-09-26 02:50:55.486142', 'admin@bluebirdcorp.com'),
-       (2, '1', 'test Group 2', 'Group 1', 1, 'Y', '2023-05-30 14:31:31.053685', 'EmmAgent@bluebirdcorp.com',
+       (2, '2', 'test Group 2', 'Group 1', 1, 'Y', '2023-05-30 14:31:31.053685', 'EmmAgent@bluebirdcorp.com',
         '2023-10-16 17:17:43.096948', 'admin@bluebirdcorp.com'),
-       (3, '7', 'Group 11', 'testGroupDescasdasd', 1, 'Y', '2023-05-30 15:35:23.629711', 'jhdl0157@naver.com',
+       (3, '3', 'Group 11', 'testGroupDescasdasd', 1, 'Y', '2023-05-30 15:35:23.629711', 'jhdl0157@naver.com',
         '2023-07-03 12:49:43.238049', 'admin@bluebirdcorp.com');
 
 INSERT INTO `TB_DEVICE_GROUP_MAP` (`DEVICE_GROUP_MAP_ID`, `DEVICE_ID`, `DEVICE_GRP_ID`)
@@ -105,46 +96,11 @@ VALUES (1, 1, 1),
        (2, 2, 2),
        (3, 3, 3);
 
-
 INSERT INTO `TB_FOTA_CAMPAIGN_DEVICE_MAP` (`CAM_DEVICE_MAP_ID`, `CAMPAIGN_ID`, `DEVICE_ID`, `STATUS`, `DETAIL_STATUS`,
                                            `DETAIL_STATUS_DESC`, `SEQ`, `UPDATE_DT`, `UPLOAD_SERVER_TYPE`,
                                            `TICKET_STATUS`)
 VALUES (1, 1, 1, 'FAIL', 'FAIL', 'Firmware Update has been failed.', 7400, '2023-10-13 18:41:37.312407', 'CLOUD', 0),
        (2, 1, 2, 'PENDING', 'PENDING', 'Firmware will be updated.', 7801, '2023-10-24 07:46:46.484819', 'CLOUD', 0);
-
-INSERT INTO `TB_FOTA_CAMPAIGN_PACKAGE_MAP` (`CAM_PACK_MAP_ID`, `PACKAGE_ID`, `CAMPAIGN_ID`)
-VALUES (1, 1, 1),
-       (2, 2, 2);
-
-INSERT INTO `TB_FOTA_DEVICE_GROUP_MAP` (`FOTA_DEVICE_GROUP_MAP_ID`, `DEVICE_GRP_ID`, `CAMPAIGN_ID`)
-VALUES (1, 1, 1),
-       (2, 2, 1);
-
-INSERT INTO `TB_FOTA_DEVICE_TAG_MAP` (`FOTA_DEVICE_TAG_MAP_ID`, `DEVICE_TAG_ID`, `CAMPAIGN_ID`)
-VALUES (1, 1, 1),
-       (2, 1, 1),
-       (3, 2, 1);
-
-INSERT INTO `TB_FOTA_PACKAGE` (`PACKAGE_ID`, `PACKAGE_NM`, `PACKAGE_DESC`, `PLATFORM_ID`, `MODEL_CD`, `CURRENT_VER`,
-                               `TARGET_VER`, `FIRMWARE_MAIN_ID`, `COMPANY_ID`, `USE_YN`, `CREATE_DT`, `CREATE_ID`,
-                               `UPDATE_DT`, `UPDATE_ID`)
-VALUES (1, 'mclee_campaign_test', '1234', 1, 1, '19:42', '20:12', 1, 1, 'Y', '2023-10-13 18:41:37.279410',
-        'admin@bluebirdcorp.com', '2023-10-13 18:41:37.279410', 'admin@bluebirdcorp.com'),
-       (2, 'test_UPLOAD_SERVER_TYPE', 'test_UPLOAD_SERVER_TYPE', 1, 1, '12:28', '12:28', 2, 1, 'Y',
-        '2023-10-18 12:29:18.690457', 'admin@bluebirdcorp.com', '2023-10-22 07:30:31.003401', 'admin@bluebirdcorp.com'),
-       (3, 'test_create', 'test_create', 1, 1, '14:05', '14:05', 3, 1, 'Y', '2023-10-18 05:06:06.557677',
-        'admin@bluebirdcorp.com', '2023-10-24 07:46:46.482471', 'admin@bluebirdcorp.com');
-
-INSERT INTO `TB_OPERATION_QUEUE` (`ID`, `DEVICE_ID`, `PAYLOAD`, `UPDATE_DT`, `OP_CODE`)
-VALUES (1, 2,
-        '{"id": 19001, "code": "UPGRADE_RFID_FIRMWARE", "type": "PROFILE", "status": "PENDING", "payLoad": "{\"firmware_id\":552,\"firmware_type\":0,\"start_date\":20240118,\"start_time\":\"07:03\",\"end_date\":20240126,\"end_time\":\"23:07\",\"force_update\":false,\"server_url\":\"https://new-emm.s3.ap-northeast-2.amazonaws.com/image/RFID_900/20231207/MCU\",\"allow_mobile_data_update\":true,\"useP2P\":false,\"useDefaultURL\":false,\"target_version\":20231207}", "isEnabled": true, "createdTimeStamp": "2024-01-1809:06:41.662"}',
-        '2024-01-18 09:06:41.673326', NULL),
-       (2, 2,
-        '{"id": 20001, "code": "UPGRADE_RFID_FIRMWARE", "type": "PROFILE", "status": "PENDING", "payLoad": "{\"firmware_id\":557,\"firmware_type\":0,\"start_date\":20240122,\"start_time\":\"09:46\",\"end_date\":20240122,\"end_time\":\"10:16\",\"force_update\":false,\"server_url\":\"https://new-emm.s3.ap-northeast-2.amazonaws.com/image/RFID_900/20230113/MCU\",\"allow_mobile_data_update\":true,\"useP2P\":false,\"useDefaultURL\":false,\"target_version\":20230113}", "isEnabled": true, "createdTimeStamp": "2024-01-2200:46:57.990"}',
-        '2024-01-22 00:46:57.993639', NULL),
-       (3, 2,
-        '{"id": 20101, "code": "UPGRADE_RFID_FIRMWARE", "type": "PROFILE", "status": "PENDING", "payLoad": "{\"firmware_id\":557,\"firmware_type\":0,\"start_date\":20240122,\"start_time\":\"10:06\",\"end_date\":20240122,\"end_time\":\"10:36\",\"force_update\":false,\"server_url\":\"https://new-emm.s3.ap-northeast-2.amazonaws.com/image/RFID_900/20230113/MCU\",\"allow_mobile_data_update\":false,\"useP2P\":false,\"useDefaultURL\":false,\"target_version\":20230113}", "isEnabled": true, "createdTimeStamp": "2024-01-2210:07:05.789"}',
-        '2024-01-22 10:07:05.793956', NULL);
 
 INSERT INTO `TB_PV_FIRMWARE_MAIN` (`FIRMWARE_MAIN_ID`, `PLATFORM_ID`, `FIRMWARE_NM`, `FIRMWARE_VER`, `MODEL`,
                                    `FIRMWARE_URL`, `FIRMWARE_DESC`, `COMPANY_ID`, `FIRMWARE_UUID_NM`,
@@ -159,3 +115,37 @@ VALUES (1, 1, 'HF550_OTA_6', '1', 'HF550', 'https://new-emm.s3.ap-northeast-2.am
        (3, 1, 'HF550_OTA_8', '1', 'HF550', 'https://new-emm.s3.ap-northeast-2.amazonaws.com/image/HF550/20230727_R1.00',
         'HF550 Firmware8', 2, NULL, NULL, 'CLOUD', 'Y', '2023-07-11 03:28:10', 'admin@bluebirdcorp.com',
         '2023-07-11 03:28:10', 'admin@bluebirdcorp.com', 'INCREMENTAL', 19, NULL);
+
+INSERT INTO `TB_FOTA_PACKAGE` (`PACKAGE_ID`, `PACKAGE_NM`, `PACKAGE_DESC`, `PLATFORM_ID`, `MODEL_CD`, `CURRENT_VER`,
+                               `TARGET_VER`, `FIRMWARE_MAIN_ID`, `COMPANY_ID`, `USE_YN`, `CREATE_DT`, `CREATE_ID`,
+                               `UPDATE_DT`, `UPDATE_ID`)
+VALUES (1, 'mclee_campaign_test', '1234', 1, 1, '19:42', '20:12', 1, 1, 'Y', '2023-10-13 18:41:37.279410',
+        'admin@bluebirdcorp.com', '2023-10-13 18:41:37.279410', 'admin@bluebirdcorp.com'),
+       (2, 'test_UPLOAD_SERVER_TYPE', 'test_UPLOAD_SERVER_TYPE', 1, 1, '12:28', '12:28', 2, 1, 'Y',
+        '2023-10-18 12:29:18.690457', 'admin@bluebirdcorp.com', '2023-10-22 07:30:31.003401', 'admin@bluebirdcorp.com'),
+       (3, 'test_create', 'test_create', 1, 1, '14:05', '14:05', 3, 1, 'Y', '2023-10-18 05:06:06.557677',
+        'admin@bluebirdcorp.com', '2023-10-24 07:46:46.482471', 'admin@bluebirdcorp.com');
+
+INSERT INTO `TB_FOTA_CAMPAIGN_PACKAGE_MAP` (`CAM_PACK_MAP_ID`, `PACKAGE_ID`, `CAMPAIGN_ID`)
+VALUES (1, 1, 1),
+       (2, 2, 2);
+
+INSERT INTO `TB_FOTA_DEVICE_GROUP_MAP` (`FOTA_DEVICE_GROUP_MAP_ID`, `DEVICE_GRP_ID`, `CAMPAIGN_ID`)
+VALUES (1, 1, 1),
+       (2, 2, 1);
+
+INSERT INTO `TB_FOTA_DEVICE_TAG_MAP` (`FOTA_DEVICE_TAG_MAP_ID`, `DEVICE_TAG_ID`, `CAMPAIGN_ID`)
+VALUES (1, 1, 1),
+       (2, 1, 1),
+       (3, 2, 1);
+
+INSERT INTO `TB_OPERATION_QUEUE` (`ID`, `DEVICE_ID`, `PAYLOAD`, `UPDATE_DT`, `OP_CODE`)
+VALUES (1, 2,
+        '{"id": 19001, "code": "UPGRADE_RFID_FIRMWARE", "type": "PROFILE", "status": "PENDING", "payLoad": "{\"firmware_id\":552,\"firmware_type\":0,\"start_date\":20240118,\"start_time\":\"07:03\",\"end_date\":20240126,\"end_time\":\"23:07\",\"force_update\":false,\"server_url\":\"https://new-emm.s3.ap-northeast-2.amazonaws.com/image/RFID_900/20231207/MCU\",\"allow_mobile_data_update\":true,\"useP2P\":false,\"useDefaultURL\":false,\"target_version\":20231207}", "isEnabled": true, "createdTimeStamp": "2024-01-1809:06:41.662"}',
+        '2024-01-18 09:06:41.673326', NULL),
+       (2, 2,
+        '{"id": 20001, "code": "UPGRADE_RFID_FIRMWARE", "type": "PROFILE", "status": "PENDING", "payLoad": "{\"firmware_id\":557,\"firmware_type\":0,\"start_date\":20240122,\"start_time\":\"09:46\",\"end_date\":20240122,\"end_time\":\"10:16\",\"force_update\":false,\"server_url\":\"https://new-emm.s3.ap-northeast-2.amazonaws.com/image/RFID_900/20230113/MCU\",\"allow_mobile_data_update\":true,\"useP2P\":false,\"useDefaultURL\":false,\"target_version\":20230113}", "isEnabled": true, "createdTimeStamp": "2024-01-2200:46:57.990"}',
+        '2024-01-22 00:46:57.993639', NULL),
+       (3, 2,
+        '{"id": 20101, "code": "UPGRADE_RFID_FIRMWARE", "type": "PROFILE", "status": "PENDING", "payLoad": "{\"firmware_id\":557,\"firmware_type\":0,\"start_date\":20240122,\"start_time\":\"10:06\",\"end_date\":20240122,\"end_time\":\"10:36\",\"force_update\":false,\"server_url\":\"https://new-emm.s3.ap-northeast-2.amazonaws.com/image/RFID_900/20230113/MCU\",\"allow_mobile_data_update\":false,\"useP2P\":false,\"useDefaultURL\":false,\"target_version\":20230113}", "isEnabled": true, "createdTimeStamp": "2024-01-2210:07:05.789"}',
+        '2024-01-22 10:07:05.793956', NULL);
