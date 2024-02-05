@@ -21,8 +21,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
-import static com.querydsl.core.types.dsl.Expressions.asNumber;
-
 @RequiredArgsConstructor
 public class QDeviceRepositoryImpl implements QDeviceRepository {
 

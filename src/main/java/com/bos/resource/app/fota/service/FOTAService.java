@@ -3,6 +3,7 @@ package com.bos.resource.app.fota.service;
 import com.bos.resource.app.device.model.entity.Device;
 import com.bos.resource.app.device.repository.device.DeviceRepository;
 import com.bos.resource.app.fota.exception.FOTACrudErrorCode;
+import com.bos.resource.app.fota.model.constants.enums.OpCode;
 import com.bos.resource.app.fota.model.dto.CampaignRequestDto;
 import com.bos.resource.app.fota.model.dto.CampaignRequestDto.Notification;
 import com.bos.resource.app.fota.model.dto.CampaignResponseDto.*;
@@ -10,7 +11,6 @@ import com.bos.resource.app.fota.model.dto.CampaignResponseDto.FotaReadyDevice.F
 import com.bos.resource.app.fota.model.dto.CampaignStatusAggregation;
 import com.bos.resource.app.fota.model.dto.OperationJson;
 import com.bos.resource.app.fota.model.entity.*;
-import com.bos.resource.app.fota.model.constants.enums.OpCode;
 import com.bos.resource.app.fota.repository.*;
 import com.bos.resource.app.fota.repository.devicemap.CampaignDeviceMapRepository;
 import com.bos.resource.app.fota.service.updatetype.UpdateTypeSelector;

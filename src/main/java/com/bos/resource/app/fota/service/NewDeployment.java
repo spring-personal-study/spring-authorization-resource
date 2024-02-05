@@ -5,7 +5,6 @@ import com.bos.resource.app.fota.model.dto.CampaignResponseDto;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.bos.resource.app.fota.model.constants.strings.NotificationTypeConstants.NEW_DEPLOYMENT_VALUE;
 

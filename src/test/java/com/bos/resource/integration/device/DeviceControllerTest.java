@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@DisplayName("DeviceController Test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(properties = "spring.profiles.active=test")
 public class DeviceControllerTest {
@@ -41,11 +42,11 @@ public class DeviceControllerTest {
     }
 
     @Nested
-    @DisplayName("/v1/asset test")
+    @DisplayName("/v1/asset")
     class AssetTest {
 
         @Test
-        @DisplayName("Test asset API - 200 OK")
+        @DisplayName("200 OK")
         public void testAsset() throws Exception {
 //            final String username = "dev_admin";
             final String username = "fake_user1";
@@ -69,7 +70,7 @@ public class DeviceControllerTest {
         }
 
         @Test
-        @DisplayName("Test asset API - 200 OK")
+        @DisplayName("404 Not Found")
         public void testAsset_fail_notExistsUser() throws Exception {
             final String username = "not_exists_user1";
 

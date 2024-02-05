@@ -16,7 +16,6 @@ import com.bos.resource.app.fota.model.entity.*;
 import com.bos.resource.app.fota.repository.*;
 import com.bos.resource.app.fota.repository.devicemap.CampaignDeviceMapRepository;
 import com.bos.resource.app.fota.repository.firmware.FirmwareRepository;
-import com.bos.resource.app.resourceowner.exception.ResourceOwnerErrorCode;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
 import com.bos.resource.app.resourceowner.model.entity.Company;
 import com.bos.resource.app.resourceowner.repository.CompanyRepository;

@@ -7,7 +7,6 @@ import com.bos.resource.app.device.service.ApiService;
 import com.bos.resource.app.resourceowner.ResourceOwnerService;
 import com.bos.resource.app.resourceowner.exception.ResourceOwnerErrorCode;
 import com.bos.resource.exception.common.BizException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

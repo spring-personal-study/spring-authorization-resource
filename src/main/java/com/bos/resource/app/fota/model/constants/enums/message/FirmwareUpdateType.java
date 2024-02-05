@@ -1,6 +1,5 @@
 package com.bos.resource.app.fota.model.constants.enums.message;
 
-import com.bos.resource.app.fota.model.constants.enums.NotificationType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

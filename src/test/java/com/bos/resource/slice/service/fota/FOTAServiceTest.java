@@ -8,7 +8,6 @@ import com.bos.resource.app.device.repository.device.DeviceRepository;
 import com.bos.resource.app.fota.exception.FOTACrudErrorCode;
 import com.bos.resource.app.fota.model.constants.enums.CampaignStatus;
 import com.bos.resource.app.fota.model.constants.enums.NotificationType;
-import com.bos.resource.app.fota.model.constants.enums.OpCode;
 import com.bos.resource.app.fota.model.constants.enums.PackageType;
 import com.bos.resource.app.fota.model.constants.enums.message.FirmwareUpdateType;
 import com.bos.resource.app.fota.model.dto.*;

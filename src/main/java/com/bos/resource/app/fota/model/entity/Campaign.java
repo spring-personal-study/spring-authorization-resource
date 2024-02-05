@@ -2,8 +2,8 @@ package com.bos.resource.app.fota.model.entity;
 
 import com.bos.resource.app.common.domain.entity.BaseEntity;
 import com.bos.resource.app.common.domain.enums.UseType;
-import com.bos.resource.app.fota.model.dto.ConvertedDateString;
 import com.bos.resource.app.fota.model.constants.enums.CampaignStatus;
+import com.bos.resource.app.fota.model.dto.ConvertedDateString;
 import com.bos.resource.app.resourceowner.model.dto.ResourceOwnerDto;
 import jakarta.persistence.*;
 import lombok.Builder;
