@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -38,10 +39,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@DisplayName("CampaignController Test")
+@DisplayName("Acceptance Test - CampaignController")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class FOTAControllerTest {
 
     private MockMvc mockMvc;
@@ -531,7 +533,7 @@ public class FOTAControllerTest {
 
         @Test
         @DisplayName("404 Not Found - Not Existed User")
-        public void testDevices_cannot() throws Exception {
+        public void testDevices_fail_notFoundUser() throws Exception {
             username = "not_exists_user1";
             mockMvc.perform(post("/v1/devices")
                             .with(jwt()

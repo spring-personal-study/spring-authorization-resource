@@ -2,15 +2,14 @@ package com.bos.resource.integration.device;
 
 import com.bos.resource.app.device.controller.DeviceController;
 import com.bos.resource.app.resourceowner.exception.ResourceOwnerErrorCode;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -23,9 +22,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@DisplayName("DeviceController Test")
+@DisplayName("Acceptance Test - Device Controller")
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(properties = "spring.profiles.active=test")
+@SpringBootTest
+@ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class DeviceControllerTest {
 
     private MockMvc mockMvc;
@@ -39,6 +40,11 @@ public class DeviceControllerTest {
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .apply(springSecurity())
                 .build();
+    }
+
+    @AfterAll
+    public static void afterAll() {
+
     }
 
     @Nested

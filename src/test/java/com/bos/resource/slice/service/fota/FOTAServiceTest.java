@@ -60,7 +60,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@DisplayName("FOTA Service Test - New Artifact Auto Update")
+@DisplayName("Unit Test - FOTA Service - New Artifact Auto Update")
 public class FOTAServiceTest {
 
     private final CampaignRepository campaignRepository = mock(CampaignRepository.class);

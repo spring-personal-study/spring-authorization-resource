@@ -22,7 +22,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("Resource Owner Service Test")
+@DisplayName("Unit Test - ResourceOwner Service")
 public class ResourceOwnerServiceTest {
 
     private ResourceOwnerRepository resourceOwnerRepository;

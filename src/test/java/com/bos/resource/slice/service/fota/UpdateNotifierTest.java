@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@DisplayName("notification: NewArtifactAutoUpdate Test")
+@DisplayName("Unit Test - notification.NewArtifactAutoUpdate")
 public class UpdateNotifierTest {
 
     private final ResourceOwnerService resourceOwnerService = mock(ResourceOwnerService.class);
