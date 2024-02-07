@@ -19,6 +19,11 @@ spring:
       ddl-auto: none
     database: mysql
     open-in-view: false
+  sql:
+    init:
+      platform: mysql
+      mode: never
+
 
 decorator:
   datasource:

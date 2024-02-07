@@ -6,20 +6,17 @@ server:
   port: 8082
 
 spring:
-  profiles:
-    active: default
   config:
     import:
-        - classpath:/application_oauth2_resource.yml
-        - classpath:/db/mysql_db.yml
+      - classpath:/db/mysql_db.yml
+      - classpath:/application_oauth2_resource.yml
 
 ---
 
 spring:
-  profiles:
-    active: test
   config:
+    activate:
+      on-profile: test
     import:
-      - classpath:/application_oauth2_resource.yml
       - classpath:/db/h2_db.yml
-
+      - classpath:/application_oauth2_resource.yml
